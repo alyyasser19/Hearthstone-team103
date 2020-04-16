@@ -1,6 +1,6 @@
 package view;
 
-import exceptions.CannotAttackException;
+import exceptions.noHeroSelectedException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,13 +23,13 @@ public class mainMenu extends Application {
         launch(args);
     }
 
-    Stage titleScreen;
-    Scene menu;
-    Scene characterSelect;
-    Hero selectedHero;
-    Hero player1;
-    Hero player2;
-    ImageView selectedCharacter;
+    private Stage titleScreen;
+    private Scene menu;
+    private Scene characterSelect;
+    private Hero selectedHero;
+    private Hero player1;
+    private Hero player2;
+    private ImageView selectedCharacter;
     boolean selected;
 
     public void start(Stage primaryStage) {
@@ -197,19 +197,29 @@ public class mainMenu extends Application {
                 //left.getChildren().add(selectedCharacter);
             }
         });
+        //Farida: play Sound when select Button is pressed
         select.setOnMouseClicked(e->{
+            if(selected) {
+                player2 = selectedHero;
+                new inGame(player1,player2);
+                titleScreen.hide();
+
+            }
             if(selectedHero!=null){
             if(!selected){
             player1= selectedHero;
             selected=true;
             selectedHero=null;}
-            if(selected)
-                player2=selectedHero;
-        }
-            else
-                throw new noHeroSelectedException("This minion Cannot Attack");
 
         }
+            else
+                try {
+                    throw new noHeroSelectedException("Select a Hero");
+                } catch (exceptions.noHeroSelectedException noHeroSelectedException) {
+                    noHeroSelectedException.printStackTrace();
+                }
+
+                }
         );
 
 
