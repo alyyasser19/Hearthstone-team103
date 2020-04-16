@@ -38,7 +38,7 @@ public class mainMenu extends Application {
         titleScreen.setTitle("hearthstone team 103");
         titleScreen.show();
         Button start= new Button();
-        start.setText("start");
+        start.setText("Start");
         start.setPrefSize(200,50);
         titleScreen.sizeToScene();
         StackPane main= new StackPane();
@@ -54,151 +54,133 @@ public class mainMenu extends Application {
         BorderPane wholeScreen= new BorderPane();
         wholeScreen.setPrefSize(1200,720);
         GridPane characters= new GridPane();
-        Button mage= new Button("Jaina");
+        Image h=new Image("images/Uther.png",110,110,false,false);
+        ImageView hw= new ImageView(h);
+        Image m=new Image("images/Uther.png",110,110,false,false);
+        ImageView mw= new ImageView(m);
+        Image pa=new Image("images/Uther.png",110,110,false,false);
+        ImageView paw= new ImageView(pa);
+        Image p=new Image("images/Uther.png",110,110,false,false);
+        ImageView pw= new ImageView(p);
+        Image w=new Image("images/Uther.png",110,110,false,false);
+        ImageView ww= new ImageView(w);
+        Image s=new Image("images/Uther.png",110,110,false,false);
+        ImageView sw= new ImageView(s);
+        Button mage= new Button("",mw);
         mage.setPrefSize(100,100);
-        Button hunter= new Button("Rexar");
+        Button hunter= new Button("",hw);
         hunter.setPrefSize(100,100);
-        Button select= new Button("select!");
+        Button select= new Button("",sw);
         select.setPrefSize(100,100);
-        Button paladin= new Button("Urther");
+        Button paladin= new Button("",paw);
         paladin.setPrefSize(100,100);
-        Button warlock= new Button("Gul'dan");
+        Button warlock= new Button("",ww);
         warlock.setPrefSize(100,100);
-        Button priest= new Button("Auduin");
+        Button priest= new Button("",pw);
         priest.setPrefSize(100,100);
         characters.setHgap(30);
         characters.setVgap(30);
 
-        //Farida add an Image to every Hero
         characters.add(mage,17,7);
         characters.add(hunter,17,8);
         characters.add(priest,18,7);
         characters.add(paladin,18,8);
         characters.add(warlock,19,7);
         characters.add(select,19,8);
-        HBox left= new HBox();
-        HBox right=new HBox();
-        wholeScreen.setCenter(characters);
+        StackPane left= new StackPane();
+        StackPane right= new StackPane();
         wholeScreen.setLeft(left);
+        wholeScreen.setCenter(characters);
         wholeScreen.setRight(right);
         characterSelect= new Scene(wholeScreen);
-        start.setOnMouseClicked(e->{
-            titleScreen.setScene(characterSelect);
-        });
+        start.setOnMouseClicked(e-> titleScreen.setScene(characterSelect));
 
-        //Hero Selection
         selected=false;
-        mage.setOnMouseClicked(e->{
-            if(!selected){
-            try {
-                selectedHero= new Mage();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            } catch (CloneNotSupportedException cloneNotSupportedException) {
-                cloneNotSupportedException.printStackTrace();
-            }
-            //Farida: insert Character image to the left.
-            //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-            //left.getChildren().add(selectedCharacter);
-                                 }
-        });
         mage.setOnMouseClicked(e->{
                 try {
                     selectedHero= new Mage();
-                } catch (IOException ioException) {
+                } catch (IOException | CloneNotSupportedException ioException) {
                     ioException.printStackTrace();
-                } catch (CloneNotSupportedException cloneNotSupportedException) {
-                    cloneNotSupportedException.printStackTrace();
                 }
             if(!selected){
-                //Farida: insert Character image to the left.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                //Farida: insert Character image to the right.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                right.getChildren().add(selectedCharacter);
             }
         });
         warlock.setOnMouseClicked(e->{
             try {
                 selectedHero= new Warlock();
-            } catch (IOException ioException) {
+            } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
-            } catch (CloneNotSupportedException cloneNotSupportedException) {
-                cloneNotSupportedException.printStackTrace();
             }
             if(!selected){
-                //Farida: insert Character image to the left.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                //Farida: insert Character image to the right.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                right.getChildren().add(selectedCharacter);
             }
         });
         paladin.setOnMouseClicked(e->{
             try {
                 selectedHero= new Paladin();
-            } catch (IOException ioException) {
+            } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
-            } catch (CloneNotSupportedException cloneNotSupportedException) {
-                cloneNotSupportedException.printStackTrace();
             }
             if(!selected){
-                //Farida: insert Character image to the left.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                //Farida: insert Character image to the right.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                right.getChildren().add(selectedCharacter);
             }
         });
         priest.setOnMouseClicked(e->{
             try {
                 selectedHero= new Priest();
-            } catch (IOException ioException) {
+            } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
-            } catch (CloneNotSupportedException cloneNotSupportedException) {
-                cloneNotSupportedException.printStackTrace();
             }
             if(!selected){
-                //Farida: insert Character image to the left.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                //Farida: insert Character image to the right.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                right.getChildren().add(selectedCharacter);
             }
         });
         hunter.setOnMouseClicked(e->{
             try {
                 selectedHero= new Hunter();
-            } catch (IOException ioException) {
+            } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
-            } catch (CloneNotSupportedException cloneNotSupportedException) {
-                cloneNotSupportedException.printStackTrace();
             }
             if(!selected){
-                //Farida: insert Character image to the left.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                //Farida: insert Character image to the right.
-                //selectedCharacter= new ImageView(new Image("images/main menu.jpg"));
-                //left.getChildren().add(selectedCharacter);
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                right.getChildren().add(selectedCharacter);
             }
         });
         //Farida: play Sound when select Button is pressed
         select.setOnMouseClicked(e->{
+            try {
+                AudioInputStream ding = AudioSystem.getAudioInputStream(new File("sounds/Ding-sound-effect.wav").getAbsoluteFile());
+                Clip clip= AudioSystem.getClip();
+                clip.open(ding);
+                clip.start();
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
+                error.printStackTrace();
+            }
             if(selected) {
                 player2 = selectedHero;
                 new inGame(player1,player2);
