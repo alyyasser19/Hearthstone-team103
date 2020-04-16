@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.heroes.*;
@@ -183,7 +182,15 @@ public class mainMenu extends Application {
             }
             if(selected) {
                 player2 = selectedHero;
-                new inGame(player1,player2);
+                //try {
+                    //new inGame(player1,player2);
+                    //Application.launch(inGame.class,args);
+                //}// catch (FullHandException fullHandException) {
+                   // fullHandException.printStackTrace();
+                //} //catch (CloneNotSupportedException cloneNotSupportedException) {
+                   // cloneNotSupportedException.printStackTrace();
+                //}
+                
                 titleScreen.hide();
 
             }
