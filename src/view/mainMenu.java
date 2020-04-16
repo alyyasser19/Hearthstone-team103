@@ -27,6 +27,7 @@ public class mainMenu extends Application {
     Hero selectedHero;
     Hero player1;
     Hero player2;
+    ImageView selectedCharacter;
     boolean selected;
 
     public void start(Stage primaryStage) {
