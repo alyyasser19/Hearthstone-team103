@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.heroes.Hero;
+import model.heroes.Mage;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -24,7 +25,9 @@ public class mainMenu extends Application {
     Scene menu;
     Scene characterSelect;
     Hero selectedHero;
-    boolean player1Select;
+    Hero player1;
+    Hero player2;
+    boolean selected;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -46,13 +49,14 @@ public class mainMenu extends Application {
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
+        wholeScreen.setPrefSize(1200,720);
         GridPane characters= new GridPane();
         Button mage= new Button("Jaina");
         mage.setPrefSize(100,100);
         Button hunter= new Button("Rexar");
         hunter.setPrefSize(100,100);
-        Button warrior= new Button("Garosh");
-        warrior.setPrefSize(100,100);
+        Button select= new Button("select!");
+        select.setPrefSize(100,100);
         Button paladin= new Button("Urther");
         paladin.setPrefSize(100,100);
         Button warlock= new Button("Gul'dan");
@@ -63,16 +67,31 @@ public class mainMenu extends Application {
         characters.setVgap(30);
         characters.add(mage,17,7);
         characters.add(hunter,17,8);
-        characters.add(warrior,18,7);
+        characters.add(priest,18,7);
         characters.add(paladin,18,8);
         characters.add(warlock,19,7);
-        characters.add(priest,19,8);
-        characters.setPrefSize(1200,720);
+        characters.add(select,19,8);
         wholeScreen.setCenter(characters);
         characterSelect= new Scene(wholeScreen);
         start.setOnMouseClicked(e->{
             titleScreen.setScene(characterSelect);
         });
+
+        //Hero Selection
+        mage.setOnMouseClicked(e->{
+            try {
+                selectedHero= new Mage();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (CloneNotSupportedException cloneNotSupportedException) {
+                cloneNotSupportedException.printStackTrace();
+            }
+            wholeScreen.setLeft();
+        });
+
+
+
+
 
         primaryStage.setMaximized(true);
     }
@@ -87,4 +106,5 @@ public class mainMenu extends Application {
             e.printStackTrace();
         }
     }
+
 }
