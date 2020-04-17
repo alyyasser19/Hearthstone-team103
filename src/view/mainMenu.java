@@ -51,8 +51,8 @@ public class mainMenu extends Application {
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
-        wholeScreen.setPrefSize(1200,720);
         GridPane characters= new GridPane();
+        characters.setPrefSize(600,720);
         Image h=new Image("images/Uther.png",110,110,false,false);
         ImageView hw= new ImageView(h);
         Image m=new Image("images/Uther.png",110,110,false,false);
@@ -77,20 +77,21 @@ public class mainMenu extends Application {
         warlock.setPrefSize(100,100);
         Button priest= new Button("",pw);
         priest.setPrefSize(100,100);
-        characters.setHgap(30);
+        characters.setHgap(6.5);
         characters.setVgap(30);
-
-        characters.add(mage,17,7);
-        characters.add(hunter,17,8);
-        characters.add(priest,18,7);
-        characters.add(paladin,18,8);
-        characters.add(warlock,19,7);
-        characters.add(select,19,8);
+        characters.add(mage,16,7);
+        characters.add(hunter,16,8);
+        characters.add(priest,17,7);
+        characters.add(paladin,17,8);
+        characters.add(warlock,18,7);
+        characters.add(select,18,8);
         StackPane left= new StackPane();
+        left.setPrefSize(300,720);
         StackPane right= new StackPane();
+        right.setPrefSize(300,720);
         wholeScreen.setLeft(left);
-        wholeScreen.setCenter(characters);
         wholeScreen.setRight(right);
+        wholeScreen.setCenter(characters);
         characterSelect= new Scene(wholeScreen);
         start.setOnMouseClicked(e-> titleScreen.setScene(characterSelect));
 
@@ -102,11 +103,11 @@ public class mainMenu extends Application {
                     ioException.printStackTrace();
                 }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -117,11 +118,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -132,11 +133,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -147,11 +148,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -162,11 +163,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",50,1200,false,false));
+                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
