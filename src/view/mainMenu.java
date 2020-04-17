@@ -4,16 +4,12 @@ import exceptions.noHeroSelectedException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
 import model.heroes.*;
-import net.sf.cglib.asm.$Label;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -34,8 +30,10 @@ public class mainMenu extends Application {
     private ImageView selectedCharacter;
     boolean selected;
     Clip clip;
+    boolean gameStart;
 
     public void start(Stage primaryStage) {
+        primaryStage.setMaximized(true);
         titleScreen= new Stage();
         primaryStage=titleScreen;
         titleScreen.setResizable(false);
@@ -103,6 +101,13 @@ public class mainMenu extends Application {
         wholeScreen.setRight(right);
         wholeScreen.setCenter(characters);
         characterSelect= new Scene(wholeScreen);
+        GridPane gameScreen= new GridPane();
+        Scene game= new Scene(gameScreen);
+        BackgroundImage myBI= new BackgroundImage(new Image("images/board.jpg"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(titleScreen.getWidth(),titleScreen.getHeight(), false, false, true, false));
+        gameScreen.setBackground(new Background(myBI));
+
         start.setOnMouseClicked(e-> titleScreen.setScene(characterSelect));
 
         selected=false;
@@ -193,19 +198,11 @@ public class mainMenu extends Application {
             }
             if(selected) {
                 player2 = selectedHero;
-                //try {
-                    //new inGame(player1,player2);
-                    //Application.launch(inGame.class,args);
-                //}// catch (FullHandException fullHandException) {
-                   // fullHandException.printStackTrace();
-                //} //catch (CloneNotSupportedException cloneNotSupportedException) {
-                   // cloneNotSupportedException.printStackTrace();
-                //}
                 clip.stop();
-                Stage ad = new Stage();
-                new inGame().start(ad);
-                titleScreen.close();
-
+                gameStart=true;
+                titleScreen.setScene(game);
+                titleScreen.setFullScreen(true);
+                music("sounds/Game.wav");
             }
             if(selectedHero!=null){
             if(!selected){
@@ -232,7 +229,6 @@ public class mainMenu extends Application {
 
 
 
-        primaryStage.setMaximized(true);
     }
     public void music(String filepath) {
         try {
