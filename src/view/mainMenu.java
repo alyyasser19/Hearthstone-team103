@@ -3,7 +3,6 @@ package view;
 import exceptions.noHeroSelectedException;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,14 +35,15 @@ public class mainMenu extends Application {
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
-        titleScreen.setMaximized(true);
         primaryStage=titleScreen;
         titleScreen.setResizable(false);
         titleScreen.setTitle("hearthstone team 103");
         titleScreen.show();
-        Button start= new Button();
-        start.setText("Start");
-        start.setPrefSize(200,50);
+        Image sss= new Image("images\\start.png",500,100,true,true);
+        ImageView start= new ImageView(sss);
+        //Button start= new Button();
+        //start.setText("Start");
+        //start.setPrefSize(200,50);
         titleScreen.sizeToScene();
         StackPane main= new StackPane();
         Image Bg= new Image("images/main menu.jpg");
@@ -59,37 +59,42 @@ public class mainMenu extends Application {
         wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1800,1000,true,true)));
         GridPane characters= new GridPane();
         characters.setPrefSize(600,720);
-        Image h=new Image("images\\Rexxar.png",110,110,true,true);
-        ImageView hw= new ImageView(h);
-        Image m=new Image("images\\Jaina_Proudmoore.png",110,110,true,true);
-        ImageView mw= new ImageView(m);
-        Image pa=new Image("images\\Uther_Lightbringer.png",110,110,true,true);
-        ImageView paw= new ImageView(pa);
-        Image p=new Image("images\\Anduin_Wrynn.png",110,110,true,true);
-        ImageView pw= new ImageView(p);
-        Image w=new Image("images\\Guldan.png",110,110,true,true);
-        ImageView ww= new ImageView(w);
-        Button mage= new Button();
-        mage.setGraphic(mw);
-        mage.setPrefSize(100,100);
-        Button hunter= new Button("",hw);
-        hunter.setPrefSize(100,100);
-        Button select= new Button("Select");
-        select.setPrefSize(100,100);
-        Button paladin= new Button("",paw);
-        paladin.setPrefSize(100,100);
-        Button warlock= new Button("",ww);
-        warlock.setPrefSize(100,100);
-        Button priest= new Button("",pw);
-        priest.setPrefSize(100,100);
+        Image h=new Image("images\\Rexxar.png",250,250,true,true);
+        ImageView hunter= new ImageView(h);
+        Image m=new Image("images\\Jaina_Proudmoore.png",250,250,true,true);
+        ImageView mage= new ImageView(m);
+        Image pa=new Image("images\\Uther_Lightbringer.png",250,250,true,true);
+        ImageView paladin= new ImageView(pa);
+        Image p=new Image("images\\Anduin_Wrynn.png",250,250,true,true);
+        ImageView priest= new ImageView(p);
+        Image w=new Image("images\\Guldan.png",250,250,true,true);
+        ImageView warlock= new ImageView(w);
+        Image s= new Image("images\\select.png",100,100,true,true);
+        ImageView select= new ImageView(s);
+
+        //Button mage= new Button("",mw);
+        //mage.setPrefSize(100,100);
+        //Button hunter= new Button("",hw);
+        //hunter.setPrefSize(100,100);
+        //Button select= new Button("Select");
+        //select.setPrefSize(100,100);
+        //Button paladin= new Button("",paw);
+        //paladin.setCenterShape(true);
+        //paladin.setCenterShape(true);
+        //paladin.setPrefSize(100,100);
+        //paladin.setGraphic(paw);
+        //Button warlock= new Button("",ww);
+        //warlock.setPrefSize(100,100);
+        //Button priest= new Button("",pw);
+        //priest.setPrefSize(100,100);
         characters.setHgap(6.5);
         characters.setVgap(30);
-        characters.add(mage,16,7);
-        characters.add(hunter,16,8);
-        characters.add(priest,17,7);
-        characters.add(paladin,17,8);
-        characters.add(warlock,18,7);
-        characters.add(select,18,8);
+        characters.add(mage,12,5);
+        characters.add(hunter,12,6);
+        characters.add(priest,13,5);
+        characters.add(paladin,13,6);
+        characters.add(warlock,14,5);
+        characters.add(select,14,6);
         StackPane left= new StackPane();
         left.setPrefSize(300,720);
         StackPane right= new StackPane();
@@ -120,11 +125,11 @@ public class mainMenu extends Application {
                     ioException.printStackTrace();
                 }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -135,11 +140,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -150,11 +155,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -165,11 +170,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -180,11 +185,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,true,true));
+                selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
