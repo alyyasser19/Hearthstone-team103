@@ -38,6 +38,7 @@ public class mainMenu extends Application {
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
         primaryStage=titleScreen;
+        titleScreen.setResizable(false);
         titleScreen.setTitle("hearthstone team 103");
         titleScreen.show();
         Button start= new Button();
@@ -55,26 +56,24 @@ public class mainMenu extends Application {
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
-        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1200,800,false,false)));
+        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1800,1000,false,false)));
         GridPane characters= new GridPane();
         characters.setPrefSize(600,720);
-        Image h=new Image("images/Uther.png",110,110,false,false);
+        Image h=new Image("images\\Rexxar.png",110,110,false,false);
         ImageView hw= new ImageView(h);
-        Image m=new Image("images/Uther.png",110,110,false,false);
+        Image m=new Image("images\\Jaina_Proudmoore.png",110,110,false,false);
         ImageView mw= new ImageView(m);
-        Image pa=new Image("images/Uther.png",110,110,false,false);
+        Image pa=new Image("images\\Uther_Lightbringer.png",110,110,false,false);
         ImageView paw= new ImageView(pa);
-        Image p=new Image("images/Uther.png",110,110,false,false);
+        Image p=new Image("images\\Anduin_Wrynn.png",110,110,false,false);
         ImageView pw= new ImageView(p);
-        Image w=new Image("images/Uther.png",110,110,false,false);
+        Image w=new Image("images\\Guldan.png",110,110,false,false);
         ImageView ww= new ImageView(w);
-        Image s=new Image("images/Uther.png",110,110,false,false);
-        ImageView sw= new ImageView(s);
         Button mage= new Button("",mw);
         mage.setPrefSize(100,100);
         Button hunter= new Button("",hw);
         hunter.setPrefSize(100,100);
-        Button select= new Button("",sw);
+        Button select= new Button("Select");
         select.setPrefSize(100,100);
         Button paladin= new Button("",paw);
         paladin.setPrefSize(100,100);
@@ -95,6 +94,8 @@ public class mainMenu extends Application {
         StackPane right= new StackPane();
         right.setPrefSize(300,720);
         Label x= new Label("Choose Your Hero: Player 1");
+        Font f= new Font("Algerian", 36);
+        x.setFont(f);
         StackPane sp= new StackPane();
         sp.getChildren().add(x);
         wholeScreen.setTop(sp);
@@ -112,11 +113,11 @@ public class mainMenu extends Application {
                     ioException.printStackTrace();
                 }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -127,11 +128,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -142,11 +143,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -157,11 +158,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -172,11 +173,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images/main menu.jpg",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -210,6 +211,11 @@ public class mainMenu extends Application {
             if(!selected){
             player1= selectedHero;
             selected=true;
+                Label x2= new Label("Choose Your Hero: Player 2");
+                Font f2= new Font("Algerian", 36);
+                x2.setFont(f2);
+                sp.getChildren().remove(x);
+                sp.getChildren().add(x2);
             selectedHero=null;}
 
         }
