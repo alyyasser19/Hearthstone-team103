@@ -9,8 +9,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import model.heroes.*;
+import net.sf.cglib.asm.$Label;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -52,6 +55,7 @@ public class mainMenu extends Application {
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
+        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1200,800,false,false)));
         GridPane characters= new GridPane();
         characters.setPrefSize(600,720);
         Image h=new Image("images/Uther.png",110,110,false,false);
@@ -90,6 +94,10 @@ public class mainMenu extends Application {
         left.setPrefSize(300,720);
         StackPane right= new StackPane();
         right.setPrefSize(300,720);
+        Label x= new Label("Choose Your Hero: Player 1");
+        StackPane sp= new StackPane();
+        sp.getChildren().add(x);
+        wholeScreen.setTop(sp);
         wholeScreen.setLeft(left);
         wholeScreen.setRight(right);
         wholeScreen.setCenter(characters);
