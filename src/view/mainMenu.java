@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import model.heroes.*;
 
 import javax.sound.sampled.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -55,20 +56,21 @@ public class mainMenu extends Application {
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
-        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1800,1000,false,false)));
+        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1800,1000,true,true)));
         GridPane characters= new GridPane();
         characters.setPrefSize(600,720);
-        Image h=new Image("images\\Rexxar.png",110,110,false,false);
+        Image h=new Image("images\\Rexxar.png",110,110,true,true);
         ImageView hw= new ImageView(h);
-        Image m=new Image("images\\Jaina_Proudmoore.png",110,110,false,false);
+        Image m=new Image("images\\Jaina_Proudmoore.png",110,110,true,true);
         ImageView mw= new ImageView(m);
-        Image pa=new Image("images\\Uther_Lightbringer.png",110,110,false,false);
+        Image pa=new Image("images\\Uther_Lightbringer.png",110,110,true,true);
         ImageView paw= new ImageView(pa);
-        Image p=new Image("images\\Anduin_Wrynn.png",110,110,false,false);
+        Image p=new Image("images\\Anduin_Wrynn.png",110,110,true,true);
         ImageView pw= new ImageView(p);
-        Image w=new Image("images\\Guldan.png",110,110,false,false);
+        Image w=new Image("images\\Guldan.png",110,110,true,true);
         ImageView ww= new ImageView(w);
-        Button mage= new Button("",mw);
+        Button mage= new Button();
+        mage.setGraphic(mw);
         mage.setPrefSize(100,100);
         Button hunter= new Button("",hw);
         hunter.setPrefSize(100,100);
@@ -93,8 +95,7 @@ public class mainMenu extends Application {
         StackPane right= new StackPane();
         right.setPrefSize(300,720);
         Label x= new Label("Choose Your Hero: Player 1");
-        Font f= new Font("Algerian", 36);
-        x.setFont(f);
+        x.setFont(new javafx.scene.text.Font("Algerian",36));
         StackPane sp= new StackPane();
         sp.getChildren().add(x);
         wholeScreen.setTop(sp);
@@ -119,11 +120,11 @@ public class mainMenu extends Application {
                     ioException.printStackTrace();
                 }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,true,true));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,720,true,true));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -134,11 +135,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,true,true));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Guldan.png",200,720,true,true));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -149,11 +150,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,true,true));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Uther_Lightbringer.png",200,720,true,true));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -164,11 +165,11 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,true,true));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Anduin_Wrynn.png",200,720,true,true));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -179,15 +180,14 @@ public class mainMenu extends Application {
                 ioException.printStackTrace();
             }
             if(!selected){
-                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,true,true));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
-                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,false,false));
+                selectedCharacter= new ImageView(new Image("images\\Rexxar.png",200,720,true,true));
                 right.getChildren().add(selectedCharacter);
             }
         });
-        //Farida: play Sound when select Button is pressed
         select.setOnMouseClicked(e->{
             try {
                 AudioInputStream ding = AudioSystem.getAudioInputStream(new File("sounds/Ding-sound-effect.wav").getAbsoluteFile());
@@ -210,8 +210,7 @@ public class mainMenu extends Application {
             player1= selectedHero;
             selected=true;
                 Label x2= new Label("Choose Your Hero: Player 2");
-                Font f2= new Font("Algerian", 36);
-                x2.setFont(f2);
+                x2.setFont(new javafx.scene.text.Font("Algerian",36));
                 sp.getChildren().remove(x);
                 sp.getChildren().add(x2);
             selectedHero=null;}
