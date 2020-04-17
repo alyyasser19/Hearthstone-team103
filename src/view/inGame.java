@@ -28,13 +28,9 @@ public class inGame extends Application  {
                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(stage.getWidth(),stage.getHeight(), false, false, true, false));
         wholeScreen.setBackground(new Background(myBI));
-        Background a= new Background(myBI);
 
 
-        //ArrayList<Card> hand=p1.getHand();
-        //hand.forEach((Card current)->{
 
-       // });
     stage.setFullScreen(true);
     }
 

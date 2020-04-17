@@ -30,6 +30,7 @@ public class mainMenu extends Application {
     private Hero player2;
     private ImageView selectedCharacter;
     boolean selected;
+    Clip clip;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -191,8 +192,10 @@ public class mainMenu extends Application {
                 //} //catch (CloneNotSupportedException cloneNotSupportedException) {
                    // cloneNotSupportedException.printStackTrace();
                 //}
-                
-                titleScreen.hide();
+                clip.stop();
+                Stage ad = new Stage();
+                new inGame().start(ad);
+                titleScreen.close();
 
             }
             if(selectedHero!=null){
@@ -220,7 +223,7 @@ public class mainMenu extends Application {
     public void music(String filepath) {
         try {
             AudioInputStream a = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
-            Clip clip= AudioSystem.getClip();
+            clip= AudioSystem.getClip();
             clip.open(a);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
