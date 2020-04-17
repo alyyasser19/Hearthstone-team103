@@ -188,7 +188,6 @@ public class mainMenu extends Application {
                 right.getChildren().add(selectedCharacter);
             }
         });
-        //Farida: play Sound when select Button is pressed
         select.setOnMouseClicked(e->{
             try {
                 AudioInputStream ding = AudioSystem.getAudioInputStream(new File("sounds/Ding-sound-effect.wav").getAbsoluteFile());
