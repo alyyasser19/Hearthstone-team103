@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.heroes.*;
 
@@ -33,8 +34,8 @@ public class mainMenu extends Application {
     boolean gameStart;
 
     public void start(Stage primaryStage) {
-        primaryStage.setMaximized(true);
         titleScreen= new Stage();
+        titleScreen.setMaximized(true);
         primaryStage=titleScreen;
         titleScreen.setResizable(false);
         titleScreen.setTitle("hearthstone team 103");
