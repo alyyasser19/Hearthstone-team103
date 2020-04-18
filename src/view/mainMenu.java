@@ -7,12 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.heroes.*;
 
 import javax.sound.sampled.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,8 +30,6 @@ public class mainMenu extends Application {
     boolean selected;
     Clip clip;
     boolean gameStart;
-    ImageView curIcon;
-    ImageView oppIcon;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -117,10 +113,12 @@ public class mainMenu extends Application {
                 new BackgroundSize(titleScreen.getWidth(),titleScreen.getHeight(), false, false, true, false));
         gameScreen.setBackground(new Background(myBI));
 
-        start.setOnMouseClicked(e-> titleScreen.setScene(characterSelect));
+        start.setOnMouseClicked(e1-> {
+            titleScreen.setScene(characterSelect);
+        });
 
         selected=false;
-        mage.setOnMouseClicked(e->{
+        mage.setOnMouseClicked(e2->{
                 try {
                     selectedHero= new Mage();
                 } catch (IOException | CloneNotSupportedException ioException) {
@@ -128,16 +126,18 @@ public class mainMenu extends Application {
                 }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
-                curIcon=new ImageView(new Image("images\\mage.JPG",300,300,false,false));
+                if(!left.getChildren().isEmpty())
+                    left.getChildren().remove(0);
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
-                oppIcon=new ImageView(new Image("images\\mage.JPG",300,300,false,false));
+                if(!right.getChildren().isEmpty())
+                    right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
-        warlock.setOnMouseClicked(e->{
+        warlock.setOnMouseClicked(e3->{
             try {
                 selectedHero= new Warlock();
             } catch (IOException | CloneNotSupportedException ioException) {
@@ -145,16 +145,18 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
-                curIcon=new ImageView(new Image("images\\warlock.PNG",300,300,false,false));
+                if(!left.getChildren().isEmpty())
+                    left.getChildren().remove(0);
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
-                oppIcon=new ImageView(new Image("images\\warlock.PNG",300,300,false,false));
+                if(!right.getChildren().isEmpty())
+                    right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
-        paladin.setOnMouseClicked(e->{
+        paladin.setOnMouseClicked(e4->{
             try {
                 selectedHero= new Paladin();
             } catch (IOException | CloneNotSupportedException ioException) {
@@ -162,16 +164,18 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
-                curIcon=new ImageView(new Image("images\\paladin.PNG",300,300,false,false));
+                if(!left.getChildren().isEmpty())
+                    left.getChildren().remove(0);
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
-                oppIcon=new ImageView(new Image("images\\paladin.PNG",300,300,false,false));
+                if(!right.getChildren().isEmpty())
+                    right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
-        priest.setOnMouseClicked(e->{
+        priest.setOnMouseClicked(e5->{
             try {
                 selectedHero= new Priest();
             } catch (IOException | CloneNotSupportedException ioException) {
@@ -179,16 +183,18 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
-                curIcon=new ImageView(new Image("images\\preist.PNG",300,500,false,false));
+                if(!left.getChildren().isEmpty())
+                    left.getChildren().remove(0);
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
-                oppIcon=new ImageView(new Image("images\\preist.PNG",300,500,false,false));
+                if(!right.getChildren().isEmpty())
+                    right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
-        hunter.setOnMouseClicked(e->{
+        hunter.setOnMouseClicked(e6->{
             try {
                 selectedHero= new Hunter();
             } catch (IOException | CloneNotSupportedException ioException) {
@@ -196,16 +202,18 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
-                curIcon=new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
+                if(!left.getChildren().isEmpty())
+                    left.getChildren().remove(0);
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
-                oppIcon=new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
+               if(!right.getChildren().isEmpty())
+                   right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
-        select.setOnMouseClicked(e->{
+        select.setOnMouseClicked(e1->{
             try {
                 AudioInputStream ding = AudioSystem.getAudioInputStream(new File("sounds/Ding-sound-effect.wav").getAbsoluteFile());
                 Clip clip= AudioSystem.getClip();
