@@ -32,6 +32,8 @@ public class mainMenu extends Application {
     boolean selected;
     Clip clip;
     boolean gameStart;
+    ImageView curIcon;
+    ImageView oppIcon;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -126,10 +128,12 @@ public class mainMenu extends Application {
                 }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
+                curIcon=new ImageView(new Image("images\\mage.JPG",300,300,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
+                oppIcon=new ImageView(new Image("images\\mage.JPG",300,300,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -141,10 +145,12 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
+                curIcon=new ImageView(new Image("images\\warlock.PNG",300,300,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\warlock.PNG",300,500,false,false));
+                oppIcon=new ImageView(new Image("images\\warlock.PNG",300,300,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -156,10 +162,12 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
+                curIcon=new ImageView(new Image("images\\paladin.PNG",300,300,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\paladin.PNG",300,500,false,false));
+                oppIcon=new ImageView(new Image("images\\paladin.PNG",300,300,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -171,10 +179,12 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
+                curIcon=new ImageView(new Image("images\\preist.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\preist.PNG",300,500,false,false));
+                oppIcon=new ImageView(new Image("images\\preist.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });
@@ -186,10 +196,12 @@ public class mainMenu extends Application {
             }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
+                curIcon=new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
                 left.getChildren().add(selectedCharacter);
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
+                oppIcon=new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
                 right.getChildren().add(selectedCharacter);
             }
         });

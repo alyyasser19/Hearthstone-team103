@@ -163,7 +163,6 @@ public abstract class Hero implements MinionListener {
 	public void castSpell(FieldSpell s) throws NotYourTurnException, NotEnoughManaException {
 		validator.validateTurn(this);
 		validator.validateManaCost((Spell) s);
-
 		s.performAction(field);
 		castSpellCommons((Spell) s);
 

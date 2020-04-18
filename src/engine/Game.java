@@ -123,9 +123,14 @@ public class Game implements ActionValidator, HeroListener {
 		return currentHero;
 	}
 
+	public Hero getOpponent() {
+		return opponent;
+	}
+
 	public void setListener(GameListener listener) {
 		this.listener = listener;
 	}
+
 
 	@Override
 	public void endTurn() throws FullHandException, CloneNotSupportedException {
@@ -143,8 +148,6 @@ public class Game implements ActionValidator, HeroListener {
 
 	}
 
-	public Hero getOpponent() {
-		return opponent;
-	}
+
 
 }
