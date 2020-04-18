@@ -130,4 +130,8 @@ public class Minion extends Card implements Cloneable {
 	public Minion clone() throws CloneNotSupportedException {
 		return (Minion) super.clone();
 	}
+
+	public MinionListener getListener() {
+		return listener;
+	}
 }

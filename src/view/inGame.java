@@ -5,6 +5,8 @@ import exceptions.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -13,22 +15,8 @@ import model.cards.Card;
 import model.cards.minions.Minion;
 import model.cards.spells.*;
 import model.heroes.Hero;
-import model.heroes.Mage;
-import model.heroes.Paladin;
-import model.heroes.Warlock;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import model.heroes.*;
+import model.heroes.Hunter;
 
-import javax.sound.sampled.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -39,43 +27,166 @@ public class inGame extends Application  {
 
     //Resources
     Clip clip;
-    ImageView curIcon;
-    ImageView oppIcon;
+    ImageView p1Icon;
+    ImageView p2Icon;
+    ImageView p1Power;
+    ImageView p2Power;
+
+    //Buttons
+    HBox p1hand= new HBox();
+    HBox p2hand= new HBox();
+    HBox p1Field=new HBox();
+    HBox p2Field= new HBox();
 
     //Game Classes
     Hero p1;
     Hero p2;
-    Hero Cur;
-    Hero Opp;
     Game game;
     Button end;
     Minion minionTarget;
     Hero heroTarget;
-    Boolean Targeted;
-    ArrayList<Button> oppField;
-    ArrayList<Button> curField;
+    Boolean Targeteing= false;
+    boolean heroTargeted=false;
+    boolean minionTargeted=false;
+
 
     public void start(Stage stage) throws IOException, CloneNotSupportedException, FullHandException {
+        Button blank= new Button("test");
+        blank.setPrefSize(100,100);
+        //blank.setVisible(true);
         p1=new Hunter();
         p2=new Hunter();
         game=new Game(p1,p2);
         end= new Button("END TURN");
         stage=new Stage();
         stage.show();
-        curIcon= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,200,true,true));
-        oppIcon=new ImageView(new Image("images\\Uther_Lightbringer.png",200,200,true,true));
-        Hero Cur= game.getCurrentHero();
-        Hero Opp= game.getOpponent();
+        p1Icon= new ImageView(new Image("images\\Jaina_Proudmoore.png",200,200,true,true));
+        p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",200,200,true,true));
+        p1Power=new ImageView(new Image("images\\Reinforce_hs.png",200,200,true,true));
+        p2Icon=new ImageView(new Image("images\\Fireball.png",200,200,true,true));
         BorderPane gamescreen= new BorderPane();
-        BorderPane showOpp= new BorderPane();
-        showOpp.getChildren().add(oppIcon);
-        showOpp.setMinSize(1360,192);
-        gamescreen.setTop(showOpp);
+
+        //Opponent Layout
+        BorderPane p2Area= new BorderPane();
+        //the place where the hero is
+        GridPane oppCenter= new GridPane();
+        oppCenter.add(p2Icon ,10,10);
+        p2Area.setRight(oppCenter);
+        //the hand
+
+        //Validate to be added and the get target method to be implemented
+        for(Card cur: p2.getHand() ) {
+            Button a= new Button(cur.getName()+"\n"+cur.getManaCost()+"\n"+cur.getRarity());
+            a.setPrefSize(100,100);
+            if (cur instanceof Minion) {
+                Button finalA5 = a;
+                a.setOnMouseClicked(e -> {
+                    try {
+                        p2.playMinion((Minion) cur);
+                    } catch (NotYourTurnException notYourTurnException) {
+                        notYourTurnException.printStackTrace();
+                    } catch (NotEnoughManaException notEnoughManaException) {
+                        notEnoughManaException.printStackTrace();
+                    } catch (FullFieldException fullFieldException) {
+                        fullFieldException.printStackTrace();
+                    }
+                    p2Field.getChildren().add(finalA5);
+                });
+
+            }
+            if (cur instanceof Spell) {
+                if (cur instanceof AOESpell) {
+                    Button finalA = a;
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p2.castSpell((AOESpell) cur, p1.getField());
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException.printStackTrace();
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException.printStackTrace();
+                        }
+                        p2hand.getChildren().remove(finalA);
+                    });
+                }
+                if (cur instanceof FieldSpell) {
+                    a = new Button(cur.toString());
+                    Button finalA1 = a;
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p2.castSpell((FieldSpell) cur);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException.printStackTrace();
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException.printStackTrace();
+                        }
+                        p2hand.getChildren().remove(finalA1);
+                    });
+                }
+                if (cur instanceof HeroTargetSpell) {
+                    Button finalA2 = a;
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p2.castSpell(((HeroTargetSpell) cur), p1);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException.printStackTrace();
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException.printStackTrace();
+                        }
+                        p2hand.getChildren().remove(finalA2);
+                    });
+                }
+                if (cur instanceof MinionTargetSpell) {
+                    getTarget();
+                    Button finalA3 = a;
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p2.castSpell((MinionTargetSpell) cur, minionTarget);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException.printStackTrace();
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException.printStackTrace();
+                        } catch (InvalidTargetException invalidTargetException) {
+                            invalidTargetException.printStackTrace();
+                        }
+                        p2hand.getChildren().remove(finalA3);
+                    });
+                }
+                if (cur instanceof LeechingSpell) {
+                    getTarget();
+                    Button finalA4 = a;
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p2.castSpell((LeechingSpell) cur, minionTarget);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException.printStackTrace();
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException.printStackTrace();
+                        }
+                        p2hand.getChildren().remove(finalA4);
+                    });
+                }
+            }
+            p2hand.getChildren().add(a);
+        }
+        p2Area.setLeft(p2hand);
+        p2Area.setCenter(p2Icon);
+        p2Field.getChildren().add(blank);
+        p2Area.setBottom(p2Field);
+
+
+        p2Area.setMinSize(1360,192);
+        gamescreen.setTop(p2Area);
+
+
+
+
+
+
         FlowPane showOppField= new FlowPane();
         showOppField.setHgap(100);
         showOppField.setMinHeight(100);
         showOppField.setMaxSize(800,192);
-        showOpp.setBottom(showOppField);
+        p2Area.setBottom(showOppField);
         FlowPane showCurField= new FlowPane();
         showCurField.setMinSize(800,192);
         BorderPane showCur= new BorderPane();
@@ -83,7 +194,7 @@ public class inGame extends Application  {
         showCur.setTop(showCurField);
         HBox showHand=new HBox();
         showCur.setBottom(showHand);
-        showCur.setCenter(curIcon);
+        showCur.setCenter(p1Icon);
         gamescreen.setBottom(showCur);
         StackPane right=new StackPane();
         StackPane left=new StackPane();
@@ -92,11 +203,11 @@ public class inGame extends Application  {
         gamescreen.setLeft(left);
         Scene game= new Scene(gamescreen,1360,768);
         stage.setScene(game);
-        ArrayList<Card> curhand= Cur.getHand();
-        Targeted=false;
+        ArrayList<Card> curhand= p1.getHand();
+        minionTargeted=false;
         end.setOnMouseClicked(e-> {
             try {
-                Cur.endTurn();
+                p1.endTurn();
             } catch (FullHandException fullHandException) {
                 Card x=fullHandException.getBurned();
                 Stage s1 = new Stage();
@@ -121,7 +232,7 @@ public class inGame extends Application  {
                     Minion m= (Minion) c;
                     showCurField.getChildren().add(b);
                     try {
-                        Cur.playMinion(m);
+                        p1.playMinion(m);
                     } catch (NotEnoughManaException e1){
                         Stage s=new Stage();
                         s.show();
@@ -160,7 +271,7 @@ public class inGame extends Application  {
                     showHand.getChildren().remove(b);
                     try {
                         Hero target=getHeroTarget();
-                        Cur.castSpell(s,target);
+                        p1.castSpell(s,target);
                     }  catch (NotEnoughManaException e1) {
                         Stage s1 = new Stage();
                         s1.show();
@@ -185,7 +296,7 @@ public class inGame extends Application  {
                     showHand.getChildren().remove(b);
                     try {
                         Minion target= getMinionTarget();
-                        Cur.castSpell(s,target);
+                        p1.castSpell(s,target);
                     } catch (NotEnoughManaException e1) {
                         Stage s1 = new Stage();
                         s1.show();
@@ -218,7 +329,7 @@ public class inGame extends Application  {
                     showHand.getChildren().remove(b);
                     try {
                         Minion target= getMinionTarget();
-                        Cur.castSpell(s,target);
+                        p1.castSpell(s,target);
                     } catch (NotEnoughManaException e1) {
                         Stage s1 = new Stage();
                         s1.show();
@@ -242,7 +353,7 @@ public class inGame extends Application  {
                     FieldSpell s = (FieldSpell) c;
                     showHand.getChildren().remove(b);
                     try {
-                        Cur.castSpell(s);
+                        p1.castSpell(s);
                     } catch (NotEnoughManaException e1) {
                         Stage s1 = new Stage();
                         s1.show();
@@ -267,7 +378,7 @@ public class inGame extends Application  {
                     AOESpell s = (AOESpell) c;
                     showHand.getChildren().remove(b);
                     try {
-                        Cur.castSpell(s,Opp.getField());
+                        p1.castSpell(s,p2.getField());
                     } catch (NotEnoughManaException e1) {
                         Stage s1 = new Stage();
                         s1.show();
@@ -291,14 +402,14 @@ public class inGame extends Application  {
 
         }
 
-        for(i=0;i<Cur.getField().size();i++){
-            Card c= Cur.getField().get(i);
+        for(i=0;i<p1.getField().size();i++){
+            Card c= p1.getField().get(i);
             Button b= new Button(c.getName()+"\n"+c.getManaCost()+"\n"+c.getRarity());
             b.setPrefSize(60,60);
             Minion m=(Minion) c;
-            b.setOnMouseClicked(e->{if(Targeted){
+            b.setOnMouseClicked(e->{if(heroTargeted){
                 try {
-                    Cur.attackWithMinion(m, getHeroTarget());
+                    p1.attackWithMinion(m, getHeroTarget());
                 } catch (CannotAttackException cannotAttackException) {
                     Stage s1 = new Stage();
                     s1.show();
@@ -338,7 +449,7 @@ public class inGame extends Application  {
             }
             else{
                 try {
-                    Cur.attackWithMinion(m, getMinionTarget());
+                    p1.attackWithMinion(m, getMinionTarget());
                 } catch (CannotAttackException cannotAttackException) {
                     Stage s1 = new Stage();
                     s1.show();
@@ -395,6 +506,10 @@ public class inGame extends Application  {
 
     }
 
+    public void getTarget(){
+
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -411,25 +526,25 @@ public class inGame extends Application  {
     }
 
     public Hero getHeroTarget(){
-        oppIcon.setOnMouseClicked(e-> heroTarget=game.getOpponent());
-        curIcon.setOnMouseClicked(e-> heroTarget= game.getCurrentHero());
-        Targeted=true;
+        p2Icon.setOnMouseClicked(e-> heroTarget=game.getOpponent());
+        p1Icon.setOnMouseClicked(e-> heroTarget= game.getCurrentHero());
+        heroTargeted=true;
         return heroTarget;
 
     }
 
     public Minion getMinionTarget(){
         int i;
-        for(i=0;i<Cur.getField().size();i++){
-            Minion m= Cur.getField().get(i);
+        for(i=0;i<p1.getField().size();i++){
+            Minion m= p1.getField().get(i);
             Button b= new Button(m.getName()+"\n"+m.getManaCost()+"\n"+m.getRarity());
-            curField.add(b);
+            //p2Field.add(b);
             b.setOnMouseClicked(e-> minionTarget=m);
         }
-        for(i=0;i<Opp.getField().size();i++){
-            Minion m= Opp.getField().get(i);
+        for(i=0;i<p2.getField().size();i++){
+            Minion m= p2.getField().get(i);
             Button b= new Button(m.getName()+"\n"+m.getManaCost()+"\n"+m.getRarity());
-            oppField.add(b);
+            //p2Field.add(b);
             b.setOnMouseClicked(e-> minionTarget=m);
         }
         return minionTarget;
