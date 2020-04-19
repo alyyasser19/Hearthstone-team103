@@ -105,6 +105,7 @@ public class inGame extends Application  {
         p1Mana=new Button("Mana:\nCards:");
         p1Mana.setMinWidth(100);
         top.getChildren().add(p1Icon);
+
         top.getChildren().add(p1Power);
         top.getChildren().add(p1Mana);
         p1Area.setTop(top);
