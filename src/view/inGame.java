@@ -96,6 +96,7 @@ public class inGame extends Application  {
         //Validate to be added and the get target method to be implemented
         playerDraw(p1hand,p1Field,p1,p2);
         Button test2=new Button();
+
         test2.setMinSize(300,192);
         test2.setVisible(false);
         p1Field.getChildren().add(test2);
