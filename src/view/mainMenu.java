@@ -69,22 +69,6 @@ public class mainMenu extends Application {
         ImageView warlock= new ImageView(w);
         Image s= new Image("images\\select.png",100,100,true,true);
         ImageView select= new ImageView(s);
-
-        //Button mage= new Button("",mw);
-        //mage.setPrefSize(100,100);
-        //Button hunter= new Button("",hw);
-        //hunter.setPrefSize(100,100);
-        //Button select= new Button("Select");
-        //select.setPrefSize(100,100);
-        //Button paladin= new Button("",paw);
-        //paladin.setCenterShape(true);
-        //paladin.setCenterShape(true);
-        //paladin.setPrefSize(100,100);
-        //paladin.setGraphic(paw);
-        //Button warlock= new Button("",ww);
-        //warlock.setPrefSize(100,100);
-        //Button priest= new Button("",pw);
-        //priest.setPrefSize(100,100);
         characters.setHgap(6.5);
         characters.setVgap(30);
         characters.add(mage,12,5);
