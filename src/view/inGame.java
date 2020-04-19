@@ -53,6 +53,13 @@ public class inGame extends Application  {
 
     public void start(Stage stage) throws IOException, CloneNotSupportedException, FullHandException {
         Button blank= new Button("test");
+        Button test= new Button("click me");
+        test.setOnMouseClicked(e->{
+            Exception a= new NotEnoughManaException("Screw you!");
+            System.out.println(a.getMessage());
+            System.out.println(a.getLocalizedMessage());
+            exceptionWindow(a);});
+        p2hand.getChildren().add(test);
         blank.setPrefSize(100,100);
         //blank.setVisible(true);
         p1=new Hunter();
@@ -784,6 +791,14 @@ public class inGame extends Application  {
 //
 //
 //  }
+    public void exceptionWindow(Exception e){
+        Stage s1=new Stage();
+        s1.show();
+        StackPane sp= new StackPane();
+        sp.getChildren().add(new Label(e.getLocalizedMessage()));
+        Scene sc=new Scene(sp,200,200);
+        s1.setScene(sc);
+    }
 
 
 }
