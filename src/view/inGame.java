@@ -635,88 +635,88 @@ public class inGame extends Application  {
 
   }
   public String getImage(Card cur){
-        if(cur.getName().equals("Goldshire Footman"))
-            return "images\\cards\\GoldshireFootman.png";
+            if(cur.getName().equals("Goldshire Footman"))
+                return "images\\cards\\GoldshireFootman.png";
 
-      if(cur.getName().equals("Bloodfen Raptor"))
-          return "images\\cards\\BloodfenRaptor.png";
+          if(cur.getName().equals("Bloodfen Raptor"))
+              return "images\\cards\\BloodfenRaptor.png";
 
-      if(cur.getName().equals("Stonetusk Boar"))
-          return "images\\cards\\StonetuskBoar.png";
+          if(cur.getName().equals("Stonetusk Boar"))
+              return "images\\cards\\StonetuskBoar.png";
 
-      if(cur.getName().equals("Frostwolf Grunt"))
-          return "images\\cards\\FrostwolfGrunt.png";
+          if(cur.getName().equals("Frostwolf Grunt"))
+              return "images\\cards\\FrostwolfGrunt.png";
 
-      if(cur.getName().equals("Wolfrider"))
-          return "images\\cards\\Wolfrider.png";
+          if(cur.getName().equals("Wolfrider"))
+              return "images\\cards\\Wolfrider.png";
 
-      if(cur.getName().equals("Chilwind Yeti"))
-          return "images\\cards\\ChillwindYeti.png";
+          if(cur.getName().equals("Chilwind Yeti"))
+              return "images\\cards\\ChillwindYeti.png";
 
-      if(cur.getName().equals("Boulderfist Ogre"))
-          return "images\\cards\\BoulderfistOgre.png";
+          if(cur.getName().equals("Boulderfist Ogre"))
+              return "images\\cards\\BoulderfistOgre.png";
 
-      if(cur.getName().equals("Core Hound"))
-          return "images\\cards\\CoreHound.png";
+          if(cur.getName().equals("Core Hound"))
+              return "images\\cards\\CoreHound.png";
 
-      if(cur.getName().equals("Argent Commander"))
-          return "images\\cards\\ArgentCommander.png";
+          if(cur.getName().equals("Argent Commander"))
+              return "images\\cards\\ArgentCommander.png";
 
-      if(cur.getName().equals("Sunwalker"))
-          return "images\\cards\\Sunwalker.png";
+          if(cur.getName().equals("Sunwalker"))
+              return "images\\cards\\Sunwalker.png";
 
-      if(cur.getName().equals("Chromaggus"))
-          return "images\\cards\\Chromaggus.png";
+          if(cur.getName().equals("Chromaggus"))
+              return "images\\cards\\Chromaggus.png";
 
-      if(cur.getName().equals("The LichKing"))
-          return "images\\cards\\TheLichKing.png";
+          if(cur.getName().equals("The LichKing"))
+              return "images\\cards\\TheLichKing.png";
 
-      if(cur.getName().equals("Icehowl"))
-          return "images\\cards\\Icehowl.png";
+          if(cur.getName().equals("Icehowl"))
+              return "images\\cards\\Icehowl.png";
 
-      if(cur.getName().equals("Colossus of the Moon"))
-          return "images\\cards\\ColossusoftheMoon.png";
+          if(cur.getName().equals("Colossus of the Moon"))
+              return "images\\cards\\ColossusoftheMoon.png";
 
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
-      if(cur.getName().equals("Goldshire Footman"))
-          return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
+          if(cur.getName().equals("Goldshire Footman"))
+              return "images\\cards\\GoldshireFootman.png";
 
-      return "images\\whitepage.png";
+          return "images\\whitepage.png";
   }
   public void endTurnDraw(Hero p,Hero pOther,HBox phand,FlowPane pfield){
         Card cur= p.getHand().get(p.getHand().size()-1);
