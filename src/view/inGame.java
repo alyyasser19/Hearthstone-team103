@@ -1,5 +1,6 @@
 package view;
 
+import com.intellij.psi.Bottom;
 import engine.Game;
 import exceptions.*;
 import javafx.application.Application;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.cards.Card;
 import model.cards.minions.Minion;
@@ -31,7 +33,8 @@ public class inGame extends Application  {
     ImageView p2Icon;
     ImageView p1Power;
     ImageView p2Power;
-
+    Button p1Mana;
+    Button p2Mana;
     //Buttons
     HBox p1hand= new HBox();
     HBox p2hand= new HBox();
@@ -52,73 +55,74 @@ public class inGame extends Application  {
 
 
     public void start(Stage stage) throws IOException, CloneNotSupportedException, FullHandException {
-        Button blank= new Button("test");
-        Button test= new Button("click me");
-        test.setOnMouseClicked(e->{
-            Exception a= new NotEnoughManaException("Screw you!");
-            System.out.println(a.getMessage());
-            System.out.println(a.getLocalizedMessage());
-            exceptionWindow(a);});
-        p2hand.getChildren().add(test);
-        blank.setPrefSize(100,100);
-        //blank.setVisible(true);
         p1=new Hunter();
         p2=new Hunter();
         game=new Game(p1,p2);
         end= new Button("END TURN");
         stage=new Stage();
         stage.show();
-        p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",200,200,true,true));
-        p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",200,200,true,true));
-        p1Power=new ImageView(new Image("images\\Reinforce_hs.png",200,200,true,true));
-        p2Icon=new ImageView(new Image("images\\Fireball.png",200,200,true,true));
+        p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",100,175,true,true));
+        p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",100,175,true,true));
+        p1Power=new ImageView(new Image("images\\Reinforce_hs.png",100,175,true,true));
+        p2Power =new ImageView(new Image("images\\Steady_Shot.png",100,175,true,true));
         BorderPane gamescreen= new BorderPane();
 
         //Opponent Layout
         BorderPane p2Area= new BorderPane();
-        //the place where the hero is
-        GridPane oppCenter= new GridPane();
-        oppCenter.add(p2Icon ,10,10);
-        p2Area.setRight(oppCenter);
         //the hand
 
         //Validate to be added and the get target method to be implemented
         playerDraw(p2hand,p2Field,p2,p1);
+        Button test=new Button();
+        test.setMinSize(300,192);
+        test.setVisible(false);
+        p2Field.getChildren().add(test);
+        p2hand.setMaxSize(580,192);
         p2Area.setLeft(p2hand);
-        p2Area.setCenter(p2Icon);
-        p2Field.getChildren().add(blank);
-        p2Area.setBottom(p2Field);
-
-        p2Area.setMinSize(1360,192);
+        HBox bottom=new HBox();
+        p2Mana=new Button("Mana:\nCards:");
+        p2Mana.setMinWidth(100);
+        bottom.getChildren().add(p2Icon);
+        bottom.getChildren().add(p2Power);
+        bottom.getChildren().add(p2Mana);
+        p2Area.setBottom(bottom);
+        p2Area.setRight(null);
         gamescreen.setTop(p2Area);
 
+        //Current Layout
+        BorderPane p1Area= new BorderPane();
+        //the place where the hero is
 
-
-
-
-
-        FlowPane showOppField= new FlowPane();
-        showOppField.setHgap(100);
-        showOppField.setMinHeight(100);
-        showOppField.setMaxSize(800,192);
-        p2Area.setBottom(showOppField);
-        FlowPane showCurField= new FlowPane();
-        p1Field.setMinSize(800,192);
-        BorderPane showCur= new BorderPane();
-        showCur.setMinSize(1360,192);
-        showCur.setTop(p1Field);
+        //Validate to be added and the get target method to be implemented
         playerDraw(p1hand,p1Field,p1,p2);
-        showCur.setBottom(p1hand);
-        showCur.setCenter(p1Icon);
-        gamescreen.setBottom(showCur);
-        StackPane right=new StackPane();
-        StackPane left=new StackPane();
-        right.getChildren().add(end);
-        gamescreen.setRight(right);
-        gamescreen.setLeft(left);
+        Button test2=new Button();
+        test2.setMinSize(300,192);
+        test2.setVisible(false);
+        p1Field.getChildren().add(test2);
+        p1hand.setMaxSize(580,192);
+        p1Area.setLeft(p1hand);
+        HBox top=new HBox();
+        p1Mana=new Button("Mana:\nCards:");
+        p1Mana.setMinWidth(100);
+        top.getChildren().add(p1Icon);
+        top.getChildren().add(p1Power);
+        top.getChildren().add(p1Mana);
+        p1Area.setTop(top);
+        p1Area.setRight(null);
+        gamescreen.setBottom(p1Area);
+
+        //Field Layout
+        BorderPane fieldArea= new BorderPane();
+        fieldArea.setTop(p2Field);
+        fieldArea.setBottom(p1Field);
+        fieldArea.setRight(end);
+        fieldArea.setMinSize(1360,384);
+        gamescreen.setCenter(fieldArea);
+
+
+
         Scene gamescene= new Scene(gamescreen,1360,768);
         stage.setScene(gamescene);
-        ArrayList<Card> curhand= p1.getHand();
         minionTargeted=false;
         end.setOnMouseClicked(e-> {
           if(p1==game.getCurrentHero()){
@@ -127,11 +131,13 @@ public class inGame extends Application  {
             } catch (FullHandException fullHandException) {
                 Card x=fullHandException.getBurned();
                 Stage s1 = new Stage();
+                s1.initModality(Modality.APPLICATION_MODAL);
                 s1.show();
                 StackPane sp = new StackPane();
                 sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                 Scene sc = new Scene(sp, 200, 200);
                 s1.setScene(sc);
+
 
             } catch (CloneNotSupportedException cloneNotSupportedException) {
                 cloneNotSupportedException.printStackTrace();
@@ -145,11 +151,13 @@ public class inGame extends Application  {
               } catch (FullHandException fullHandException) {
                   Card x=fullHandException.getBurned();
                   Stage s1 = new Stage();
+                  s1.initModality(Modality.APPLICATION_MODAL);
                   s1.show();
                   StackPane sp = new StackPane();
                   sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                   Scene sc = new Scene(sp, 200, 200);
                   s1.setScene(sc);
+
 
               } catch (CloneNotSupportedException cloneNotSupportedException) {
                   cloneNotSupportedException.printStackTrace();
@@ -496,12 +504,18 @@ public class inGame extends Application  {
                     try {
                         p.playMinion((Minion) cur);
                     } catch (NotYourTurnException notYourTurnException) {
+                        notYourTurnException= new NotYourTurnException("Not Your Turn!!");
+                        exceptionWindow(notYourTurnException);
                         notYourTurnException.printStackTrace();
                         return;
                     } catch (NotEnoughManaException notEnoughManaException) {
+                        notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                        exceptionWindow(notEnoughManaException);
                         notEnoughManaException.printStackTrace();
                         return;
                     } catch (FullFieldException fullFieldException) {
+                        fullFieldException= new FullFieldException("Your Field is Full!!");
+                        exceptionWindow(fullFieldException);
                         fullFieldException.printStackTrace();
                         return;
                     }
@@ -516,9 +530,13 @@ public class inGame extends Application  {
                         try {
                             p.castSpell((AOESpell) cur, pOther.getField());
                         } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
                             notYourTurnException.printStackTrace();
                             return;
                         } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
                             notEnoughManaException.printStackTrace();
                             return;
                         }
@@ -531,9 +549,13 @@ public class inGame extends Application  {
                         try {
                             p.castSpell((FieldSpell) cur);
                         } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
                             notYourTurnException.printStackTrace();
                             return;
                         } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
                             notEnoughManaException.printStackTrace();
                             return;
                         }
@@ -546,9 +568,13 @@ public class inGame extends Application  {
                         try {
                             p.castSpell(((HeroTargetSpell) cur), pOther);
                         } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
                             notYourTurnException.printStackTrace();
                             return;
                         } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
                             notEnoughManaException.printStackTrace();
                             return;
                         }
@@ -562,12 +588,18 @@ public class inGame extends Application  {
                         try {
                             p.castSpell((MinionTargetSpell) cur, minionTarget);
                         } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
                             notYourTurnException.printStackTrace();
                             return;
                         } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
                             notEnoughManaException.printStackTrace();
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
+                            invalidTargetException=new InvalidTargetException("Invalid Target!!");
+                            exceptionWindow(invalidTargetException);
                             invalidTargetException.printStackTrace();
                             return;
                         }
@@ -581,9 +613,13 @@ public class inGame extends Application  {
                         try {
                             p.castSpell((LeechingSpell) cur, minionTarget);
                         } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
                             notYourTurnException.printStackTrace();
                             return;
                         } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
                             notEnoughManaException.printStackTrace();
                             return;
                         }
@@ -690,9 +726,13 @@ public class inGame extends Application  {
               try {
                   p.playMinion((Minion) cur);
               } catch (NotYourTurnException notYourTurnException) {
+                  notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                  exceptionWindow(notYourTurnException);
                   notYourTurnException.printStackTrace();
                   return;
               } catch (NotEnoughManaException notEnoughManaException) {
+                  notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                  exceptionWindow(notEnoughManaException);
                   notEnoughManaException.printStackTrace();
                   return;
               } catch (FullFieldException fullFieldException) {
@@ -710,9 +750,13 @@ public class inGame extends Application  {
                   try {
                       p.castSpell((AOESpell) cur, pOther.getField());
                   } catch (NotYourTurnException notYourTurnException) {
+                      notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                      exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
                       return;
                   } catch (NotEnoughManaException notEnoughManaException) {
+                      notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                      exceptionWindow(notEnoughManaException);
                       notEnoughManaException.printStackTrace();
                       return;
                   }
@@ -725,9 +769,13 @@ public class inGame extends Application  {
                   try {
                       p.castSpell((FieldSpell) cur);
                   } catch (NotYourTurnException notYourTurnException) {
+                      notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                      exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
                       return;
                   } catch (NotEnoughManaException notEnoughManaException) {
+                      notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                      exceptionWindow(notEnoughManaException);
                       notEnoughManaException.printStackTrace();
                       return;
                   }
@@ -740,9 +788,13 @@ public class inGame extends Application  {
                   try {
                       p.castSpell(((HeroTargetSpell) cur), pOther);
                   } catch (NotYourTurnException notYourTurnException) {
+                      notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                      exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
                       return;
                   } catch (NotEnoughManaException notEnoughManaException) {
+                      notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                      exceptionWindow(notEnoughManaException);
                       notEnoughManaException.printStackTrace();
                       return;
                   }
@@ -756,12 +808,18 @@ public class inGame extends Application  {
                   try {
                       p.castSpell((MinionTargetSpell) cur, minionTarget);
                   } catch (NotYourTurnException notYourTurnException) {
+                      notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                      exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
                       return;
                   } catch (NotEnoughManaException notEnoughManaException) {
+                      notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                      exceptionWindow(notEnoughManaException);
                       notEnoughManaException.printStackTrace();
                       return;
                   } catch (InvalidTargetException invalidTargetException) {
+                      invalidTargetException= new InvalidTargetException("Invalid Target!!");
+                      exceptionWindow(invalidTargetException);
                       invalidTargetException.printStackTrace();
                       return;
                   }
@@ -775,9 +833,13 @@ public class inGame extends Application  {
                   try {
                       p.castSpell((LeechingSpell) cur, minionTarget);
                   } catch (NotYourTurnException notYourTurnException) {
+                      notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                      exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
                       return;
                   } catch (NotEnoughManaException notEnoughManaException) {
+                      notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                      exceptionWindow(notEnoughManaException);
                       notEnoughManaException.printStackTrace();
                       return;
                   }
@@ -793,10 +855,30 @@ public class inGame extends Application  {
 //  }
     public void exceptionWindow(Exception e){
         Stage s1=new Stage();
+        s1.initModality(Modality.APPLICATION_MODAL);
         s1.show();
-        StackPane sp= new StackPane();
-        sp.getChildren().add(new Label(e.getLocalizedMessage()));
-        Scene sc=new Scene(sp,200,200);
+        BorderPane sp= new BorderPane();
+        VBox v= new VBox();
+        VBox v1= new VBox();
+        VBox v2= new VBox();
+        VBox v3= new VBox();
+        VBox v4= new VBox();
+        v.setPrefSize(125,125);
+        v1.setPrefSize(62.5,250);
+        v2.setPrefSize(62.5,250);
+        v3.setPrefSize(250,62.5);
+        v4.setPrefSize(250,62.5);
+        sp.setCenter(v);
+        sp.setLeft(v1);
+        sp.setRight(v2);
+        sp.setTop(v3);
+        sp.setBottom(v4);
+        Label x=new Label(e.getLocalizedMessage());
+        v.getChildren().add(x);
+        Scene sc=new Scene(sp,250,250);
+        Button okay= new Button("OKAY");
+        okay.setOnMouseClicked(e1-> s1.close());
+        v.getChildren().add(okay);
         s1.setScene(sc);
     }
 
