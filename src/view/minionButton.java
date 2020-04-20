@@ -43,7 +43,7 @@ public class minionButton extends Button implements Cloneable{
 
    public minionButton(Minion minion){
 	   this.minion=minion;
-	   //ImageView imageFile = new ImageView(new Image(getImage()));
+        //ImageView imageFile = new ImageView(new Image(getImage()));
 	   Image imageFile = new Image(getImage(),100,100,false,false);
        ImageView imageDecline = new ImageView(imageFile);
 	   this.setGraphic(imageDecline);
@@ -67,6 +67,10 @@ public class minionButton extends Button implements Cloneable{
 	    //this.setMinSize(420,600); this.setMaxSize(420,600);
     }
     public void verifyMinion() {
+        if(minion.getName().equals("Sheep")){
+            ImageView imageDecline = new ImageView(new Image("images\\cards\\normal\\Sheep.jpg",100,100,false,false));
+            this.setGraphic(imageDecline);
+        }
         hp=minion.getCurrentHP();
 
         this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
