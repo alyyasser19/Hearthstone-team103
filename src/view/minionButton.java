@@ -44,7 +44,7 @@ public class minionButton extends Button implements Cloneable{
    public minionButton(Minion minion){
 	   this.minion=minion;
         //ImageView imageFile = new ImageView(new Image(getImage()));
-	   Image imageFile = new Image("images\\cards\\normal\\Icehowl.png",100,100,false,false);
+	   Image imageFile = new Image(getImage(),100,100,false,false);
        ImageView imageDecline = new ImageView(imageFile);
 	   this.setGraphic(imageDecline);
        this.attack=minion.getAttack();
@@ -67,6 +67,10 @@ public class minionButton extends Button implements Cloneable{
 	    //this.setMinSize(420,600); this.setMaxSize(420,600);
     }
     public void verifyMinion() {
+        if(minion.getName().equals("Sheep")){
+            ImageView imageDecline = new ImageView(new Image("images\\cards\\normal\\Sheep.jpg",100,100,false,false));
+            this.setGraphic(imageDecline);
+        }
         hp=minion.getCurrentHP();
 
         this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
@@ -82,13 +86,13 @@ public class minionButton extends Button implements Cloneable{
             return "images\\cards\\normal\\BloodfenRaptor.jpg";
 
         if(cur.getName().equals("Stonetusk Boar"))
-            return "images\\cards\\normal\\StonetuskBoar.png";
+            return "images\\cards\\normal\\StonetuskBoar.jpg";
 
         if(cur.getName().equals("Frostwolf Grunt"))
-            return "images\\cards\\normal\\FrostwolfGrunt.png";
+            return "images\\cards\\normal\\FrostwolfGrunt.jpg";
 
         if(cur.getName().equals("Wolfrider"))
-            return "images\\cards\\normal\\Wolfrider.png";
+            return "images\\cards\\normal\\Wolfrider.jpg";
 
         if(cur.getName().equals("Chilwind Yeti"))
             return "images\\cards\\normal\\ChillwindYeti.jpg";
@@ -97,40 +101,40 @@ public class minionButton extends Button implements Cloneable{
             return "images\\cards\\normal\\BoulderfistOgre.jpg";
 
         if(cur.getName().equals("Core Hound"))
-            return "images\\cards\\normal\\CoreHound.png";
+            return "images\\cards\\normal\\CoreHound.jpg";
 
         if(cur.getName().equals("Argent Commander"))
             return "images\\cards\\normal\\ArgentCommander.png";
 
         if(cur.getName().equals("Sunwalker"))
-            return "images\\cards\\normal\\Sunwalker.png";
+            return "images\\cards\\normal\\Sunwalker.jpg";
 
         if(cur.getName().equals("Chromaggus"))
-            return "images\\cards\\normal\\Chromaggus.png";
+            return "images\\cards\\normal\\Chromaggus.jpg";
 
         if(cur.getName().equals("The LichKing"))
-            return "images\\cards\\normal\\TheLichKing.png";
+            return "images\\cards\\normal\\TheLichKing.jpg";
 
         if(cur.getName().equals("Icehowl"))
             return "images\\cards\\normal\\Icehowl.png";
 
         if(cur.getName().equals("Colossus of the Moon"))
-            return "images\\cards\\normal\\ColossusoftheMoon.png";
+            return "images\\cards\\normal\\ColossusoftheMoon.jpg";
 
         if(cur.getName().equals("King Krush"))
-            return "images\\cards\\normal\\KingKrush.png";
+            return "images\\cards\\normal\\KingKrush.jpg";
 
         if(cur.getName().equals("Kalycgos"))
-            return "images\\cards\\normal\\Kalycgos.png";
+            return "images\\cards\\normal\\Kalycgos.jpg";
 
         if(cur.getName().equals("Tirion Fordring"))
-            return "images\\cards\\normal\\TirionFordring.png";
+            return "images\\cards\\normal\\TirionFordring.jpg";
 
         if(cur.getName().equals("Prophet Velen"))
-            return "images\\cards\\normal\\ProphetVelen.png";
+            return "images\\cards\\normal\\ProphetVelen.jpg";
 
         if(cur.getName().equals("Wilfred Fizzlebang"))
-            return "images\\cards\\normal\\WilfredFizzlebang.png";
+            return "images\\cards\\normal\\WilfredFizzlebang.jpg";
 
 
         return "images\\whitepage.png";
