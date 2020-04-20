@@ -19,7 +19,7 @@ public class test extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		minionButton aa= new minionButton(new Minion("Icehowl",1, Rarity.BASIC,1,1,true,true,true));
+		minionButton aa= new minionButton(new Minion("Core Hound",1, Rarity.BASIC,1,1,true,true,true));
 		aa.setPrefSize(150,150);
 		aa.verifyMinion();
 		stage.setTitle("HEHE");
