@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.cards.minions.Minion;
 
-public class minionButton extends Button {
+public class minionButton extends Button implements Cloneable{
     int hp;
     int attack;
 
@@ -58,7 +58,7 @@ public class minionButton extends Button {
             //"-fx-text-alignment: justify;"+
             "-fx-content-display: top;"+ 
             //"-fx-padding: 10px;" +
-            "-fx-font-size: 10px;"+
+            "-fx-font-size: 12px;"+
             "-fx-background-position: center;";
 	    this.setStyle(style);
 	    this.setLayoutX(200);
@@ -67,6 +67,7 @@ public class minionButton extends Button {
 	    //this.setMinSize(420,600); this.setMaxSize(420,600);
     }
     public void verifyMinion() {
+        hp=minion.getCurrentHP();
 
         this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
 
