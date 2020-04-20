@@ -55,8 +55,8 @@ public class inGame extends Application  {
 
 
     public void start(Stage stage) throws IOException, CloneNotSupportedException, FullHandException {
-        p1=new Hunter();
-        p2=new Hunter();
+        p1=new Mage();
+        p2=new Paladin();
         game=new Game(p1,p2);
         end= new Button("END TURN");
         stage=new Stage();
@@ -86,7 +86,6 @@ public class inGame extends Application  {
         p2Mana.setMinWidth(100);
         bottom.getChildren().add(p2Icon);
         bottom.getChildren().add(p2Power);
-        bottom.getChildren().add(p2Mana);
         p2Area.setBottom(bottom);
         p2Area.setRight(null);
         gamescreen.setTop(p2Area);
@@ -108,9 +107,7 @@ public class inGame extends Application  {
         p1Mana=new Button("Mana:\nCards:");
         p1Mana.setMinWidth(100);
         top.getChildren().add(p1Icon);
-
         top.getChildren().add(p1Power);
-        top.getChildren().add(p1Mana);
         p1Area.setTop(top);
         p1Area.setRight(null);
         gamescreen.setBottom(p1Area);
@@ -119,7 +116,13 @@ public class inGame extends Application  {
         BorderPane fieldArea= new BorderPane();
         fieldArea.setTop(p2Field);
         fieldArea.setBottom(p1Field);
-        fieldArea.setRight(end);
+        VBox V=new VBox();
+        p2Mana.setMinSize(100,100);
+        p1Mana.setMinSize(100,100);
+        V.getChildren().add(p2Mana);
+        V.getChildren().add(end);
+        V.getChildren().add(p1Mana);
+        fieldArea.setRight(V);
         fieldArea.setMinSize(1360,384);
         gamescreen.setCenter(fieldArea);
 
@@ -571,6 +574,8 @@ public class inGame extends Application  {
                                 return;
                             }
                             System.out.println(pOther.getCurrentHP());
+                            System.out.println(p1.getCurrentHP());
+                            System.out.println(p2.getCurrentHP());
                             verifyHeroP1();
                             verifyHeroP2();
                         });
@@ -1605,7 +1610,7 @@ public class inGame extends Application  {
 
     public void verifyHeroP2(){        if(p2 instanceof Mage){
         if(p2.getCurrentHP()==30)
-            p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
 
         if(p2.getCurrentHP()==29)
             p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_29.png",250,300,true,true));
