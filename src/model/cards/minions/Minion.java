@@ -127,6 +127,13 @@ public class Minion extends Card implements Cloneable {
 		return divine;
 	}
 
+	@Override
+	public String toString() {
+		return "Minion{" +
+				"name=" + this.getName() +
+				'}';
+	}
+
 	public Minion clone() throws CloneNotSupportedException {
 		return (Minion) super.clone();
 	}

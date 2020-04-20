@@ -1,10 +1,10 @@
 package view;
 
-import com.intellij.psi.Bottom;
 import engine.Game;
 import exceptions.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,15 +14,15 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.cards.Card;
+import model.cards.Rarity;
+import model.cards.minions.Icehowl;
 import model.cards.minions.Minion;
 import model.cards.spells.*;
-import model.heroes.Hero;
-import model.heroes.Hunter;
+import model.heroes.*;
 
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class inGame extends Application  {
 
@@ -61,8 +61,10 @@ public class inGame extends Application  {
         end= new Button("END TURN");
         stage=new Stage();
         stage.show();
-        p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",100,175,true,true));
-        p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",100,175,true,true));
+        stage.setMinHeight(1060);
+        stage.setMinWidth(1920);
+        p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
+        p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",250,300,true,true));
         p1Power=new ImageView(new Image("images\\Reinforce_hs.png",100,175,true,true));
         p2Power =new ImageView(new Image("images\\Steady_Shot.png",100,175,true,true));
         BorderPane gamescreen= new BorderPane();
@@ -72,8 +74,8 @@ public class inGame extends Application  {
         //the hand
 
         //Validate to be added and the get target method to be implemented
-        playerDraw(p2hand,p2Field,p2,p1);
-        Button test=new Button();
+        playerDraw(p2hand,p2Field,p2,p1,p1Field);
+        minionButton test=new minionButton(new Minion("Choose you target, you can also attack me but yeah that's a waste of a perfectly fine attack i am just an innocent frame",0, Rarity.BASIC,0,0,false,false,false));
         test.setMinSize(300,192);
         test.setVisible(false);
         p2Field.getChildren().add(test);
@@ -94,8 +96,8 @@ public class inGame extends Application  {
         //the place where the hero is
 
         //Validate to be added and the get target method to be implemented
-        playerDraw(p1hand,p1Field,p1,p2);
-        Button test2=new Button();
+        playerDraw(p1hand,p1Field,p1,p2,p2Field);
+        minionButton test2=new minionButton(new Icehowl());
 
         test2.setMinSize(300,192);
         test2.setVisible(false);
@@ -139,13 +141,14 @@ public class inGame extends Application  {
                 sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                 Scene sc = new Scene(sp, 200, 200);
                 s1.setScene(sc);
+                return;
 
 
             } catch (CloneNotSupportedException cloneNotSupportedException) {
                 cloneNotSupportedException.printStackTrace();
             }
           ///validateHealth
-              endTurnDraw(p2,p1,p2hand,p2Field);
+              endTurnDraw(p2,p1,p2hand,p2Field,p2Field);
                }
           else{
               try {
@@ -159,13 +162,14 @@ public class inGame extends Application  {
                   sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                   Scene sc = new Scene(sp, 200, 200);
                   s1.setScene(sc);
+                  return;
 
 
               } catch (CloneNotSupportedException cloneNotSupportedException) {
                   cloneNotSupportedException.printStackTrace();
               }
               ///validateHealth
-              endTurnDraw(p1,p2,p1hand,p1Field);
+              endTurnDraw(p1,p2,p1hand,p1Field,p2Field);
 
           }
         });
@@ -497,11 +501,11 @@ public class inGame extends Application  {
         }
         return minionTarget;
     }
-    public void playerDraw(HBox phand,FlowPane pfield,Hero p,Hero pOther){
+    public void playerDraw(HBox phand,FlowPane pfield,Hero p,Hero pOther,FlowPane pOtherField){
         for(Card cur: p.getHand() ) {
             ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
             if (cur instanceof Minion) {
-                ImageView finalA5 = a;
+                minionButton finalA5 = new minionButton((Minion) cur);
                 a.setOnMouseClicked(e -> {
                     try {
                         p.playMinion((Minion) cur);
@@ -521,7 +525,102 @@ public class inGame extends Application  {
                         fullFieldException.printStackTrace();
                         return;
                     }
+                    phand.getChildren().remove(a);
+                    finalA5.setOnMouseClicked(ee->{
+                        Stage s1=new Stage();
+                        s1.initModality(Modality.APPLICATION_MODAL);
+                        s1.show();
+                        FlowPane oppField= new FlowPane();
+                        ImageView opponent = null;
+                        if(pOther instanceof Mage)
+                            opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                        if(pOther instanceof Warlock)
+                            opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                        if(pOther instanceof Priest)
+                            opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                        if(pOther instanceof Paladin)
+                            opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                        if(pOther instanceof Hunter)
+                            opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                        opponent.setOnMouseClicked(eee->{
+                            heroTargeted=true;
+                            heroTarget=pOther;
+                            s1.close();
+                            try {
+                                p.attackWithMinion((Minion) cur,pOther);
+                                System.out.println(pOther.getCurrentHP());
+                            } catch (CannotAttackException cannotAttackException) {
+                                cannotAttackException.printStackTrace();
+                                exceptionWindow(cannotAttackException);
+                                return;
+                            } catch (NotYourTurnException notYourTurnException) {
+                                notYourTurnException.printStackTrace();
+                                exceptionWindow(notYourTurnException);
+                                return;
+                            } catch (TauntBypassException tauntBypassException) {
+                                tauntBypassException.printStackTrace();
+                                exceptionWindow(tauntBypassException);
+                                return;
+                            } catch (NotSummonedException notSummonedException) {
+                                notSummonedException.printStackTrace();
+                                exceptionWindow(notSummonedException);
+                                return;
+                            } catch (InvalidTargetException invalidTargetException) {
+                                invalidTargetException.printStackTrace();
+                                exceptionWindow(invalidTargetException);
+                                return;
+                            }
+                            System.out.println(pOther.getCurrentHP());
+                            verifyHeroP1();
+                            verifyHeroP2();
+                        });
+                        oppField.getChildren().add(opponent);
+                        for(Node curr: pOtherField.getChildren()){
+                            if(!curr.isVisible())
+                                continue;
+                            minionButton target= new minionButton(((minionButton)curr).getMinion());
+                            target.setOnMouseClicked(eee->{
+                                try {
+                                    p.attackWithMinion((Minion) cur,target.getMinion());
+                                } catch (CannotAttackException cannotAttackException) {
+                                    cannotAttackException.printStackTrace();
+                                    exceptionWindow(cannotAttackException);
+                                    return;
+                                } catch (NotYourTurnException notYourTurnException) {
+                                    notYourTurnException.printStackTrace();
+                                    exceptionWindow(notYourTurnException);
+                                    return;
+                                } catch (TauntBypassException tauntBypassException) {
+                                    tauntBypassException.printStackTrace();
+                                    exceptionWindow(tauntBypassException);
+                                    return;
+                                } catch (InvalidTargetException invalidTargetException) {
+                                    invalidTargetException.printStackTrace();
+                                    exceptionWindow(invalidTargetException);
+                                    return;
+                                } catch (NotSummonedException notSummonedException) {
+                                    exceptionWindow(notSummonedException);
+                                    notSummonedException.printStackTrace();
+                                    return;
+                                }
+                                ((minionButton)curr).verifyMinion();
+                                finalA5.verifyMinion();
+                                if(finalA5.getHp()==0)
+                                    pfield.getChildren().remove(finalA5);
+                                if(((minionButton)curr).getHp()==0)
+                                    pOtherField.getChildren().remove(((minionButton)curr));
+                                s1.close();
+
+
+                            });
+                            oppField.getChildren().add(target);
+                        }
+                        Scene scene= new Scene(oppField);
+                        s1.setScene(scene);
+
+                    });
                     pfield.getChildren().add(finalA5);
+
                 });
 
             }
@@ -636,99 +735,118 @@ public class inGame extends Application  {
 
   }
   public String getImage(Card cur){
-            if(cur.getName().equals("Goldshire Footman"))
-                return "images\\cards\\GoldshireFootman.png";
+      if(cur.getName().equals("Goldshire Footman"))
+          return "images\\cards\\GoldshireFootman.png";
 
-          if(cur.getName().equals("Bloodfen Raptor"))
-              return "images\\cards\\BloodfenRaptor.png";
+      if(cur.getName().equals("Bloodfen Raptor"))
+          return "images\\cards\\BloodfenRaptor.png";
 
-          if(cur.getName().equals("Stonetusk Boar"))
-              return "images\\cards\\StonetuskBoar.png";
+      if(cur.getName().equals("Stonetusk Boar"))
+          return "images\\cards\\StonetuskBoar.png";
 
-          if(cur.getName().equals("Frostwolf Grunt"))
-              return "images\\cards\\FrostwolfGrunt.png";
+      if(cur.getName().equals("Frostwolf Grunt"))
+          return "images\\cards\\FrostwolfGrunt.png";
 
-          if(cur.getName().equals("Wolfrider"))
-              return "images\\cards\\Wolfrider.png";
+      if(cur.getName().equals("Wolfrider"))
+          return "images\\cards\\Wolfrider.png";
 
-          if(cur.getName().equals("Chilwind Yeti"))
-              return "images\\cards\\ChillwindYeti.png";
+      if(cur.getName().equals("Chilwind Yeti"))
+          return "images\\cards\\ChillwindYeti.png";
 
-          if(cur.getName().equals("Boulderfist Ogre"))
-              return "images\\cards\\BoulderfistOgre.png";
+      if(cur.getName().equals("Boulderfist Ogre"))
+          return "images\\cards\\BoulderfistOgre.png";
 
-          if(cur.getName().equals("Core Hound"))
-              return "images\\cards\\CoreHound.png";
+      if(cur.getName().equals("Core Hound"))
+          return "images\\cards\\CoreHound.png";
 
-          if(cur.getName().equals("Argent Commander"))
-              return "images\\cards\\ArgentCommander.png";
+      if(cur.getName().equals("Argent Commander"))
+          return "images\\cards\\ArgentCommander.png";
 
-          if(cur.getName().equals("Sunwalker"))
-              return "images\\cards\\Sunwalker.png";
+      if(cur.getName().equals("Sunwalker"))
+          return "images\\cards\\Sunwalker.png";
 
-          if(cur.getName().equals("Chromaggus"))
-              return "images\\cards\\Chromaggus.png";
+      if(cur.getName().equals("Chromaggus"))
+          return "images\\cards\\Chromaggus.png";
 
-          if(cur.getName().equals("The LichKing"))
-              return "images\\cards\\TheLichKing.png";
+      if(cur.getName().equals("The LichKing"))
+          return "images\\cards\\TheLichKing.png";
 
-          if(cur.getName().equals("Icehowl"))
-              return "images\\cards\\Icehowl.png";
+      if(cur.getName().equals("Icehowl"))
+          return "images\\cards\\Icehowl.png";
 
-          if(cur.getName().equals("Colossus of the Moon"))
-              return "images\\cards\\ColossusoftheMoon.png";
+      if(cur.getName().equals("Colossus of the Moon"))
+          return "images\\cards\\ColossusoftheMoon.png";
 
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
-          if(cur.getName().equals("Goldshire Footman"))
-              return "images\\cards\\GoldshireFootman.png";
+      if(cur.getName().equals("King Krush"))
+          return "images\\cards\\KingKrush.png";
 
-          return "images\\whitepage.png";
+      if(cur.getName().equals("Kalycgos"))
+          return "images\\cards\\Kalycgos.png";
+
+      if(cur.getName().equals("Tirion Fordring"))
+          return "images\\cards\\TirionFordring.png";
+
+      if(cur.getName().equals("Prophet Velen"))
+          return "images\\cards\\ProphetVelen.png";
+
+      if(cur.getName().equals("Wilfred Fizzlebang"))
+          return "images\\cards\\WilfredFizzlebang.png";
+
+      if(cur.getName().equals("Curse of Weakness"))
+          return "images\\cards\\CurseofWeakness.png";
+
+      if(cur.getName().equals("Divine spirit"))
+          return "images\\cards\\Divinespirit.png";
+
+      if(cur.getName().equals("Flame Strike"))
+          return "images\\cards\\FlameStrike.png";
+
+      if(cur.getName().equals("Holy Nova"))
+          return "images\\cards\\HolyNova.png";
+
+      if(cur.getName().equals("Kill Command"))
+          return "images\\cards\\KillCommand.png";
+
+      if(cur.getName().equals("Level Up!"))
+          return "images\\cards\\LevelUp.png";
+
+      if(cur.getName().equals("Multi-Shot"))
+          return "images\\cards\\MultiShot.png";
+
+      if(cur.getName().equals("Polymorph"))
+          return "images\\cards\\Polymorph.png";
+
+      if(cur.getName().equals("Pyroblast"))
+          return "images\\cards\\Pyroblast.png";
+
+      if(cur.getName().equals("Seal Of Champions"))
+          return "images\\cards\\SealOfChampions.png";
+
+      if(cur.getName().equals("Shadow Word: Death"))
+          return "images\\cards\\ShadowWordDeath.png";
+
+      if(cur.getName().equals("Siphon Soul"))
+          return "images\\cards\\SiphonSoul.png";
+
+      if(cur.getName().equals("Twisting nether"))
+          return "images\\cards\\Twistingnether.png";
+
+      if(cur.getName().equals("Goldshire Footman"))
+          return "images\\cards\\GoldshireFootman.png";
+
+      return "images\\whitepage.png";
   }
-  public void endTurnDraw(Hero p,Hero pOther,HBox phand,FlowPane pfield){
+  public void endTurnDraw(Hero p,Hero pOther,HBox phand,FlowPane pfield,FlowPane pOtherField){
         Card cur= p.getHand().get(p.getHand().size()-1);
+        System.out.println(p.getHand());
       ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
       if (cur instanceof Minion) {
-          ImageView finalA5 = a;
+          minionButton finalA5 = new minionButton((Minion) cur);
           a.setOnMouseClicked(e -> {
               try {
                   p.playMinion((Minion) cur);
               } catch (NotYourTurnException notYourTurnException) {
-                  notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                  notYourTurnException= new NotYourTurnException("Not Your Turn!!");
                   exceptionWindow(notYourTurnException);
                   notYourTurnException.printStackTrace();
                   return;
@@ -738,10 +856,107 @@ public class inGame extends Application  {
                   notEnoughManaException.printStackTrace();
                   return;
               } catch (FullFieldException fullFieldException) {
+                  fullFieldException= new FullFieldException("Your Field is Full!!");
+                  exceptionWindow(fullFieldException);
                   fullFieldException.printStackTrace();
                   return;
               }
+              phand.getChildren().remove(a);
+              finalA5.setOnMouseClicked(ee->{
+                  Stage s1=new Stage();
+                  s1.initModality(Modality.APPLICATION_MODAL);
+                  s1.show();
+                  FlowPane oppField= new FlowPane();
+                  ImageView opponent = null;
+                  if(pOther instanceof Mage)
+                      opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                  if(pOther instanceof Warlock)
+                      opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                  if(pOther instanceof Priest)
+                      opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                  if(pOther instanceof Paladin)
+                      opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                  if(pOther instanceof Hunter)
+                      opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                  opponent.setOnMouseClicked(eee->{
+                      heroTargeted=true;
+                      heroTarget=pOther;
+                      s1.close();
+                      try {
+                          p.attackWithMinion((Minion) cur,pOther);
+                          System.out.println(pOther.getCurrentHP());
+                      } catch (CannotAttackException cannotAttackException) {
+                          cannotAttackException.printStackTrace();
+                          exceptionWindow(cannotAttackException);
+                          return;
+                      } catch (NotYourTurnException notYourTurnException) {
+                          notYourTurnException.printStackTrace();
+                          exceptionWindow(notYourTurnException);
+                          return;
+                      } catch (TauntBypassException tauntBypassException) {
+                          tauntBypassException.printStackTrace();
+                          exceptionWindow(tauntBypassException);
+                          return;
+                      } catch (NotSummonedException notSummonedException) {
+                          notSummonedException.printStackTrace();
+                          exceptionWindow(notSummonedException);
+                          return;
+                      } catch (InvalidTargetException invalidTargetException) {
+                          invalidTargetException.printStackTrace();
+                          exceptionWindow(invalidTargetException);
+                          return;
+                      }
+                      System.out.println(pOther.getCurrentHP());
+                      verifyHeroP1();
+                      verifyHeroP2();
+                  });
+                  oppField.getChildren().add(opponent);
+                  for(Node curr: pOtherField.getChildren()){
+                      if(!curr.isVisible())
+                          continue;
+                      minionButton target= new minionButton(((minionButton)curr).getMinion());
+                      target.setOnMouseClicked(eee->{
+                          try {
+                              p.attackWithMinion((Minion) cur,target.getMinion());
+                          } catch (CannotAttackException cannotAttackException) {
+                              cannotAttackException.printStackTrace();
+                              exceptionWindow(cannotAttackException);
+                              return;
+                          } catch (NotYourTurnException notYourTurnException) {
+                              notYourTurnException.printStackTrace();
+                              exceptionWindow(notYourTurnException);
+                              return;
+                          } catch (TauntBypassException tauntBypassException) {
+                              tauntBypassException.printStackTrace();
+                              exceptionWindow(tauntBypassException);
+                              return;
+                          } catch (InvalidTargetException invalidTargetException) {
+                              invalidTargetException.printStackTrace();
+                              exceptionWindow(invalidTargetException);
+                              return;
+                          } catch (NotSummonedException notSummonedException) {
+                              exceptionWindow(notSummonedException);
+                              notSummonedException.printStackTrace();
+                              return;
+                          }
+                          ((minionButton)curr).verifyMinion();
+                          finalA5.verifyMinion();
+                          if(finalA5.getHp()==0)
+                              pfield.getChildren().remove(finalA5);
+                          if(((minionButton)curr).getHp()==0)
+                              pOtherField.getChildren().remove(((minionButton)curr));
+                          s1.close();
+
+
+                      });
+                      oppField.getChildren().add(target);
+                  }
+                  Scene scene= new Scene(oppField);
+                  s1.setScene(scene);
+
+              });
               pfield.getChildren().add(finalA5);
+
           });
 
       }
@@ -882,6 +1097,992 @@ public class inGame extends Application  {
         okay.setOnMouseClicked(e1-> s1.close());
         v.getChildren().add(okay);
         s1.setScene(sc);
+    }
+    public void target(Hero p,Hero pOther,ImageView opponent,boolean attack){
+        Stage s1=new Stage();
+        s1.initModality(Modality.APPLICATION_MODAL);
+        s1.show();
+        FlowPane oppField= new FlowPane();
+        opponent.setOnMouseClicked(e->{
+            heroTargeted=true;
+            heroTarget=pOther;
+            s1.close();
+        });
+        oppField.getChildren().add(opponent);
+        for(Minion cur: pOther.getField()){
+            minionButton target= new minionButton(cur);
+            target.setOnMouseClicked(e->{
+                minionTargeted=true;
+                minionTarget=cur;
+                s1.close();
+            });
+            oppField.getChildren().add(target);
+        }
+        Scene scene= new Scene(oppField);
+        s1.setScene(scene);
+    }
+    public void verifyHeroP1(){
+        if(p1 instanceof Mage){
+            if(p1.getCurrentHP()==30)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==29)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_29.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==28)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_28.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==27)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_27.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==26)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_26.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==25)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_25.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==24)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_24.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==23)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_23.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==22)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_22.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==21)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_21.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==20)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_20.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==19)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_19.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==18)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_18.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==17)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_17.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==16)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_16.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==15)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_15.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==14)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_14.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==13)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_13.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==12)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_12.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==11)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_11.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==10)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_10.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==9)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_9.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==8)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_8.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==7)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_7.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==6)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_6.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==5)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_5.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==4)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_4.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==3)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_3.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==2)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_2.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==1)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_1.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==0)
+                p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_0.png",250,300,true,true));
+        }
+
+        if(p1 instanceof Paladin){
+            if(p1.getCurrentHP()==30)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==29)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_29.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==28)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_28.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==27)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_27.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==26)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_26.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==25)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_25.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==24)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_24.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==23)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_23.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==22)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_22.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==21)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_21.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==20)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_20.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==19)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_19.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==18)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_18.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==17)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_17.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==16)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_16.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==15)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_15.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==14)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_14.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==13)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_13.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==12)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_12.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==11)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_11.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==10)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_10.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==9)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_9.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==8)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_8.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==7)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_7.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==6)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_6.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==5)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_5.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==4)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_4.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==3)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_3.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==2)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_2.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==1)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_1.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==0)
+                p1Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_0.png",250,300,true,true));
+
+        }
+
+        if(p1 instanceof Priest){
+            if(p1.getCurrentHP()==30)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_30.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==29)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_29.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==28)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_28.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==27)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_27.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==26)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_26.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==25)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_25.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==24)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_24.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==23)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_23.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==22)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_22.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==21)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_21.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==20)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_20.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==19)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_19.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==18)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_18.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==17)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_17.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==16)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_16.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==15)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_15.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==14)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_14.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==13)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_13.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==12)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_12.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==11)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_11.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==10)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_10.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==9)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_9.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==8)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_8.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==7)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_7.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==6)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_6.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==5)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_5.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==4)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_4.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==3)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_3.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==2)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_2.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==1)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_1.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==0)
+                p1Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_0.png",250,300,true,true));
+
+
+        }
+        if(p1 instanceof Warlock){
+            if(p1.getCurrentHP()==30)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_30.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==29)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_29.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==28)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_28.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==27)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_27.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==26)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_26.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==25)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_25.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==24)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_24.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==23)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_23.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==22)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_22.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==21)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_21.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==20)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_20.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==19)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_19.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==18)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_18.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==17)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_17.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==16)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_16.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==15)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_15.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==14)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_14.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==13)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_13.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==12)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_12.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==11)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_11.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==10)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_10.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==9)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_9.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==8)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_8.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==7)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_7.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==6)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_6.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==5)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_5.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==4)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_4.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==3)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_3.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==2)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_2.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==1)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_1.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==0)
+                p1Icon=new ImageView(new Image("images\\Guldan\\Guldan_0.png",250,300,true,true));
+
+
+        }
+        if(p1 instanceof Hunter){
+            if(p1.getCurrentHP()==30)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_30.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==29)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_29.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==28)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_28.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==27)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_27.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==26)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_26.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==25)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_25.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==24)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_24.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==23)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_23.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==22)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_22.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==21)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_21.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==20)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_20.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==19)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_19.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==18)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_18.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==17)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_17.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==16)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_16.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==15)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_15.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==14)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_14.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==13)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_13.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==12)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_12.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==11)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_11.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==10)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_10.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==9)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_9.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==8)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_8.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==7)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_7.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==6)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_6.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==5)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_5.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==4)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_4.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==3)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_3.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==2)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_2.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==1)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_1.png",250,300,true,true));
+
+            if(p1.getCurrentHP()==0)
+                p1Icon=new ImageView(new Image("images\\rexxar\\Rexxar_0.png",250,300,true,true));
+
+
+        }
+    }
+
+    public void verifyHeroP2(){        if(p2 instanceof Mage){
+        if(p2.getCurrentHP()==30)
+            p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==29)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_29.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==28)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_28.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==27)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_27.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==26)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_26.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==25)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_25.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==24)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_24.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==23)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_23.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==22)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_22.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==21)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_21.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==20)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_20.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==19)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_19.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==18)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_18.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==17)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_17.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==16)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_16.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==15)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_15.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==14)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_14.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==13)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_13.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==12)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_12.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==11)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_11.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==10)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_10.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==9)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_9.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==8)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_8.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==7)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_7.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==6)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_6.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==5)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_5.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==4)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_4.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==3)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_3.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==2)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_2.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==1)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_1.png",250,300,true,true));
+
+        if(p2.getCurrentHP()==0)
+            p2Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_0.png",250,300,true,true));
+    }
+
+        if(p2 instanceof Paladin){
+            if(p2.getCurrentHP()==30)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==29)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_29.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==28)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_28.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==27)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_27.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==26)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_26.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==25)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_25.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==24)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_24.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==23)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_23.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==22)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_22.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==21)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_21.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==20)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_20.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==19)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_19.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==18)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_18.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==17)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_17.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==16)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_16.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==15)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_15.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==14)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_14.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==13)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_13.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==12)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_12.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==11)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_11.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==10)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_10.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==9)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_9.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==8)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_8.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==7)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_7.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==6)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_6.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==5)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_5.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==4)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_4.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==3)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_3.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==2)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_2.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==1)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_1.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==0)
+                p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_0.png",250,300,true,true));
+
+        }
+
+        if(p2 instanceof Priest){
+            if(p2.getCurrentHP()==30)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_30.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==29)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_29.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==28)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_28.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==27)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_27.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==26)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_26.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==25)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_25.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==24)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_24.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==23)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_23.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==22)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_22.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==21)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_21.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==20)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_20.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==19)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_19.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==18)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_18.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==17)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_17.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==16)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_16.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==15)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_15.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==14)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_14.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==13)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_13.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==12)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_12.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==11)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_11.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==10)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_10.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==9)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_9.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==8)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_8.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==7)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_7.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==6)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_6.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==5)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_5.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==4)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_4.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==3)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_3.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==2)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_2.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==1)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_1.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==0)
+                p2Icon=new ImageView(new Image("images\\anduin\\Anduin_Wrynn_0.png",250,300,true,true));
+
+
+        }
+        if(p2 instanceof Warlock){
+            if(p2.getCurrentHP()==30)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_30.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==29)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_29.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==28)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_28.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==27)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_27.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==26)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_26.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==25)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_25.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==24)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_24.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==23)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_23.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==22)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_22.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==21)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_21.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==20)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_20.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==19)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_19.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==18)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_18.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==17)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_17.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==16)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_16.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==15)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_15.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==14)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_14.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==13)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_13.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==12)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_12.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==11)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_11.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==10)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_10.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==9)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_9.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==8)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_8.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==7)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_7.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==6)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_6.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==5)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_5.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==4)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_4.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==3)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_3.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==2)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_2.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==1)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_1.png",250,300,true,true));
+
+            if(p2.getCurrentHP()==0)
+                p2Icon=new ImageView(new Image("images\\Guldan\\Guldan_0.png",250,300,true,true));
+
+
+        }
+        if(p2 instanceof Hunter) {
+            if (p2.getCurrentHP() == 30)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_30.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 29)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_29.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 28)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_28.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 27)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_27.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 26)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_26.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 25)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_25.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 24)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_24.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 23)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_23.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 22)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_22.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 21)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_21.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 20)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_20.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 19)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_19.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 18)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_18.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 17)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_17.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 16)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_16.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 15)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_15.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 14)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_14.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 13)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_13.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 12)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_12.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 11)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_11.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 10)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_10.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 9)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_9.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 8)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_8.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 7)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_7.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 6)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_6.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 5)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_5.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 4)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_4.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 3)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_3.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 2)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_2.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 1)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_1.png", 250, 300, true, true));
+
+            if (p2.getCurrentHP() == 0)
+                p2Icon = new ImageView(new Image("images\\rexxar\\Rexxar_0.png", 250, 300, true, true));
+
+
+        }
+
     }
 
 
