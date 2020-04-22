@@ -3,7 +3,7 @@ package exceptions;
 public class noHeroSelectedException extends HearthstoneException {
     public noHeroSelectedException()
     {
-        super();
+        super("");
     }
     public noHeroSelectedException(String message)
     {

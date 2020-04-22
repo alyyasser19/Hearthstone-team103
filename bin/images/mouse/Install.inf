@@ -1,0 +1,54 @@
+; Zune'd
+; Right click on the file "Install.inf" and select "Install". Then in the Mouse control panel apply Zune'd cursors.
+
+[Version]
+signature="$CHICAGO$"
+
+[DefaultInstall]
+CopyFiles = Scheme.Cur, Scheme.Txt
+AddReg    = Scheme.Reg
+
+[DestinationDirs]
+Scheme.Cur = 10,"%CUR_DIR%"
+Scheme.Txt = 10,"%CUR_DIR%"
+
+[Scheme.Reg]
+HKCU,"Control Panel\Cursors\Schemes","%SCHEME_NAME%",,"%10%\%CUR_DIR%\%pointer%,%10%\%CUR_DIR%\%help%,%10%\%CUR_DIR%\%work%,%10%\%CUR_DIR%\%busy%,%10%\%CUR_DIR%\%cross%,%10%\%CUR_DIR%\%Text%,%10%\%CUR_DIR%\%Hand%,%10%\%CUR_DIR%\%unavailiable%,%10%\%CUR_DIR%\%Vert%,%10%\%CUR_DIR%\%Horz%,%10%\%CUR_DIR%\%Dgn1%,%10%\%CUR_DIR%\%Dgn2%,%10%\%CUR_DIR%\%move%,%10%\%CUR_DIR%\%alternate%,%10%\%CUR_DIR%\%link%"
+
+; -- Installed files
+
+[Scheme.Cur]
+ZBusy.ani
+ZBusyBackground.ani
+ZCursors.ani
+ZHelp.ani
+ZLinks.ani
+ZMove.ani
+ZNesw.ani
+Install.inf
+ZNs.ani
+ZNwe.ani
+ZNwse.ani
+ZPen.ani
+ZPrecision.ani
+ZText.ani
+ZUnavailable.ani
+
+[Strings]
+CUR_DIR       = "Cursors\Zune'd"
+SCHEME_NAME   = "Zune'd"
+pointer       = "ZCursors.ani"
+help          = "ZHelp.ani"
+work          = "ZBusyBackground.ani"
+busy          = "ZBusy.ani"
+text          = "ZText.ani"
+unavailiable  = "ZUnavailable.ani"
+vert          = "ZNs.ani"
+horz          = "ZNwe.ani"
+dgn1          = "ZNwse.ani"
+dgn2          = "ZNesw.ani"
+move          = "ZMove.ani"
+link          = "ZLinks.ani"
+cross         = "ZPrecision.ani"
+hand          = "ZPen.ani"
+alternate     = "ZPen.ani"

@@ -79,6 +79,12 @@ public class minionButton extends Button implements Cloneable{
     }
     public String getImage(){
         Minion cur= minion;
+       if (cur.getName().equals("Silver Hand Recruit"))
+        return "images\\cards\\normal\\SilverHand.jpg";
+
+        if(cur.getName().equals("Sheep"))
+            return "images\\cards\\normal\\Sheep.jpg";
+
         if(cur.getName().equals("Goldshire Footman"))
             return "images\\cards\\normal\\GoldshireFootman.png";
 
