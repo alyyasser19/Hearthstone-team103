@@ -86,7 +86,7 @@ public class inGame extends Application  {
         p2hand.setMaxSize(580,192);
         p2Area.setLeft(p2hand);
         HBox bottom=new HBox();
-        p2Mana=new Button("Mana:\nCards:");
+        p2Mana=new Button("Current Mana:"+p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
         p2Mana.setMinWidth(100);
         bottom.getChildren().add(p2Icon);
         bottom.getChildren().add(p2Power);
@@ -108,7 +108,7 @@ public class inGame extends Application  {
         p1hand.setMaxSize(580,192);
         p1Area.setLeft(p1hand);
         HBox top=new HBox();
-        p1Mana=new Button("Mana:\nCards:");
+        p1Mana=new Button("Current Mana:"+p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size());
         p1Mana.setMinWidth(100);
         top.getChildren().add(p1Icon);
         top.getChildren().add(p1Power);
@@ -261,6 +261,7 @@ public class inGame extends Application  {
                         return;
                     }
                     phand.getChildren().remove(a);
+                    verifyMana();
                     finalA5.setOnMouseClicked(ee->{
                         Stage s1=new Stage();
                         s1.initModality(Modality.APPLICATION_MODAL);
@@ -366,6 +367,7 @@ public class inGame extends Application  {
                     a.setOnMouseClicked(e -> {
                         try {
                             p.castSpell((AOESpell) cur, pOther.getField());
+
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException=new NotYourTurnException("Not Your Turn!!");
                             exceptionWindow(notYourTurnException);
@@ -378,6 +380,7 @@ public class inGame extends Application  {
                             return;
                         }
                         phand.getChildren().remove(a);
+                        verifyMana();
                         System.out.println("works?");
                         for(Node curr: pOtherField.getChildren()){
                             if(curr.isVisible()) {
@@ -427,6 +430,7 @@ public class inGame extends Application  {
                         verifyHeroP1();
                         verifyHeroP2();
                         phand.getChildren().remove(a);
+                        verifyMana();
                         System.out.println("works?");
                     });
                 }
@@ -470,6 +474,7 @@ public class inGame extends Application  {
                                     return;
                                 }
                                 phand.getChildren().remove(a);
+                                verifyMana();
                                 verifyHeroP2();
                                 verifyHeroP1();
                             }});
@@ -505,6 +510,7 @@ public class inGame extends Application  {
                                     if(((minionButton) curr).getHp()==0)
                                         pOtherField.getChildren().remove(curr);
                                     phand.getChildren().remove(a);
+                                    verifyMana();
                                 }
 
 ;});
@@ -541,6 +547,7 @@ public class inGame extends Application  {
                                     heroTargeted=false;
                                     try {
                                         p.castSpell((HeroTargetSpell) cur,pOther);
+
                                     } catch (NotYourTurnException notYourTurnException) {
                                         notYourTurnException.printStackTrace();
                                         exceptionWindow(notYourTurnException);
@@ -551,6 +558,7 @@ public class inGame extends Application  {
                                         return;
                                     }
                                     phand.getChildren().remove(a);
+                                    verifyMana();
                                     verifyHeroP2();
                                     verifyHeroP1();
                                 }});
@@ -569,6 +577,12 @@ public class inGame extends Application  {
                                     minionTargeted=false;
                                     try {
                                         p.castSpell((LeechingSpell) cur,minionTarget);
+                                        if(p==p1){
+                                            p1Mana.setText("Mana:"+ p.getCurrentHP()+"\nCardsleft"+p.getHand().size());
+                                        }
+                                        if(p==p2){
+                                            p2Mana.setText("Mana:"+ p.getCurrentHP()+"\nCardsleft"+p.getHand().size());
+                                        }
                                     } catch (NotYourTurnException notYourTurnException) {
                                         notYourTurnException.printStackTrace();
                                         exceptionWindow(notYourTurnException);
@@ -584,6 +598,7 @@ public class inGame extends Application  {
                                     verifyHeroP1();
                                     verifyHeroP2();
                                     phand.getChildren().remove(a);
+                                    verifyMana();
                                 }
 
 
@@ -710,7 +725,8 @@ public class inGame extends Application  {
               a.setOnMouseClicked(e -> {
                   try {
                       p.playMinion((Minion) cur);
-                  } catch (NotYourTurnException notYourTurnException) {
+                      }
+                   catch (NotYourTurnException notYourTurnException) {
                       notYourTurnException= new NotYourTurnException("Not Your Turn!!");
                       exceptionWindow(notYourTurnException);
                       notYourTurnException.printStackTrace();
@@ -727,6 +743,7 @@ public class inGame extends Application  {
                       return;
                   }
                   phand.getChildren().remove(a);
+                  verifyMana();
                   finalA5.setOnMouseClicked(ee->{
                       Stage s1=new Stage();
                       s1.initModality(Modality.APPLICATION_MODAL);
@@ -851,7 +868,8 @@ public class inGame extends Application  {
                           }
                       }
                       pOtherField.getChildren().removeIf(m->((minionButton)m).getHp()==0 && m.isVisible());
-                        phand.getChildren().remove(a);});
+                        phand.getChildren().remove(a);
+                        verifyMana();});
               }
               if (cur instanceof FieldSpell) {
                   a.setOnMouseClicked(e -> {
@@ -873,6 +891,7 @@ public class inGame extends Application  {
                           ((minionButton) curr).verifyMinion();
                       }
                       phand.getChildren().remove(a);
+                      verifyMana();
                   });
               }
               if (cur instanceof HeroTargetSpell && !(cur instanceof MinionTargetSpell)) {
@@ -893,6 +912,7 @@ public class inGame extends Application  {
                       verifyHeroP1();
                       verifyHeroP2();
                       phand.getChildren().remove(a);
+                      verifyMana();
                       System.out.println("works?");
                   });
               }
@@ -973,7 +993,8 @@ public class inGame extends Application  {
                               }
 
                               ;
-                              phand.getChildren().remove(a);});
+                              phand.getChildren().remove(a);
+                              verifyMana();});
                       }
 
 });
@@ -1050,6 +1071,7 @@ public class inGame extends Application  {
                                   verifyHeroP1();
                                   verifyHeroP2();
                                   phand.getChildren().remove(a);
+                                  verifyMana();
                               }
 
 
@@ -1060,6 +1082,7 @@ public class inGame extends Application  {
               }
           }
           phand.getChildren().add(a);
+      verifyMana();
       }
 //  public void endTurn(){
 //
@@ -2079,6 +2102,13 @@ public class inGame extends Application  {
         }
 
     }
+    public void verifyMana(){
+            p1Mana.setText("Current Mana:"+ p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size());
+            p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
+
+    }
+
+
 
 
 
