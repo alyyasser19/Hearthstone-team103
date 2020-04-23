@@ -21,7 +21,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.cards.Card;
-import model.cards.minions.Icehowl;
 import model.cards.minions.Minion;
 import model.cards.spells.*;
 import model.heroes.*;
@@ -39,6 +38,8 @@ public class mainMenu extends Application implements GameListener {
     private Stage titleScreen;
     private Scene menu;
     private Scene characterSelect;
+    private BorderPane p1Area;
+    private BorderPane p2Area;
 
 
     //Game Classes
@@ -68,6 +69,7 @@ public class mainMenu extends Application implements GameListener {
     //Buttons
     HBox p1hand= new HBox();
     HBox p2hand= new HBox();
+    HBox oppHand=new HBox();
     FlowPane p1Field=new FlowPane();
     FlowPane p2Field= new FlowPane();
     Stage stage;
@@ -314,7 +316,10 @@ public class mainMenu extends Application implements GameListener {
     public void playerDraw(HBox phand,FlowPane pfield,Hero p,Hero pOther,FlowPane pOtherField){
         for(Card cur: p.getHand() ) {
             ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
-            a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+            a.setOnMouseEntered(e->{if(cur.getManaCost()<=p.getCurrentManaCrystals() && p==game.getCurrentHero())
+                                    a.setEffect(new InnerShadow(50,Color.GREEN));
+                                    else
+                                    a.setEffect(new InnerShadow(50,Color.RED));});
             a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
             if (cur instanceof Minion) {
                 minionButton finalA5 = new minionButton((Minion) cur);
@@ -465,6 +470,12 @@ public class mainMenu extends Application implements GameListener {
                         verifyHeroP1();
                         p2VerifyMinions();
                         p1VerifyMinions();
+                        verifyMana();
+                        verifyMana();
+                        verifyHeroP2();
+                        verifyHeroP1();
+                        p2VerifyMinions();
+                        p1VerifyMinions();
                         System.out.println("works?");
 
                     });
@@ -486,10 +497,16 @@ public class mainMenu extends Application implements GameListener {
                         }
                         System.out.println("works?");
                         verifyMana();
+                        p1VerifyMinions();
+                        p2VerifyMinions();
+                        verifyHeroP1();
+                        verifyHeroP2();
+                        verifyMana();
                         verifyHeroP2();
                         verifyHeroP1();
                         p2VerifyMinions();
                         p1VerifyMinions();
+
 
                         phand.getChildren().remove(a);
                     });
@@ -516,6 +533,12 @@ public class mainMenu extends Application implements GameListener {
                         p1VerifyMinions();
                         phand.getChildren().remove(a);
                         verifyMana();
+                        verifyMana();
+                        verifyMana();
+                        verifyHeroP2();
+                        verifyHeroP1();
+                        p2VerifyMinions();
+                        p1VerifyMinions();
                         System.out.println("works?");
                     });
                 }
@@ -564,6 +587,12 @@ public class mainMenu extends Application implements GameListener {
                                     verifyMana();
                                     verifyHeroP2();
                                     verifyHeroP1();
+                                    verifyMana();
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    p2VerifyMinions();
+                                    p1VerifyMinions();
                                 }});
                             oppField.getChildren().add(opponent);}
                         for(Node curr:pOtherField.getChildren()){
@@ -643,6 +672,12 @@ public class mainMenu extends Application implements GameListener {
                                     verifyMana();
                                     verifyHeroP2();
                                     verifyHeroP1();
+                                    verifyMana();
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    p2VerifyMinions();
+                                    p1VerifyMinions();
                                 }});}
                         for(Node curr:pfield.getChildren()){
                             if(!curr.isVisible() || curr instanceof ImageView)
@@ -897,7 +932,10 @@ public class mainMenu extends Application implements GameListener {
         Card cur= p.getHand().get(p.getHand().size()-1);
         System.out.println(p.getHand());
         ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
-        a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+        a.setOnMouseEntered(e->{if(cur.getManaCost()<=p.getCurrentManaCrystals()  && p==game.getCurrentHero())
+            a.setEffect(new InnerShadow(50,Color.GREEN));
+        else
+            a.setEffect(new InnerShadow(50,Color.RED));});
         a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
         if (cur instanceof Minion) {
             minionButton finalA5 = new minionButton((Minion) cur);
@@ -1059,7 +1097,12 @@ public class mainMenu extends Application implements GameListener {
                     verifyHeroP1();
                     p2VerifyMinions();
                     p1VerifyMinions();
-                    //pOtherField.getChildren().removeIf(m->((minionButton)m).getHp()==0 && m.isVisible() && !(m instanceof ImageView));
+                    verifyMana();
+                    verifyMana();
+                    verifyHeroP2();
+                    verifyHeroP1();
+                    p2VerifyMinions();
+                    p1VerifyMinions();
                     phand.getChildren().remove(a);
                     verifyMana();});
             }
@@ -1081,6 +1124,11 @@ public class mainMenu extends Application implements GameListener {
                     System.out.println("works?");
 
                     phand.getChildren().remove(a);
+                    verifyMana();
+                    p1VerifyMinions();
+                    p2VerifyMinions();
+                    verifyHeroP1();
+                    verifyHeroP2();
                     verifyMana();
                     p1VerifyMinions();
                     p2VerifyMinions();
@@ -1396,7 +1444,10 @@ public class mainMenu extends Application implements GameListener {
             Card cur= p.getHand().get(p.getHand().size()-2);
             System.out.println(p.getHand());
             ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
-            a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+            a.setOnMouseEntered(e->{if(cur.getManaCost()<=p.getCurrentManaCrystals()  && p==game.getCurrentHero())
+                a.setEffect(new InnerShadow(50,Color.GREEN));
+            else
+                a.setEffect(new InnerShadow(50,Color.RED));});
             a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
             if (cur instanceof Minion) {
                 minionButton finalA5 = new minionButton((Minion) cur);
@@ -1558,7 +1609,12 @@ public class mainMenu extends Application implements GameListener {
                         verifyHeroP1();
                         p2VerifyMinions();
                         p1VerifyMinions();
-                        //pOtherField.getChildren().removeIf(m->((minionButton)m).getHp()==0 && m.isVisible() && !(m instanceof ImageView));
+                        verifyMana();
+                        verifyMana();
+                        verifyHeroP2();
+                        verifyHeroP1();
+                        p2VerifyMinions();
+                        p1VerifyMinions();
                         phand.getChildren().remove(a);
                         verifyMana();});
                 }
@@ -1580,6 +1636,11 @@ public class mainMenu extends Application implements GameListener {
                         System.out.println("works?");
 
                         phand.getChildren().remove(a);
+                        verifyMana();
+                        p1VerifyMinions();
+                        p2VerifyMinions();
+                        verifyHeroP1();
+                        verifyHeroP2();
                         verifyMana();
                         p1VerifyMinions();
                         p2VerifyMinions();
@@ -2911,6 +2972,12 @@ public class mainMenu extends Application implements GameListener {
             p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size()+"\nYour Turn");
         else
             p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size()+"\nOpponent's Turn");
+        p1VerifyMinions();
+        p2VerifyMinions();
+        verifyHeroP1();
+        verifyHeroP2();
+
+
 
     }
     public void getPowerImage(){
@@ -2938,6 +3005,7 @@ public class mainMenu extends Application implements GameListener {
             p2Power.setImage(new Image("images\\Steady_Shot.png",300,192,true,true));
     }
     public void p1VerifyMinions(){
+        if(!p1Field.getChildren().isEmpty()){
         int i=0;
         int size= p1Field.getChildren().size();
         while(i<size){
@@ -2949,6 +3017,10 @@ public class mainMenu extends Application implements GameListener {
                 size=p1Field.getChildren().size();
             }
             i++;}
+        if(p1Field.getChildren().get(p1Field.getChildren().size()-1) instanceof minionButton){
+           if( ((minionButton) p1Field.getChildren().get(p1Field.getChildren().size()-1)).getHp()==0)
+               p1Field.getChildren().remove(p1Field.getChildren().size()-1);
+        }}
 //        for(Node cur: p1Field.getChildren()){
 //            if(cur instanceof minionButton) {
 //                ((minionButton) cur).verifyMinion();
@@ -2957,6 +3029,7 @@ public class mainMenu extends Application implements GameListener {
         // p1Field.getChildren().removeIf(m->((minionButton)m).getHp()==0);
     }
     public void p2VerifyMinions(){
+        if(!p2Field.getChildren().isEmpty()){
         int i=0;
         int size= p2Field.getChildren().size();
         while(i<size){
@@ -2968,6 +3041,10 @@ public class mainMenu extends Application implements GameListener {
                 size=p2Field.getChildren().size();
             }
             i++;}
+        if(p2Field.getChildren().get(p2Field.getChildren().size()-1) instanceof minionButton){
+            if( ((minionButton) p2Field.getChildren().get(p2Field.getChildren().size()-1)).getHp()==0)
+                p2Field.getChildren().remove(p2Field.getChildren().size()-1);
+        }}
 
 //        for(Node cur: p2Field.getChildren()){
 //            if(cur instanceof minionButton) {
@@ -2995,6 +3072,18 @@ public class mainMenu extends Application implements GameListener {
         p1Power=new ImageView(new Image("images\\Fireblast.png",300,192,true,true));
         p2Power =new ImageView(new Image("images\\Steady_Shot.png",100,175,true,true));
         getPowerImage();
+        p1Power.setOnMouseEntered(e->{  p1Power.setOnMouseEntered(ee->{if(p1.getCurrentManaCrystals()>=2 && p1.isHeroPowerUsed()==false&& p1==game.getCurrentHero())
+            p1Power.setEffect(new InnerShadow(50,Color.GREEN));
+        else
+            p1Power.setEffect(new InnerShadow(50,Color.RED));});});
+        p1Power.setOnMouseExited(e->p1Power.setEffect(new InnerShadow(0,Color.GREEN)));
+
+        p2Power.setOnMouseEntered(e->{  p2Power.setOnMouseEntered(ee->{if(p2.getCurrentManaCrystals()>=2 && p2.isHeroPowerUsed()==false&& p2==game.getCurrentHero())
+            p2Power.setEffect(new InnerShadow(50,Color.GREEN));
+        else
+            p2Power.setEffect(new InnerShadow(50,Color.RED));});});
+        p2Power.setOnMouseExited(e->p2Power.setEffect(new InnerShadow(0,Color.GREEN)));
+        //__________________________________________________________________________________________
         //___________________________________________________________________________________________________________
 
 
@@ -3792,15 +3881,15 @@ public class mainMenu extends Application implements GameListener {
         BorderPane gamescreen= new BorderPane();
 
         //Opponent Layout
-        BorderPane p2Area= new BorderPane();
+         p2Area= new BorderPane();
         //the hand
 
         //Validate to be added and the get target method to be implemented
         playerDraw(p2hand,p2Field,p2,p1,p1Field);
-        minionButton test= new minionButton(new Icehowl());
-        test.setMinSize(210,200);
-        test.setVisible(false);
-        p2Field.getChildren().add(test);
+//        minionButton test= new minionButton(new Icehowl());
+//        test.setMinSize(210,200);
+//        test.setVisible(false);
+//        p2Field.getChildren().add(test);
         p2Field.getChildren().add(p2Power);
         p2hand.setMaxSize(580,200);
         p2Area.setLeft(p2hand);
@@ -3808,23 +3897,23 @@ public class mainMenu extends Application implements GameListener {
         p2Mana=new Button("Current Mana:"+p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
         p2Mana.setMinWidth(100);
         bottom.getChildren().add(p2Icon);
+        bottom.getChildren().add(p2Power);
         p2Area.setBottom(bottom);
         p2Area.setRight(null);
         gamescreen.setTop(p2Area);
 
         //Current Layout
-        BorderPane p1Area= new BorderPane();
+         p1Area= new BorderPane();
         //the place where the hero is
 
         //Validate to be added and the get target method to be implemented
         playerDraw(p1hand,p1Field,p1,p2,p2Field);
-        minionButton test2=new minionButton(new Icehowl());
-
-        test2.setMinSize(200,192);
-        test2.setVisible(false);
-        p1Field.getChildren().add(test2);
-        p1Field.getChildren().add(p1Power);
-
+//        minionButton test2=new minionButton(new Icehowl());
+//
+//        test2.setMinSize(200,192);
+//        test2.setVisible(false);
+//        p1Field.getChildren().add(test2);
+        oppHand.setMaxSize(580,192);
         p1hand.setMaxSize(580,192);
         p1Area.setLeft(p1hand);
         HBox top=new HBox();
@@ -3834,10 +3923,13 @@ public class mainMenu extends Application implements GameListener {
        // p1Mana.setShape(new Circle(20));
 
         top.getChildren().add(p1Icon);
+
         p1Area.setTop(top);
         p1Area.setRight(null);
         gamescreen.setBottom(p1Area);
-
+        top.getChildren().add(new Button());
+        top.getChildren().add(p1Power);
+        top.setSpacing(5);
         //Field Layout
         BorderPane fieldArea= new BorderPane();
         fieldArea.setTop(p2Field);
@@ -3930,7 +4022,7 @@ public class mainMenu extends Application implements GameListener {
                     endTurnDraw(p1,p2,p1hand,p1Field,p2Field);
 
             }
-        });
+            cardFlip();});
 
         BackgroundImage myBI= new BackgroundImage(new Image("images/board.jpg"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -3943,6 +4035,11 @@ public class mainMenu extends Application implements GameListener {
         stage.setMaximized(true);
         System.out.println(stage.getHeight());
         System.out.println(stage.getWidth());
+        cardFlip();
+        p1Field.setAlignment(Pos.CENTER);
+        p2Field.setAlignment(Pos.CENTER);
+        p1Field.setHgap(5);
+        p2Field.setHgap(5);
     }
 
 
@@ -3999,7 +4096,7 @@ public class mainMenu extends Application implements GameListener {
                     new BackgroundSize(s1.getWidth(),s1.getHeight(), false, false, true, false));
             v.setBackground(new Background(b));
             v.setAlignment(Pos.CENTER);
-            Scene sc=new Scene(v,300,300);
+            Scene sc=new Scene(v,400,400);
             Button close= new Button("CLOSE");
             close.setAlignment(Pos.CENTER);
             close.setOnMouseClicked(e1-> s1.close());
@@ -4011,4 +4108,44 @@ public class mainMenu extends Application implements GameListener {
 
     
 
-}}
+}
+public void cardFlip(){
+        if(p1==game.getCurrentHero()){
+            oppHand= new HBox();
+            oppHand.setSpacing(5);
+            for(Card a:p2.getHand()){
+                ImageView cur= new ImageView(new Image(getHeroBack(p2),130,200,false,true));
+                oppHand.getChildren().add(cur);
+            }
+            p2Area.setLeft(oppHand);
+            p1Area.setLeft(p1hand);
+        }
+    if(p2==game.getCurrentHero()){
+        oppHand= new HBox();
+        oppHand.setSpacing(5);
+        for(Card a:p1.getHand()){
+            ImageView cur= new ImageView(new Image(getHeroBack(p1),130,200,false,true));
+            oppHand.getChildren().add(cur);
+        }
+        p2Area.setLeft(p2hand);
+        p1Area.setLeft(oppHand);
+    }
+}
+
+
+public String getHeroBack(Hero p){
+        if(p instanceof Paladin)
+            return "images\\cardBacks\\paladin.png";
+        if(p instanceof Mage)
+            return "images\\cardBacks\\mage.png";
+        if(p instanceof Priest)
+            return "images\\cardBacks\\priest.png";
+        if(p instanceof Warlock)
+            return  "images\\cardBacks\\warlock.png";
+        if(p instanceof Hunter)
+            return "images\\cardBacks\\hunter.png";
+    return "images\\whitepage.png";
+
+}
+
+}

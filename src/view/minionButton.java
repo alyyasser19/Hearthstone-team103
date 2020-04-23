@@ -61,7 +61,9 @@ public class minionButton extends Button implements Cloneable{
             "-fx-content-display: top;"+ 
             //"-fx-padding: 10px;" +
             "-fx-font-size: 12px;"+
-            "-fx-background-position: center;";
+            "-fx-background-position: center;\n"+
+                    "    -fx-border-radius: 30;"+
+                    "-fx-background-radius: 16.4, 15;";
 	    this.setStyle(style);
 	    this.setLayoutX(200);
         this.setLayoutY(100);
