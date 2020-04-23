@@ -5,10 +5,9 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class ShadowWordDeath extends Spell implements MinionTargetSpell {
-
 	public ShadowWordDeath() {
 		super("Shadow Word: Death", 3, Rarity.BASIC);
-
+		setDescription("Destroys a minion that his attack is 5 or more even if it has a divine shield");
 	}
 
 	@Override

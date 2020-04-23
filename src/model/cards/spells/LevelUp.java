@@ -1,15 +1,14 @@
 package model.cards.spells;
 
-import java.util.ArrayList;
-
 import model.cards.Rarity;
 import model.cards.minions.Minion;
 
-public class LevelUp extends Spell implements FieldSpell {
+import java.util.ArrayList;
 
+public class LevelUp extends Spell implements FieldSpell {
 	public LevelUp() {
 		super("Level Up!", 6, Rarity.EPIC);
-
+		setDescription("Increase the attack, current, and max HP of all silver hand recruits by 1");
 	}
 
 	@Override

@@ -4,9 +4,9 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class Polymorph extends Spell implements MinionTargetSpell {
-
 	public Polymorph() {
 		super("Polymorph", 4, Rarity.BASIC);
+		setDescription("Transforms a minion into a Sheep");
 	}
 
 	@Override

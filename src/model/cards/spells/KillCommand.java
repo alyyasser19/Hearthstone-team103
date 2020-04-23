@@ -8,7 +8,7 @@ public class KillCommand extends Spell implements MinionTargetSpell, HeroTargetS
 
 	public KillCommand() {
 		super("Kill Command", 3, Rarity.COMMON);
-
+		setDescription("Deals 5 damage to a minion or 3 damage to a hero");
 	}
 
 	@Override

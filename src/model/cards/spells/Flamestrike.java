@@ -1,14 +1,14 @@
 package model.cards.spells;
 
-import java.util.ArrayList;
-
 import model.cards.Rarity;
 import model.cards.minions.Minion;
 
-public class Flamestrike extends Spell implements AOESpell {
+import java.util.ArrayList;
 
+public class Flamestrike extends Spell implements AOESpell {
 	public Flamestrike() {
 		super("Flamestrike", 7, Rarity.BASIC);
+		setDescription("Deals 4 damage to all enemy minions");
 	}
 
 	public void performAction(ArrayList<Minion> oppField, ArrayList<Minion> curField) {

@@ -4,10 +4,9 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class DivineSpirit extends Spell implements MinionTargetSpell {
-
 	public DivineSpirit() {
 		super("Divine Spirit", 3, Rarity.BASIC);
-
+		setDescription("Doubles the current and max HP of a minion");
 	}
 
 	@Override

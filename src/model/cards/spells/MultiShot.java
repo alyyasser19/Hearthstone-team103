@@ -1,15 +1,14 @@
  package model.cards.spells;
 
-import java.util.ArrayList;
-
 import model.cards.Rarity;
 import model.cards.minions.Minion;
 
-public class MultiShot extends Spell implements AOESpell {
+import java.util.ArrayList;
 
+public class MultiShot extends Spell implements AOESpell {
 	public MultiShot() {
 		super("Multi-Shot", 4, Rarity.BASIC);
-
+		setDescription("Deals 3 damage to two random enemy minions");
 	}
 
 	@Override

@@ -10,11 +10,16 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.cards.Card;
 import model.cards.minions.Icehowl;
 import model.cards.minions.Minion;
@@ -41,7 +46,7 @@ public class mainMenu extends Application implements GameListener {
     Hero p1;
     Hero p2;
     Game game;
-    Button end;
+    ImageView end;
     Minion minionTarget;
     Hero heroTarget;
     Boolean Targeteing= false;
@@ -65,6 +70,7 @@ public class mainMenu extends Application implements GameListener {
     HBox p2hand= new HBox();
     FlowPane p1Field=new FlowPane();
     FlowPane p2Field= new FlowPane();
+    Stage stage;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -308,6 +314,8 @@ public class mainMenu extends Application implements GameListener {
     public void playerDraw(HBox phand,FlowPane pfield,Hero p,Hero pOther,FlowPane pOtherField){
         for(Card cur: p.getHand() ) {
             ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
+            a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+            a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
             if (cur instanceof Minion) {
                 minionButton finalA5 = new minionButton((Minion) cur);
                 a.setOnMouseClicked(e -> {
@@ -432,6 +440,9 @@ public class mainMenu extends Application implements GameListener {
 
             }
             if (cur instanceof Spell) {
+                Tooltip t = new Tooltip(((Spell) cur).getDescription());
+                Tooltip.install(a, t);
+                t.setMinSize(50,50);
                 if (cur instanceof AOESpell) {
                     a.setOnMouseClicked(e -> {
                         try {
@@ -513,10 +524,10 @@ public class mainMenu extends Application implements GameListener {
                     a.setOnMouseClicked(e -> {
                         Stage s1=new Stage();
                         s1.initModality(Modality.APPLICATION_MODAL);
-
                         s1.show();
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
+                        oppField.setPrefSize(1900,300);
                         s1.setScene(scene);
                         Label opp=new Label("opponent");
                         oppField.getChildren().add(opp);
@@ -772,6 +783,10 @@ public class mainMenu extends Application implements GameListener {
                     });
                 }
             }
+            if (cur instanceof Spell){
+            Tooltip t=new Tooltip(((Spell) cur).getDescription());
+            Tooltip.install(a,t);
+            }
             phand.getChildren().add(a);
         }
     }
@@ -882,6 +897,8 @@ public class mainMenu extends Application implements GameListener {
         Card cur= p.getHand().get(p.getHand().size()-1);
         System.out.println(p.getHand());
         ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
+        a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+        a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
         if (cur instanceof Minion) {
             minionButton finalA5 = new minionButton((Minion) cur);
             a.setOnMouseClicked(e -> {
@@ -1017,6 +1034,9 @@ public class mainMenu extends Application implements GameListener {
 
         }
         if (cur instanceof Spell) {
+            Tooltip t = new Tooltip(((Spell) cur).getDescription());
+            t.setShowDelay(Duration.ONE);
+            Tooltip.install(a, t);
             if (cur instanceof AOESpell) {
                 a.setOnMouseClicked(e -> {
                     try {
@@ -1098,6 +1118,9 @@ public class mainMenu extends Application implements GameListener {
 
                     s1.show();
                     FlowPane oppField= new FlowPane();
+                    oppField.setPrefSize(1900,300);
+                    Label opp=new Label("opponent");
+                    oppField.getChildren().add(opp);
                     Scene scene= new Scene(oppField);
                     s1.setScene(scene);
                     if(cur instanceof HeroTargetSpell){
@@ -1349,6 +1372,12 @@ public class mainMenu extends Application implements GameListener {
                 });
             }
         }
+        if (cur instanceof Spell){
+            Tooltip t=new Tooltip(((Spell) cur).getDescription());
+            t.setShowDelay(Duration.ONE);
+            Tooltip.install(a,t);}
+
+
         phand.getChildren().add(a);
         verifyMana();
         verifyMana();
@@ -1356,11 +1385,507 @@ public class mainMenu extends Application implements GameListener {
         verifyHeroP1();
         p2VerifyMinions();
         p1VerifyMinions();
+        for (Node curr:pfield.getChildren()){
+            if(curr instanceof minionButton)
+                if(((minionButton) curr).getMinion().getName().equals("Chromaggus"))
+                    chroDraw(p,pOther,phand,pfield,pOtherField);
+        }
     }
-    //  public void endTurn(){
-//
-//
-//  }
+    public void chroDraw(Hero p,Hero pOther,HBox phand,FlowPane pfield,FlowPane pOtherField){
+        {
+            Card cur= p.getHand().get(p.getHand().size()-2);
+            System.out.println(p.getHand());
+            ImageView a= new ImageView(new Image(getImage(cur),130,200,false,true));
+            a.setOnMouseEntered(e->a.setEffect(new InnerShadow(40,Color.LIGHTGREEN)));
+            a.setOnMouseExited(e->a.setEffect(new InnerShadow(0,Color.WHITESMOKE)));
+            if (cur instanceof Minion) {
+                minionButton finalA5 = new minionButton((Minion) cur);
+                a.setOnMouseClicked(e -> {
+                    try {
+                        p.playMinion((Minion) cur);
+                    }
+                    catch (NotYourTurnException notYourTurnException) {
+                        notYourTurnException= new NotYourTurnException("Not Your Turn!!");
+                        exceptionWindow(notYourTurnException);
+                        notYourTurnException.printStackTrace();
+                        return;
+                    } catch (NotEnoughManaException notEnoughManaException) {
+                        notEnoughManaException= new NotEnoughManaException("Not Enough Mana!!");
+                        exceptionWindow(notEnoughManaException);
+                        notEnoughManaException.printStackTrace();
+                        return;
+                    } catch (FullFieldException fullFieldException) {
+                        fullFieldException= new FullFieldException("Your Field is Full!!");
+                        exceptionWindow(fullFieldException);
+                        fullFieldException.printStackTrace();
+                        return;
+                    }
+                    phand.getChildren().remove(a);
+                    verifyMana();
+                    finalA5.setOnMouseClicked(ee->{
+                        Stage s1=new Stage();
+                        s1.initModality(Modality.APPLICATION_MODAL);
+                        s1.show();
+                        FlowPane oppField= new FlowPane();
+                        ImageView opponent = null;
+                        if(pOther instanceof Mage)
+                            opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                        if(pOther instanceof Warlock)
+                            opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                        if(pOther instanceof Priest)
+                            opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                        if(pOther instanceof Paladin)
+                            opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                        if(pOther instanceof Hunter)
+                            opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                        opponent.setOnMouseClicked(eee->{
+                            heroTargeted=true;
+                            heroTarget=pOther;
+                            s1.close();
+                            try {
+                                p.attackWithMinion((Minion) cur,pOther);
+                                verifyHeroP1();
+                                verifyHeroP2();
+                                System.out.println(pOther.getCurrentHP());
+                            } catch (CannotAttackException cannotAttackException) {
+                                cannotAttackException.printStackTrace();
+                                exceptionWindow(cannotAttackException);
+                                return;
+                            } catch (NotYourTurnException notYourTurnException) {
+                                notYourTurnException.printStackTrace();
+                                exceptionWindow(notYourTurnException);
+                                return;
+                            } catch (TauntBypassException tauntBypassException) {
+                                tauntBypassException.printStackTrace();
+                                exceptionWindow(tauntBypassException);
+                                return;
+                            } catch (NotSummonedException notSummonedException) {
+                                notSummonedException.printStackTrace();
+                                exceptionWindow(notSummonedException);
+                                return;
+                            } catch (InvalidTargetException invalidTargetException) {
+                                invalidTargetException.printStackTrace();
+                                exceptionWindow(invalidTargetException);
+                                return;
+                            }
+                            System.out.println(pOther.getCurrentHP());
+                            System.out.println(p1.getCurrentHP());
+                            System.out.println(p2.getCurrentHP());
+                            verifyMana();
+                            verifyHeroP2();
+                            verifyHeroP1();
+                            p2VerifyMinions();
+                            p1VerifyMinions();
+                        });
+                        oppField.getChildren().add(opponent);
+                        for(Node curr: pOtherField.getChildren()){
+                            if(!curr.isVisible() || curr instanceof ImageView)
+                                continue;
+                            minionButton target= new minionButton(((minionButton)curr).getMinion());
+                            target.setOnMouseClicked(eee->{
+                                try {
+                                    p.attackWithMinion((Minion) cur,target.getMinion());
+                                } catch (CannotAttackException cannotAttackException) {
+                                    cannotAttackException.printStackTrace();
+                                    exceptionWindow(cannotAttackException);
+                                    return;
+                                } catch (NotYourTurnException notYourTurnException) {
+                                    notYourTurnException.printStackTrace();
+                                    exceptionWindow(notYourTurnException);
+                                    return;
+                                } catch (TauntBypassException tauntBypassException) {
+                                    tauntBypassException.printStackTrace();
+                                    exceptionWindow(tauntBypassException);
+                                    return;
+                                } catch (InvalidTargetException invalidTargetException) {
+                                    invalidTargetException.printStackTrace();
+                                    exceptionWindow(invalidTargetException);
+                                    return;
+                                } catch (NotSummonedException notSummonedException) {
+                                    exceptionWindow(notSummonedException);
+                                    notSummonedException.printStackTrace();
+                                    return;
+                                }
+                                verifyMana();
+                                verifyHeroP2();
+                                verifyHeroP1();
+                                p2VerifyMinions();
+                                p1VerifyMinions();
+                                ((minionButton)curr).verifyMinion();
+                                finalA5.verifyMinion();
+                                if(finalA5.getHp()==0)
+                                    pfield.getChildren().remove(finalA5);
+                                if(((minionButton)curr).getHp()==0)
+                                    pOtherField.getChildren().remove(((minionButton)curr));
+                                s1.close();
+
+
+                            });
+                            oppField.getChildren().add(target);
+                        }
+                        Scene scene= new Scene(oppField);
+                        s1.setScene(scene);
+
+                    });
+                    pfield.getChildren().add(finalA5);
+
+                });
+
+            }
+            if (cur instanceof Spell) {
+                Tooltip t = new Tooltip(((Spell) cur).getDescription());
+                t.setShowDelay(Duration.ONE);
+                Tooltip.install(a, t);
+                if (cur instanceof AOESpell) {
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p.castSpell((AOESpell) cur, pOther.getField());
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
+                            notYourTurnException.printStackTrace();
+                            return;
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
+                            notEnoughManaException.printStackTrace();
+                            return;
+                        }
+                        phand.getChildren().remove(a);
+                        System.out.println("works?");
+                        verifyMana();
+                        verifyHeroP2();
+                        verifyHeroP1();
+                        p2VerifyMinions();
+                        p1VerifyMinions();
+                        //pOtherField.getChildren().removeIf(m->((minionButton)m).getHp()==0 && m.isVisible() && !(m instanceof ImageView));
+                        phand.getChildren().remove(a);
+                        verifyMana();});
+                }
+                if (cur instanceof FieldSpell) {
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p.castSpell((FieldSpell) cur);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
+                            notYourTurnException.printStackTrace();
+                            return;
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
+                            notEnoughManaException.printStackTrace();
+                            return;
+                        }
+                        System.out.println("works?");
+
+                        phand.getChildren().remove(a);
+                        verifyMana();
+                        p1VerifyMinions();
+                        p2VerifyMinions();
+                        verifyHeroP1();
+                        verifyHeroP2();
+                    });
+                }
+                if (cur instanceof HeroTargetSpell && !(cur instanceof MinionTargetSpell)) {
+                    a.setOnMouseClicked(e -> {
+                        try {
+                            p.castSpell(((HeroTargetSpell) cur), pOther);
+                        } catch (NotYourTurnException notYourTurnException) {
+                            notYourTurnException=new NotYourTurnException("Not Your Turn!!");
+                            exceptionWindow(notYourTurnException);
+                            notYourTurnException.printStackTrace();
+                            return;
+                        } catch (NotEnoughManaException notEnoughManaException) {
+                            notEnoughManaException=new NotEnoughManaException("Not Enough Mana!!");
+                            exceptionWindow(notEnoughManaException);
+                            notEnoughManaException.printStackTrace();
+                            return;
+                        }
+                        verifyHeroP1();
+                        verifyHeroP2();
+                        phand.getChildren().remove(a);
+                        verifyMana();
+                        System.out.println("works?");
+                    });
+                }
+                if (cur instanceof MinionTargetSpell) {
+
+                    a.setOnMouseClicked(e -> {
+                        Stage s1=new Stage();
+                        s1.initModality(Modality.APPLICATION_MODAL);
+
+                        s1.show();
+                        FlowPane oppField= new FlowPane();
+                        Label opp=new Label("opponent");
+                        oppField.getChildren().add(opp);
+                        Scene scene= new Scene(oppField);
+                        s1.setScene(scene);
+                        if(cur instanceof HeroTargetSpell){
+                            ImageView opponent = null;
+                            if(pOther instanceof Mage)
+                                opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                            if(pOther instanceof Warlock)
+                                opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                            if(pOther instanceof Priest)
+                                opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                            if(pOther instanceof Paladin)
+                                opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                            if(pOther instanceof Hunter)
+                                opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                            opponent.setOnMouseClicked(eee->{
+                                heroTargeted=true;
+                                heroTarget=pOther;
+                                s1.close();
+                                if(heroTargeted){
+                                    heroTargeted=false;
+                                    try {
+                                        p.castSpell((HeroTargetSpell) cur,pOther);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    }
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    verifyMana();
+                                    phand.getChildren().remove(a);
+                                }});
+                            oppField.getChildren().add(opponent);}
+                        for(Node curr:pOtherField.getChildren()){
+                            if(!curr.isVisible() || curr instanceof ImageView)
+                                continue;
+                            Minion target=((minionButton)curr).getMinion();
+                            minionButton obj=new minionButton(target);
+                            oppField.getChildren().add(obj);
+                            obj.setOnMouseClicked(ee->{
+                                minionTargeted=true;
+                                minionTarget=target;
+                                s1.close();
+                                if(minionTargeted){
+                                    minionTargeted=false;
+                                    try {
+                                        p.castSpell((MinionTargetSpell) cur,minionTarget);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    } catch (InvalidTargetException invalidTargetException) {
+                                        invalidTargetException.printStackTrace();
+                                        exceptionWindow(invalidTargetException);
+                                        return;
+                                    }
+                                    ((minionButton) curr).verifyMinion();
+                                    if(((minionButton) curr).getHp()==0)
+                                        pOtherField.getChildren().remove(curr);
+
+                                }
+
+                                ;
+                                phand.getChildren().remove(a);
+                                verifyMana();
+                                verifyMana();
+                                verifyHeroP2();
+                                verifyHeroP1();
+                                p2VerifyMinions();
+                                p1VerifyMinions();;});
+                        }
+                        Label ally= new Label("Friendly");
+                        oppField.getChildren().add(ally);
+                        if(cur instanceof HeroTargetSpell){
+                            ImageView hero= null;
+                            if(p instanceof Mage)
+                                hero=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                            if(p instanceof Warlock)
+                                hero=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                            if(p instanceof Priest)
+                                hero=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                            if(p instanceof Paladin)
+                                hero=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                            if(p instanceof Hunter)
+                                hero=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                            oppField.getChildren().add(hero);
+                            hero.setOnMouseClicked(ee->{
+                                heroTargeted=true;
+                                heroTarget=pOther;
+                                s1.close();
+                                if(heroTargeted){
+                                    heroTargeted=false;
+                                    try {
+                                        p.castSpell((HeroTargetSpell) cur,pOther);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    }
+                                    phand.getChildren().remove(a);
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                }});}
+                        for(Node curr:pfield.getChildren()){
+                            if(!curr.isVisible() || curr instanceof ImageView)
+                                continue;
+                            Minion target=((minionButton)curr).getMinion();
+                            minionButton obj=new minionButton(target);
+                            oppField.getChildren().add(obj);
+                            obj.setOnMouseClicked(ee->{
+                                minionTargeted=true;
+                                minionTarget=target;
+                                s1.close();
+                                if(minionTargeted){
+                                    minionTargeted=false;
+                                    try {
+                                        p.castSpell((MinionTargetSpell) cur,minionTarget);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    } catch (InvalidTargetException invalidTargetException) {
+                                        invalidTargetException.printStackTrace();
+                                        exceptionWindow(invalidTargetException);
+                                        return;
+                                    }
+                                    ((minionButton) curr).verifyMinion();
+                                    if(((minionButton) curr).getHp()==0)
+                                        pOtherField.getChildren().remove(curr);
+                                    phand.getChildren().remove(a);
+                                    verifyMana();
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    p2VerifyMinions();
+                                    p1VerifyMinions();
+                                }
+
+                                ;});
+                        }
+                    });
+                }
+                if (cur instanceof LeechingSpell) {
+
+                    a.setOnMouseClicked(e -> {
+                        Stage s1=new Stage();
+                        s1.initModality(Modality.APPLICATION_MODAL);
+
+                        s1.show();
+                        FlowPane oppField= new FlowPane();
+                        Scene scene= new Scene(oppField);
+                        s1.setScene(scene);
+                        if(cur instanceof HeroTargetSpell){
+                            ImageView opponent = null;
+                            if(pOther instanceof Mage)
+                                opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                            if(pOther instanceof Warlock)
+                                opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
+                            if(pOther instanceof Priest)
+                                opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                            if(pOther instanceof Paladin)
+                                opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                            if(pOther instanceof Hunter)
+                                opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
+                            opponent.setOnMouseClicked(eee->{
+                                heroTargeted=true;
+                                heroTarget=pOther;
+                                s1.close();
+                                if(heroTargeted){
+                                    heroTargeted=false;
+                                    try {
+                                        p.castSpell((HeroTargetSpell) cur,pOther);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    }
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    p2VerifyMinions();
+                                    p1VerifyMinions();
+                                }});
+                            oppField.getChildren().add(opponent);}
+                        for(Node curr:pOtherField.getChildren()){
+                            if(!curr.isVisible() || curr instanceof ImageView)
+                                continue;
+                            Minion target=((minionButton)curr).getMinion();
+                            minionButton obj=new minionButton(target);
+                            oppField.getChildren().add(obj);
+                            obj.setOnMouseClicked(ee->{
+                                minionTargeted=true;
+                                minionTarget=target;
+                                s1.close();
+                                if(minionTargeted){
+                                    minionTargeted=false;
+                                    try {
+                                        p.castSpell((LeechingSpell) cur,minionTarget);
+                                    } catch (NotYourTurnException notYourTurnException) {
+                                        notYourTurnException.printStackTrace();
+                                        exceptionWindow(notYourTurnException);
+                                        return;
+                                    } catch (NotEnoughManaException notEnoughManaException) {
+                                        notEnoughManaException.printStackTrace();
+                                        exceptionWindow(notEnoughManaException);
+                                        return;
+                                    }
+                                    ((minionButton) curr).verifyMinion();
+                                    if(((minionButton) curr).getHp()==0)
+                                        pOtherField.getChildren().remove(curr);
+                                    verifyHeroP1();
+                                    verifyHeroP2();
+                                    verifyMana();
+                                    verifyHeroP2();
+                                    verifyHeroP1();
+                                    p2VerifyMinions();
+                                    p1VerifyMinions();
+                                    phand.getChildren().remove(a);
+                                    verifyMana();
+                                }
+
+
+
+                            });
+                        }
+                    });
+                }
+            }
+            if (cur instanceof Spell){
+                Tooltip t=new Tooltip(((Spell) cur).getDescription());
+                t.setShowDelay(Duration.ONE);
+                Tooltip.install(a,t);}
+
+
+            phand.getChildren().add(a);
+            verifyMana();
+            verifyMana();
+            verifyHeroP2();
+            verifyHeroP1();
+            p2VerifyMinions();
+            p1VerifyMinions();
+
+        }
+    }
     public void exceptionWindow(Exception e){
         Stage s1=new Stage();
         s1.initModality(Modality.APPLICATION_MODAL);
@@ -1403,6 +1928,11 @@ public class mainMenu extends Application implements GameListener {
         s1.setScene(scene);
     }
     public void verifyHeroP1(){
+        if(p1==game.getCurrentHero()){
+            p1Icon.setEffect(new DropShadow(50, Color.WHITESMOKE));
+          }else
+            p1Icon.setEffect(new DropShadow(0, Color.DEEPSKYBLUE));
+
         if(p1 instanceof Mage){
             if(p1.getCurrentHP()==30)
                 p1Icon.setImage(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
@@ -1884,8 +2414,15 @@ public class mainMenu extends Application implements GameListener {
         }
     }
 
-    public void verifyHeroP2(){        if(p2 instanceof Mage){
-        if(p2.getCurrentHP()==30)
+    public void verifyHeroP2(){
+        if(p2==game.getCurrentHero()){
+            p2Icon.setEffect(new DropShadow(50, Color.WHITESMOKE));
+        }else
+            p2Icon.setEffect(new DropShadow(0, Color.DEEPSKYBLUE));
+
+
+        if(p2 instanceof Mage){
+            if(p2.getCurrentHP()==30)
             p2Icon.setImage(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
 
         if(p2.getCurrentHP()==29)
@@ -2366,8 +2903,14 @@ public class mainMenu extends Application implements GameListener {
 
     }
     public void verifyMana(){
-        p1Mana.setText("Current Mana:"+ p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size());
-        p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
+        if(game.getCurrentHero()==p1)
+         p1Mana.setText("Current Mana:"+ p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size()+"\nYour Turn");
+        else
+            p1Mana.setText("Current Mana:"+ p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size()+"\nOpponent's Turn");
+        if(game.getCurrentHero()==p2)
+            p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size()+"\nYour Turn");
+        else
+            p2Mana.setText("Current Mana:"+ p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size()+"\nOpponent's Turn");
 
     }
     public void getPowerImage(){
@@ -2432,9 +2975,10 @@ public class mainMenu extends Application implements GameListener {
 //            }
     }
     public void game() throws FullHandException, CloneNotSupportedException {
-        Stage stage=new Stage();
+        stage=new Stage();
         game=new Game(p1,p2);
-        end= new Button("END TURN");
+        game.setListener(this);
+        end= new ImageView(new Image("images\\resources\\endTurn.png",200,100,false,false));
         stage.show();
         stage.setMinHeight(1060);
         stage.setMinWidth(1920);
@@ -3286,6 +3830,8 @@ public class mainMenu extends Application implements GameListener {
         HBox top=new HBox();
         p1Mana=new Button("Current Mana:"+p1.getCurrentManaCrystals()+"\nMax Mana:"+ p1.getTotalManaCrystals()+"\nCards Left:"+p1.getDeck().size());
         p1Mana.setMinWidth(100);
+        verifyMana();
+       // p1Mana.setShape(new Circle(20));
 
         top.getChildren().add(p1Icon);
         p1Area.setTop(top);
@@ -3297,8 +3843,25 @@ public class mainMenu extends Application implements GameListener {
         fieldArea.setTop(p2Field);
         fieldArea.setBottom(p1Field);
         VBox V=new VBox();
-        p2Mana.setMinSize(100,100);
-        p1Mana.setMinSize(100,100);
+        p2Mana.setMinSize(200,100);
+        p1Mana.setMinSize(200,100);
+        p2Mana.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(200,100, false, false, false, false))));
+        p1Mana.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(200,100, false, false, false, false))));
+        p2Mana.setStyle("-fx-font-family: Sketch Gothic School;");
+       // p2Mana.setMinWidth(100);
+        verifyMana();
+        //p2Mana.setShape(new Circle(20));
+//        p2Mana.setStyle("    -fx-text-fill: rgb(72, 47, 0);\n" +
+//                "    -fx-border-color: rgb(72, 47, 0);\n" +
+//                "    -fx-border-radius: 15;\n" +
+//                "-fx-background-radius: 16.4, 15;"+
+//                "-fx-background-color: rgb(215, 138, 16);");
+       end.setOnMouseEntered(e->{end.setEffect(new InnerShadow(100,Color.GRAY));});
+       end.setOnMouseExited(e->{end.setEffect(new InnerShadow(0,Color.BLACK));});
         V.getChildren().add(p2Mana);
         V.getChildren().add(end);
         V.getChildren().add(p1Mana);
@@ -3306,12 +3869,18 @@ public class mainMenu extends Application implements GameListener {
         fieldArea.setMinSize(1360,384);
         gamescreen.setCenter(fieldArea);
 
-
+        end.setOnMouseReleased(e->{end.setEffect(new InnerShadow(100,Color.WHITESMOKE));});
 
         Scene gamescene= new Scene(gamescreen,1360,768);
         stage.setScene(gamescene);
         minionTargeted=false;
         end.setOnMouseClicked(e-> {
+            end.setEffect(new InnerShadow(100,Color.BLACK));
+            verifyMana();
+            verifyHeroP2();
+            verifyHeroP1();
+            p1VerifyMinions();
+            p2VerifyMinions();
             if(p1==game.getCurrentHero()){
                 try {
                     p1.endTurn();
@@ -3379,6 +3948,67 @@ public class mainMenu extends Application implements GameListener {
 
     @Override
     public void onGameOver() {
+        String winner = null;
+        String winnerName = null;
+        ImageView icon=new ImageView();
+        if(p1.getCurrentHP()!=0){
+            winner="Player 1";
+            if(p1 instanceof Mage){
+                icon.setImage(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                winnerName="Jaina Proudmoore";}
+            else if(p1 instanceof Warlock){
+                icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
+                winnerName="Gul'dan";}
+            else if(p1 instanceof Priest){
+                icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                winnerName="Anduin Wrynn";}
+            else if(p1 instanceof Paladin){
+                icon.setImage(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                winnerName="Uther Lightbringer";}
+            else{
+                icon.setImage(new Image("images\\Rexxar.png",250,250,true,true));
+                winnerName="Rexxar";}
+        }
+         if (p1.getCurrentHP()==0){
+            winner="Player 2";
+            if(p2 instanceof Mage){
+                icon.setImage(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                winnerName="Jaina Proudmoore";}
+            else if(p2 instanceof Warlock){
+                icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
+                winnerName="Gul'dan";}
+            else if(p2 instanceof Priest){
+                icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                winnerName="Anduin Wrynn";}
+            else if(p2 instanceof Paladin){
+                icon.setImage(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                winnerName="Uther Lightbringer";}
+            else if(p2 instanceof Hunter){
+                icon.setImage(new Image("images\\Rexxar.png",250,250,true,true));
+                winnerName="Rexxar";}}
+            Label l= new Label("WINNER:"+winner);
+            Label l2= new Label(winnerName);
+            stage.close();
+            Stage s1=new Stage();
+            s1.initModality(Modality.APPLICATION_MODAL);
+            s1.show();
+            s1.setMinWidth(300);
+            s1.setMinHeight(300);
+            VBox v = new VBox();
+            BackgroundImage b= new BackgroundImage(new Image("images/whitepage.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                    new BackgroundSize(s1.getWidth(),s1.getHeight(), false, false, true, false));
+            v.setBackground(new Background(b));
+            v.setAlignment(Pos.CENTER);
+            Scene sc=new Scene(v,300,300);
+            Button close= new Button("CLOSE");
+            close.setAlignment(Pos.CENTER);
+            close.setOnMouseClicked(e1-> s1.close());
+            v.getChildren().add(l);
+            v.getChildren().add(l2);
+            v.getChildren().add(icon);
+            v.getChildren().add(close);
+            s1.setScene(sc);
 
-    }
-}
+    
+
+}}

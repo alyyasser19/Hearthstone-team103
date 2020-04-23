@@ -7,6 +7,7 @@ import model.heroes.Hero;
 public class Pyroblast extends Spell implements HeroTargetSpell, MinionTargetSpell {
 	public Pyroblast() {
 		super("Pyroblast", 10, Rarity.EPIC);
+		setDescription("Deals 10 damage to a chosen target ");
 	}
 
 	@Override

@@ -1,8 +1,10 @@
 package view;
 
 import javafx.scene.control.Button;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import model.cards.minions.Minion;
 
 public class minionButton extends Button implements Cloneable{
@@ -65,12 +67,19 @@ public class minionButton extends Button implements Cloneable{
         this.setLayoutY(100);
         //this.verifyMinion();
 	    //this.setMinSize(420,600); this.setMaxSize(420,600);
+       if(minion.isDivine()){
+           this.setEffect(new InnerShadow(50, Color.GOLD));
+       }
+       //this.setBackground();
     }
     public void verifyMinion() {
         if(minion.getName().equals("Sheep")){
             ImageView imageDecline = new ImageView(new Image("images\\cards\\normal\\Sheep.jpg",100,100,false,false));
             this.setGraphic(imageDecline);
         }
+        if(minion.isDivine()){
+            this.setEffect(new InnerShadow(50, Color.GOLD));}else
+            this.setEffect(new InnerShadow(0, Color.WHITE));
         hp=minion.getCurrentHP();
 
         this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
