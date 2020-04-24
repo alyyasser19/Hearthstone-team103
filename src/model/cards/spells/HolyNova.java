@@ -6,7 +6,7 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class HolyNova extends Spell implements AOESpell {
-
+	String description;
 	public HolyNova() {
 		super("Holy Nova", 5, Rarity.BASIC);
 

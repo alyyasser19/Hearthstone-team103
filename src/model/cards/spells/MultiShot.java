@@ -6,10 +6,10 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class MultiShot extends Spell implements AOESpell {
-
+	String description;
 	public MultiShot() {
 		super("Multi-Shot", 4, Rarity.BASIC);
-
+		description="Deals 3 damage to two random enemy minions";
 	}
 
 	@Override

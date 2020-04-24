@@ -6,10 +6,10 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class TwistingNether extends Spell implements AOESpell {
-
+	String description;
 	public TwistingNether() {
 		super("Twisting Nether", 8, Rarity.EPIC);
-
+		description="Destroys all minions of both heroes even if any of them has a divine shield";
 	}
 
 	@Override

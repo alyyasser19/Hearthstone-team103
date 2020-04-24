@@ -34,6 +34,7 @@ public class mainMenu extends Application implements GameListener {
     private Stage titleScreen;
     private Scene menu;
     private Scene characterSelect;
+    private Stage stage;
 
 
     //Game Classes
@@ -2432,8 +2433,9 @@ public class mainMenu extends Application implements GameListener {
 //            }
     }
     public void game() throws FullHandException, CloneNotSupportedException {
-        Stage stage=new Stage();
+        stage=new Stage();
         game=new Game(p1,p2);
+        game.setListener(this);
         end= new Button("END TURN");
         stage.show();
         stage.setMinHeight(1060);
@@ -3379,6 +3381,66 @@ public class mainMenu extends Application implements GameListener {
 
     @Override
     public void onGameOver() {
+        String winner;
+        String winnerName;
+        ImageView icon=new ImageView();
+        if(p1.getCurrentHP()!=0){
+            winner="Player 1";
+            if(p1 instanceof Mage){
+                icon.setImage(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                winnerName="Jaina Proudmoore";}
+            else if(p1 instanceof Warlock){
+                icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
+                winnerName="Gul'dan";}
+            else if(p1 instanceof Priest){
+                icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                winnerName="Anduin Wrynn";}
+            else if(p1 instanceof Paladin){
+                icon.setImage(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                winnerName="Uther Lightbringer";}
+            else{
+                icon.setImage(new Image("images\\Rexxar.png",250,250,true,true));
+                winnerName="Rexxar";}
+        }
+        else{
+            winner="Player 2";
+            if(p2 instanceof Mage){
+                icon.setImage(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
+                winnerName="Jaina Proudmoore";}
+            else if(p2 instanceof Warlock){
+                icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
+                winnerName="Gul'dan";}
+            else if(p2 instanceof Priest){
+                icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
+                winnerName="Anduin Wrynn";}
+            else if(p2 instanceof Paladin){
+                icon.setImage(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
+                winnerName="Uther Lightbringer";}
+            else{
+                icon.setImage(new Image("images\\Rexxar.png",250,250,true,true));
+                winnerName="Rexxar";}
+        Label l= new Label("WINNER:"+winner);
+        Label l2= new Label(winnerName);
+        stage.close();
+        Stage s1=new Stage();
+        s1.initModality(Modality.APPLICATION_MODAL);
+        s1.show();
+        s1.setMinWidth(300);
+        s1.setMinHeight(300);
+        VBox v = new VBox();
+        BackgroundImage b= new BackgroundImage(new Image("images/whitepage.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(s1.getWidth(),s1.getHeight(), false, false, true, false));
+        v.setBackground(new Background(b));
+        v.setAlignment(Pos.CENTER);
+        Scene sc=new Scene(v,300,300);
+        Button close= new Button("CLOSE");
+        close.setAlignment(Pos.CENTER);
+        close.setOnMouseClicked(e1-> s1.close());
+        v.getChildren().add(l);
+        v.getChildren().add(l2);
+        v.getChildren().add(icon);
+        v.getChildren().add(close);
+        s1.setScene(sc);
 
     }
-}
+}}

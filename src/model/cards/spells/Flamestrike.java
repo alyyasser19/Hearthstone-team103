@@ -6,9 +6,10 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class Flamestrike extends Spell implements AOESpell {
-
+	String description;
 	public Flamestrike() {
 		super("Flamestrike", 7, Rarity.BASIC);
+		description="Deals 4 damage to all enemy minions";
 	}
 
 	public void performAction(ArrayList<Minion> oppField, ArrayList<Minion> curField) {

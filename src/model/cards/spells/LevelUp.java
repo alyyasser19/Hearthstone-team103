@@ -6,10 +6,10 @@ import model.cards.Rarity;
 import model.cards.minions.Minion;
 
 public class LevelUp extends Spell implements FieldSpell {
-
+	String description;
 	public LevelUp() {
 		super("Level Up!", 6, Rarity.EPIC);
-
+		description="Increase the attack, current, and max HP of all silver hand recruits by 1";
 	}
 
 	@Override
