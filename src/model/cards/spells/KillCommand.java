@@ -5,10 +5,10 @@ import model.cards.minions.Minion;
 import model.heroes.Hero;
 
 public class KillCommand extends Spell implements MinionTargetSpell, HeroTargetSpell {
-	String description;
+
 	public KillCommand() {
 		super("Kill Command", 3, Rarity.COMMON);
-		description="Deals 5 damage to a minion or 3 damage to a hero";
+		setDescription("Deals 5 damage to a minion or 3 damage to a hero");
 	}
 
 	@Override

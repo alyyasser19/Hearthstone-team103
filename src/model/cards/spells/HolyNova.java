@@ -1,14 +1,14 @@
 package model.cards.spells;
 
-import java.util.ArrayList;
-
 import model.cards.Rarity;
 import model.cards.minions.Minion;
 
+import java.util.ArrayList;
+
 public class HolyNova extends Spell implements AOESpell {
-	String description;
 	public HolyNova() {
 		super("Holy Nova", 5, Rarity.BASIC);
+		setDescription("Deals 2 damage to all enemy minions. Restores 2 health to all friendly minions.");
 
 	}
 

@@ -1,15 +1,14 @@
 package model.cards.spells;
 
-import java.util.ArrayList;
-
 import model.cards.Rarity;
 import model.cards.minions.Minion;
 
+import java.util.ArrayList;
+
 public class TwistingNether extends Spell implements AOESpell {
-	String description;
 	public TwistingNether() {
 		super("Twisting Nether", 8, Rarity.EPIC);
-		description="Destroys all minions of both heroes even if any of them has a divine shield";
+		setDescription("Destroys all minions of both heroes even if any of them has a divine shield");
 	}
 
 	@Override
