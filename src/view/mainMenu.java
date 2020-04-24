@@ -59,6 +59,7 @@ public class mainMenu extends Application implements GameListener {
     private ImageView selectedCharacter;
     boolean selected;
     boolean gameStart;
+    boolean mute=false;
 
     Clip clip;
     ImageView p1Icon=null;
@@ -81,67 +82,100 @@ public class mainMenu extends Application implements GameListener {
         titleScreen.setResizable(false);
         titleScreen.setTitle("hearthstone team 103");
         titleScreen.show();
-        Image sss= new Image("images\\start.png",500,100,true,true);
+        Image sss= new Image("images\\start.png",380,100,false,false);
         ImageView start= new ImageView(sss);
+        ImageView Mute= new ImageView(new Image("images\\Mute.png",380,100,false,false));
+        ImageView Exit= new ImageView(new Image("images\\Exit.png",380,100,false,false));
+        Exit.setX(440);
+        Exit.setY(478);
+        Mute.setX(436);
+        Mute.setY(364);
+        start.setX(436);
+        start.setY(244);
+        Exit.setOnMouseEntered(e->{Exit.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        Exit.setOnMouseExited(e->{Exit.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
+        Exit.setOnMouseClicked(e->{titleScreen.close();
+            playOnce("sounds/Accept.wav");});
+        Mute.setOnMouseEntered(e->{Mute.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        Mute.setOnMouseExited(e->{Mute.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
+        Mute.setOnMouseClicked(e->{playOnce("sounds/Accept.wav");
+        if(mute==false){
+            clip.stop();
+            mute=true;}
+        else{
+            music("sounds/menu.wav");
+            mute=false;}
+        });
+        start.setOnMouseEntered(e->{start.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+        playOnce("sounds/Hover.wav");});
+        start.setOnMouseExited(e->{start.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         //Button start= new Button();
         //start.setText("Start");
         //start.setPrefSize(200,50);
         titleScreen.sizeToScene();
-        StackPane main= new StackPane();
+        AnchorPane main= new AnchorPane();
         Image Bg= new Image("images/main menu.jpg");
         ImageView a= new ImageView(Bg);
         a.fitWidthProperty().bind(main.widthProperty());
         a.fitHeightProperty().bind(main.heightProperty());
         main.getChildren().add(a);
         main.getChildren().add(start);
+        main.getChildren().add(Mute);
+        main.getChildren().add(Exit);
         menu= new Scene(main,1200, 720);
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
-        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.jpg",1800,1000,true,true)));
+        wholeScreen.getChildren().add(new ImageView(new Image("images/Background.png",1200,720,false,false)));
         GridPane characters= new GridPane();
         characters.setPrefSize(600,720);
-        Image h=new Image("images\\Rexxar.gif",300,300,true,true);
+        Image h=new Image("images\\Rexxar.gif",250,250,true,true);
         ImageView hunter= new ImageView(h);
-        Image m=new Image("images\\JainaProudmoore.gif",300,300,true,true);
+        Image m=new Image("images\\JainaProudmoore.gif",250,250,true,true);
         ImageView mage= new ImageView(m);
-        Image pa=new Image("images\\UtherLightbringer.gif",300,300,true,true);
+        Image pa=new Image("images\\UtherLightbringer.gif",250,250,true,true);
         ImageView paladin= new ImageView(pa);
-        Image p=new Image("images\\AnduinWrynn.gif",300,300,true,true);
+        Image p=new Image("images\\AnduinWrynn.gif",250,250,true,true);
         ImageView priest= new ImageView(p);
-        Image w=new Image("images\\Guldan.gif",300,300,true,true);
+        Image w=new Image("images\\Guldan.gif",250,250,true,true);
         ImageView warlock= new ImageView(w);
-        Image s= new Image("images\\select.png",300,300,true,true);
+        Image s= new Image("images\\select.png",140,140,false,false);
         ImageView select= new ImageView(s);
         characters.setHgap(6.5);
         characters.setVgap(30);
-        characters.add(mage,12,5);
-        characters.add(hunter,12,6);
-        characters.add(priest,13,5);
-        characters.add(paladin,13,6);
-        characters.add(warlock,14,5);
-        characters.add(select,14,6);
+        characters.add(mage,10,1);
+        characters.add(hunter,10,2);
+        characters.add(priest,11,1);
+        characters.add(paladin,11,2);
+        characters.add(warlock,12,1);
+        characters.add(select,12,2);
         StackPane left= new StackPane();
         left.setPrefSize(300,720);
         StackPane right= new StackPane();
         right.setPrefSize(300,720);
-        Label x= new Label("Choose Your Hero: Player 1");
-        x.setFont(new javafx.scene.text.Font("Algerian",36));
+        ImageView x= new ImageView(new Image("images\\p1Choose.PNG",1200,100,false,false));
+        //x.setFont(new javafx.scene.text.Font("Algerian",36));
         StackPane sp= new StackPane();
+        sp.setMaxSize(1200,100);
         sp.getChildren().add(x);
         wholeScreen.setTop(sp);
         wholeScreen.setLeft(left);
         wholeScreen.setRight(right);
         wholeScreen.setCenter(characters);
-        characterSelect= new Scene(wholeScreen);
+        characterSelect= new Scene(wholeScreen,1200,720);
         GridPane gameScreen= new GridPane();
         Scene game= new Scene(gameScreen);
         BackgroundImage myBI= new BackgroundImage(new Image("images/board.jpg"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(titleScreen.getWidth(),titleScreen.getHeight(), false, false, true, false));
         gameScreen.setBackground(new Background(myBI));
+        wholeScreen.setPrefSize(1200,720);
 
         start.setOnMouseClicked(e1-> {
+            playOnce("sounds/Accept.wav");
+            start.setEffect(new InnerShadow(50,Color.BLACK));
             titleScreen.setScene(characterSelect);
         });
 
@@ -283,10 +317,9 @@ public class mainMenu extends Application implements GameListener {
                 if(selectedHero!=null){
             p1= selectedHero;
             selected=true;
-                Label x2= new Label("Choose Your Hero: Player 2");
-                x2.setFont(new javafx.scene.text.Font("Algerian",36));
-                sp.getChildren().remove(x);
-                sp.getChildren().add(x2);
+                x.setImage(new Image("images\\p2Choose.PNG",1200,100,false,false));
+                //x2.setFont(new javafx.scene.text.Font("Algerian",36));
+
             selectedHero=null;
             }
 
@@ -303,6 +336,7 @@ public class mainMenu extends Application implements GameListener {
         try {
             AudioInputStream a = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
             clip= AudioSystem.getClip();
+
             clip.open(a);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -3053,6 +3087,7 @@ public class mainMenu extends Application implements GameListener {
 //            }
     }
     public void game() throws FullHandException, CloneNotSupportedException {
+        playOnce("sounds/Start.wav");
         stage=new Stage();
         game=new Game(p1,p2);
         game.setListener(this);
@@ -4144,6 +4179,16 @@ public String getHeroBack(Hero p){
             return "images\\cardBacks\\hunter.png";
     return "images\\whitepage.png";
 
+}
+public void playOnce(String filePath){
+    try {
+        AudioInputStream ding = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+        Clip clip= AudioSystem.getClip();
+        clip.open(ding);
+        clip.start();
+    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
+        error.printStackTrace();
+    }
 }
 
 }
