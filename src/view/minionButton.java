@@ -4,7 +4,9 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import model.cards.minions.Minion;
 
 public class minionButton extends Button implements Cloneable{
@@ -16,6 +18,7 @@ public class minionButton extends Button implements Cloneable{
     String style;
     String name;
     String description;
+    String tauntt="";
 
     Minion minion;
 
@@ -53,26 +56,34 @@ public class minionButton extends Button implements Cloneable{
        this.hp=minion.getCurrentHP();
 	   this.divine=minion.isDivine();
 	   //this.setPrefSize(100,100);
-	   this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
+       if(minion.isTaunt())
+           tauntt="Taunt";
+	   this.setText( "Name:"+" "+ minion.getName()+"\n" + "Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n"+""+ tauntt);
 	   this.setWrapText(true);
 	   this.style =
             "-fx-alignment: center;" +
             //"-fx-text-alignment: justify;"+
-            "-fx-content-display: top;"+ 
+            "-fx-content-display: top;"+
             //"-fx-padding: 10px;" +
             "-fx-font-size: 12px;"+
             "-fx-background-position: center;\n"+
                     "    -fx-border-radius: 30;"+
-                    "-fx-background-radius: 16.4, 15;";
+                    "-fx-background-radius: 30, 30;"+
+                    "-fx-background-color: rgb(151, 138, 110);"+
+                "    -fx-border-color: rgb(12, 11, 10);";
 	    this.setStyle(style);
 	    this.setLayoutX(200);
         this.setLayoutY(100);
         //this.verifyMinion();
+       this.setTextAlignment(TextAlignment.CENTER);
 	    //this.setMinSize(420,600); this.setMaxSize(420,600);
        if(minion.isDivine()){
-           this.setEffect(new InnerShadow(50, Color.GOLD));
+           this.setEffect(new InnerShadow(100, Color.GOLD));
        }
        //this.setBackground();
+       this.setBackground(new Background(new BackgroundImage(new Image("images/minio.png"),
+               BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+               new BackgroundSize(200,100, false, false, false, false))));
     }
     public void verifyMinion() {
         if(minion.getName().equals("Sheep")){
@@ -80,11 +91,11 @@ public class minionButton extends Button implements Cloneable{
             this.setGraphic(imageDecline);
         }
         if(minion.isDivine()){
-            this.setEffect(new InnerShadow(50, Color.GOLD));}else
+            this.setEffect(new InnerShadow(100, Color.GOLD));}else
             this.setEffect(new InnerShadow(0, Color.WHITE));
         hp=minion.getCurrentHP();
 
-        this.setText("Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n   Divine: "+String.valueOf(minion.isDivine()));
+        this.setText( "Name:"+" "+ minion.getName()+"\n" + "Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n"+""+ tauntt);
 
   
     }
