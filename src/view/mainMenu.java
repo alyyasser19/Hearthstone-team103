@@ -6,6 +6,7 @@ import exceptions.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.ImageCursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.cards.Card;
 import model.cards.minions.Icehowl;
@@ -55,7 +57,7 @@ public class mainMenu extends Application implements GameListener {
     boolean heroTargeted=false;
     boolean minionTargeted=false;
     boolean handler;
-
+    Clip Fx;
     private ImageView selectedCharacter;
     boolean selected;
     boolean gameStart;
@@ -101,15 +103,15 @@ public class mainMenu extends Application implements GameListener {
             playOnce("sounds/Hover.wav");});
         Mute.setOnMouseExited(e->{Mute.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         Mute.setOnMouseClicked(e->{playOnce("sounds/Accept.wav");
-        if(mute==false){
-            clip.stop();
-            mute=true;}
-        else{
-            music("sounds/menu.wav");
-            mute=false;}
+            if(mute==false){
+                clip.stop();
+                mute=true;}
+            else{
+                music("sounds/menu.wav");
+                mute=false;}
         });
         start.setOnMouseEntered(e->{start.setEffect(new InnerShadow(50,Color.WHITESMOKE));
-        playOnce("sounds/Hover.wav");});
+            playOnce("sounds/Hover.wav");});
         start.setOnMouseExited(e->{start.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         //Button start= new Button();
         //start.setText("Start");
@@ -125,6 +127,7 @@ public class mainMenu extends Application implements GameListener {
         main.getChildren().add(Mute);
         main.getChildren().add(Exit);
         menu= new Scene(main,1200, 720);
+        menu.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         titleScreen.setScene(menu);
         music("sounds/menu.wav");
         BorderPane wholeScreen= new BorderPane();
@@ -185,9 +188,11 @@ public class mainMenu extends Application implements GameListener {
         wholeScreen.setRight(right);
         wholeScreen.setCenter(characters);
         characterSelect= new Scene(wholeScreen,1200,720);
+        characterSelect.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         GridPane gameScreen= new GridPane();
         Scene game= new Scene(gameScreen);
-        BackgroundImage myBI= new BackgroundImage(new Image("images/board.jpg"),
+        game.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
+        BackgroundImage myBI= new BackgroundImage(new Image("images/board.png"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(titleScreen.getWidth(),titleScreen.getHeight(), false, false, true, false));
         gameScreen.setBackground(new Background(myBI));
@@ -201,12 +206,12 @@ public class mainMenu extends Application implements GameListener {
 
         selected=false;
         mage.setOnMouseClicked(e2->{
-                try {
-                    selectedHero= new Mage();
-                    playOnce("sounds/Accept.wav");
-                } catch (IOException | CloneNotSupportedException ioException) {
-                    ioException.printStackTrace();
-                }
+            try {
+                selectedHero= new Mage();
+                playOnce("sounds/jaina.wav");
+            } catch (IOException | CloneNotSupportedException ioException) {
+                ioException.printStackTrace();
+            }
             if(!selected){
                 selectedCharacter= new ImageView(new Image("images\\mage.JPG",300,500,false,false));
                 if(!left.getChildren().isEmpty())
@@ -223,7 +228,7 @@ public class mainMenu extends Application implements GameListener {
         warlock.setOnMouseClicked(e3->{
             try {
                 selectedHero= new Warlock();
-                playOnce("sounds/Accept.wav");
+                playOnce("sounds/guldan.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -243,7 +248,7 @@ public class mainMenu extends Application implements GameListener {
         paladin.setOnMouseClicked(e4->{
             try {
                 selectedHero= new Paladin();
-                playOnce("sounds/Accept.wav");
+                playOnce("sounds/uther.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -263,7 +268,7 @@ public class mainMenu extends Application implements GameListener {
         priest.setOnMouseClicked(e5->{
             try {
                 selectedHero= new Priest();
-                playOnce("sounds/Accept.wav");
+                playOnce("sounds/aunduin.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -283,7 +288,7 @@ public class mainMenu extends Application implements GameListener {
         hunter.setOnMouseClicked(e6->{
             try {
                 selectedHero= new Hunter();
-                playOnce("sounds/Accept.wav");
+                playOnce("sounds/rexxar.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -295,13 +300,13 @@ public class mainMenu extends Application implements GameListener {
             }
             if(selected){
                 selectedCharacter= new ImageView(new Image("images\\hunter.PNG",300,500,false,false));
-               if(!right.getChildren().isEmpty())
-                   right.getChildren().remove(0);
+                if(!right.getChildren().isEmpty())
+                    right.getChildren().remove(0);
                 right.getChildren().add(selectedCharacter);
             }
         });
         select.setOnMouseClicked(e1->{
-                playOnce("sounds/Accept.wav");
+            playOnce("sounds/Accept.wav");
 
             if(selected) {
                 if(selectedHero==null){                try {
@@ -313,17 +318,17 @@ public class mainMenu extends Application implements GameListener {
 
                 }
                 if(selectedHero!=null){
-                p2 = selectedHero;
-                clip.stop();
-                gameStart=true;
-                titleScreen.close();
-                try {
-                    game();
-                } catch (FullHandException e) {
-                    e.printStackTrace();
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }}
+                    p2 = selectedHero;
+                    clip.stop();
+                    gameStart=true;
+                    titleScreen.close();
+                    try {
+                        game();
+                    } catch (FullHandException e) {
+                        e.printStackTrace();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }}
             }
             if(!selected){
                 if(selectedHero==null){
@@ -334,16 +339,16 @@ public class mainMenu extends Application implements GameListener {
                         noHeroSelectedException.printStackTrace();
                     }}
                 if(selectedHero!=null){
-            p1= selectedHero;
-            selected=true;
-                x.setImage(new Image("images\\p2Choose.PNG",1200,100,false,false));
-                //x2.setFont(new javafx.scene.text.Font("Algerian",36));
+                    p1= selectedHero;
+                    selected=true;
+                    x.setImage(new Image("images\\p2Choose.PNG",1200,100,false,false));
+                    //x2.setFont(new javafx.scene.text.Font("Algerian",36));
 
-            selectedHero=null;
-            }
+                    selectedHero=null;
+                }
 
 
-                }}
+            }}
         );
 
 
@@ -489,8 +494,11 @@ public class mainMenu extends Application implements GameListener {
                             });
                             oppField.getChildren().add(target);
                         }
+
                         Scene scene= new Scene(oppField);
+                        scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
                         s1.setScene(scene);
+
 
                     });
                     pfield.getChildren().add(finalA5);
@@ -604,6 +612,7 @@ public class mainMenu extends Application implements GameListener {
                         s1.show();
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
+                        scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
                         oppField.setPrefSize(1900,300);
                         s1.setScene(scene);
                         Label opp=new Label("opponent");
@@ -785,6 +794,7 @@ public class mainMenu extends Application implements GameListener {
                         s1.show();
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
+                        scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
                         s1.setScene(scene);
                         if(cur instanceof HeroTargetSpell){
                             ImageView opponent = null;
@@ -1117,6 +1127,7 @@ public class mainMenu extends Application implements GameListener {
                         oppField.getChildren().add(target);
                     }
                     Scene scene= new Scene(oppField);
+                    scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
                     s1.setScene(scene);
 
                 });
@@ -1224,6 +1235,7 @@ public class mainMenu extends Application implements GameListener {
                     Label opp=new Label("opponent");
                     oppField.getChildren().add(opp);
                     Scene scene= new Scene(oppField);
+                    scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
                     s1.setScene(scene);
                     if(cur instanceof HeroTargetSpell){
                         ImageView opponent = null;
@@ -1490,6 +1502,7 @@ public class mainMenu extends Application implements GameListener {
         for (Node curr:pfield.getChildren()){
             if(curr instanceof minionButton)
                 if(((minionButton) curr).getMinion().getName().equals("Chromaggus"))
+                    if(p.getHand().size()!=10)
                     chroDraw(p,pOther,phand,pfield,pOtherField);
         }
     }
@@ -3108,14 +3121,14 @@ public class mainMenu extends Application implements GameListener {
     public void game() throws FullHandException, CloneNotSupportedException {
         playOnce("sounds/Start.wav");
         stage=new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         game=new Game(p1,p2);
         game.setListener(this);
         end= new ImageView(new Image("images\\resources\\endTurn.png",200,100,false,false));
-        stage.show();
-        stage.setMinHeight(1060);
-        stage.setMinWidth(1920);
-        stage.setMaxHeight(1080);
-        stage.setMaxWidth(1920);
+//        stage.setMinHeight(1060);
+//        stage.setMinWidth(1920);
+//        stage.setMaxHeight(1080);
+//        stage.setMaxWidth(1920);
         //HeroIcon
         p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
         p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",250,300,true,true));
@@ -3940,6 +3953,11 @@ public class mainMenu extends Application implements GameListener {
         //the hand
 
         //Validate to be added and the get target method to be implemented
+        Button inv= new Button();
+        inv.setPrefSize(200,200);
+        inv.setMinSize(200,200);
+        inv.setVisible(true);
+
         playerDraw(p2hand,p2Field,p2,p1,p1Field);
         minionButton test= new minionButton(new Icehowl());
         test.setMinSize(210,200);
@@ -3960,6 +3978,7 @@ public class mainMenu extends Application implements GameListener {
         //Current Layout
          p1Area= new BorderPane();
         //the place where the hero is
+
 
         //Validate to be added and the get target method to be implemented
         playerDraw(p1hand,p1Field,p1,p2,p2Field);
@@ -3985,6 +4004,8 @@ public class mainMenu extends Application implements GameListener {
 
         //Field Layout
         BorderPane fieldArea= new BorderPane();
+
+
         fieldArea.setTop(p2Field);
         fieldArea.setBottom(p1Field);
         VBox V=new VBox();
@@ -4005,11 +4026,23 @@ public class mainMenu extends Application implements GameListener {
 //                "    -fx-border-radius: 15;\n" +
 //                "-fx-background-radius: 16.4, 15;"+
 //                "-fx-background-color: rgb(215, 138, 16);");
+        Button exit= new Button("exit");
        end.setOnMouseEntered(e->{end.setEffect(new InnerShadow(100,Color.GRAY));});
        end.setOnMouseExited(e->{end.setEffect(new InnerShadow(0,Color.BLACK));});
-        V.getChildren().add(p2Mana);
+        V.getChildren().add(exit);
+       V.getChildren().add(p2Mana);
         V.getChildren().add(end);
         V.getChildren().add(p1Mana);
+        VBox exitA= new VBox();
+        exitA.setMaxSize(100,50);
+
+        exit.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(200,100, false, false, false, false))));
+        exit.setPrefSize(200,100);
+        exit.setOnMouseEntered(e->{exit.setEffect(new InnerShadow(100,Color.GRAY));});
+        exit.setOnMouseExited(e->{exit.setEffect(new InnerShadow(0,Color.BLACK));});
+        exit.setOnMouseClicked(e->stage.close());
         fieldArea.setRight(V);
         fieldArea.setMinSize(1360,384);
         gamescreen.setCenter(fieldArea);
@@ -4018,10 +4051,12 @@ public class mainMenu extends Application implements GameListener {
 
         Scene gamescene= new Scene(gamescreen,1360,768);
         stage.setScene(gamescene);
+        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         minionTargeted=false;
         end.setOnMouseClicked(e-> {
+            Boolean draw=true;
+            cardFlip();
             end.setEffect(new InnerShadow(100,Color.BLACK));
-            verifyMana();
             verifyHeroP2();
             verifyHeroP1();
             p1VerifyMinions();
@@ -4038,8 +4073,7 @@ public class mainMenu extends Application implements GameListener {
                     sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                     Scene sc = new Scene(sp, 200, 200);
                     s1.setScene(sc);
-                    return;
-
+                    draw=false;
 
                 } catch (CloneNotSupportedException cloneNotSupportedException) {
                     cloneNotSupportedException.printStackTrace();
@@ -4047,7 +4081,7 @@ public class mainMenu extends Application implements GameListener {
                 verifyMana();
                 verifyHeroP2();
                 verifyHeroP1();
-                if(!p1.getDeck().isEmpty())
+                if(!p2.getDeck().isEmpty()&& draw)
                     endTurnDraw(p2,p1,p2hand,p2Field,p1Field);
             }
             else{
@@ -4062,8 +4096,7 @@ public class mainMenu extends Application implements GameListener {
                     sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
                     Scene sc = new Scene(sp, 200, 200);
                     s1.setScene(sc);
-                    return;
-
+                    draw=false;
 
                 } catch (CloneNotSupportedException cloneNotSupportedException) {
                     cloneNotSupportedException.printStackTrace();
@@ -4071,13 +4104,13 @@ public class mainMenu extends Application implements GameListener {
                 verifyMana();
                 verifyHeroP2();
                 verifyHeroP1();
-                if(!p2.getDeck().isEmpty())
+                if(!p1.getDeck().isEmpty()&& draw)
                     endTurnDraw(p1,p2,p1hand,p1Field,p2Field);
 
             }
             cardFlip();});
 
-        BackgroundImage myBI= new BackgroundImage(new Image("images/board.jpg"),
+        BackgroundImage myBI= new BackgroundImage(new Image("images/board.png"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(stage.getWidth(),stage.getHeight(), false, false, true, false));
         gamescreen.setBackground(new Background(myBI));
@@ -4085,18 +4118,30 @@ public class mainMenu extends Application implements GameListener {
         gamescreen.setMinSize(400, 200);
         gamescreen.setPadding(new Insets(10, 10, 10, 10));
         //stage.setFullScreen(true);
-        stage.setMaximized(true);
+       // stage.setMaximized(true);
         System.out.println(stage.getHeight());
         System.out.println(stage.getWidth());
         cardFlip();
 
         p1Field.setHgap(5);
         p2Field.setHgap(5);
+            stage.setOnCloseRequest(e ->{
+            e.consume();
+            stage.close();
+        });
+            stage.setOnHiding(e->e.consume());
+            stage.setIconified(false);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setFullScreenExitHint("");
+    stage.setMaximized(true);
+    stage.show();
     }
 
 
     @Override
     public void onGameOver() {
+        clip.stop();
+        music("sounds/victory.wav");
         String winner = null;
         String winnerName = null;
         ImageView icon=new ImageView();
@@ -4144,7 +4189,7 @@ public class mainMenu extends Application implements GameListener {
             s1.setMinWidth(300);
             s1.setMinHeight(300);
             VBox v = new VBox();
-            BackgroundImage b= new BackgroundImage(new Image("images/whitepage.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            BackgroundImage b= new BackgroundImage(new Image("images/878332.jpg"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                     new BackgroundSize(s1.getWidth(),s1.getHeight(), false, false, true, false));
             v.setBackground(new Background(b));
             v.setAlignment(Pos.CENTER);
@@ -4200,11 +4245,17 @@ public String getHeroBack(Hero p){
 
 }
 public void playOnce(String filePath){
+
     try {
+
         AudioInputStream ding = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
-        Clip clip= AudioSystem.getClip();
-        clip.open(ding);
-        clip.start();
+        Fx= AudioSystem.getClip();
+        if(Fx.isRunning()){
+            System.out.println(Fx.isActive());
+            Fx.stop();
+        }
+        Fx.open(ding);
+        Fx.start();
     } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
         error.printStackTrace();
     }
