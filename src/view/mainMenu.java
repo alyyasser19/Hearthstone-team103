@@ -133,16 +133,36 @@ public class mainMenu extends Application implements GameListener {
         characters.setPrefSize(600,720);
         Image h=new Image("images\\Rexxar.gif",250,250,true,true);
         ImageView hunter= new ImageView(h);
+        hunter.setOnMouseEntered(e->{hunter.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        hunter.setOnMouseExited(e->{hunter.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
+        hunter.setOnMouseClicked(e->playOnce("sounds/Accept.wav"));
         Image m=new Image("images\\JainaProudmoore.gif",250,250,true,true);
         ImageView mage= new ImageView(m);
+        mage.setOnMouseEntered(e->{mage.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        mage.setOnMouseExited(e->{mage.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
+        mage.setOnMouseClicked(e->playOnce("sounds/Accept.wav"));
         Image pa=new Image("images\\UtherLightbringer.gif",250,250,true,true);
         ImageView paladin= new ImageView(pa);
+        paladin.setOnMouseEntered(e->{paladin.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        paladin.setOnMouseExited(e->{paladin.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         Image p=new Image("images\\AnduinWrynn.gif",250,250,true,true);
         ImageView priest= new ImageView(p);
+        priest.setOnMouseEntered(e->{priest.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        priest.setOnMouseExited(e->{priest.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         Image w=new Image("images\\Guldan.gif",250,250,true,true);
         ImageView warlock= new ImageView(w);
+        warlock.setOnMouseEntered(e->{warlock.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        warlock.setOnMouseExited(e->{warlock.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         Image s= new Image("images\\select.png",140,140,false,false);
         ImageView select= new ImageView(s);
+        select.setOnMouseEntered(e->{select.setEffect(new InnerShadow(50,Color.WHITESMOKE));
+            playOnce("sounds/Hover.wav");});
+        select.setOnMouseExited(e->{select.setEffect(new InnerShadow(0,Color.WHITESMOKE));});
         characters.setHgap(6.5);
         characters.setVgap(30);
         characters.add(mage,10,1);
@@ -183,6 +203,7 @@ public class mainMenu extends Application implements GameListener {
         mage.setOnMouseClicked(e2->{
                 try {
                     selectedHero= new Mage();
+                    playOnce("sounds/Accept.wav");
                 } catch (IOException | CloneNotSupportedException ioException) {
                     ioException.printStackTrace();
                 }
@@ -202,6 +223,7 @@ public class mainMenu extends Application implements GameListener {
         warlock.setOnMouseClicked(e3->{
             try {
                 selectedHero= new Warlock();
+                playOnce("sounds/Accept.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -221,6 +243,7 @@ public class mainMenu extends Application implements GameListener {
         paladin.setOnMouseClicked(e4->{
             try {
                 selectedHero= new Paladin();
+                playOnce("sounds/Accept.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -240,6 +263,7 @@ public class mainMenu extends Application implements GameListener {
         priest.setOnMouseClicked(e5->{
             try {
                 selectedHero= new Priest();
+                playOnce("sounds/Accept.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -259,6 +283,7 @@ public class mainMenu extends Application implements GameListener {
         hunter.setOnMouseClicked(e6->{
             try {
                 selectedHero= new Hunter();
+                playOnce("sounds/Accept.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -276,14 +301,8 @@ public class mainMenu extends Application implements GameListener {
             }
         });
         select.setOnMouseClicked(e1->{
-            try {
-                AudioInputStream ding = AudioSystem.getAudioInputStream(new File("sounds/Ding-sound-effect.wav").getAbsoluteFile());
-                Clip clip= AudioSystem.getClip();
-                clip.open(ding);
-                clip.start();
-            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
-                error.printStackTrace();
-            }
+                playOnce("sounds/Accept.wav");
+
             if(selected) {
                 if(selectedHero==null){                try {
                     throw new noHeroSelectedException("Please Select a Hero");
