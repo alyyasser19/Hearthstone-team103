@@ -2031,6 +2031,32 @@ public class mainMenu extends Application implements GameListener {
         okay.setOnMouseClicked(e1-> s1.close());
         v.getChildren().add(okay);
         s1.setScene(sc);
+        if(e instanceof FullFieldException){
+            playOnce("sounds/fullField.wav");
+        }
+        if(e instanceof FullHandException){
+            playOnce("sounds/fullHand.wav");
+        }
+        if(e instanceof CannotAttackException){
+            if(e.getLocalizedMessage()=="Give this minion a turn to get ready"){
+                playOnce("sounds/sleep.wav");}
+            else{
+                playOnce("sounds/attacked.wav");
+            }
+        }
+
+        if(e instanceof InvalidTargetException){
+            playOnce("sounds/invalid.wav");
+        }
+        if(e instanceof NotEnoughManaException){
+            playOnce("sounds/mana.wav");
+        }
+        if(e instanceof TauntBypassException){
+            playOnce("sounds/Taunt.wav");
+        }
+        if(e instanceof FullFieldException){
+            playOnce("sounds/fullField.wav");
+        }
     }
     public void target(Hero p,Hero pOther,ImageView opponent,boolean attack){
         Stage s1=new Stage();
@@ -4054,6 +4080,11 @@ public class mainMenu extends Application implements GameListener {
         gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         minionTargeted=false;
         end.setOnMouseClicked(e-> {
+            verifyHeroP1();
+            verifyHeroP2();
+            verifyMana();
+            p2VerifyMinions();
+            p1VerifyMinions();
             Boolean draw=true;
             cardFlip();
             end.setEffect(new InnerShadow(100,Color.BLACK));
