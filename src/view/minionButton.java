@@ -87,8 +87,14 @@ public class minionButton extends Button implements Cloneable{
        this.setBackground(new Background(new BackgroundImage(new Image("images/minio.png"),
                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                new BackgroundSize(200,100, false, false, false, false))));
+    if(minion.isSleeping())
+        this.setEffect(new InnerShadow(300,Color.BLACK));
+    if(minion.isSleeping() && minion.isDivine())
+        this.setEffect(new InnerShadow(300,Color.DARKGOLDENROD));
     }
     public void verifyMinion() {
+        if(!minion.isSleeping())
+            this.setEffect(new InnerShadow(0,Color.BLACK));
         if(minion.getName().equals("Sheep")){
             ImageView imageDecline = new ImageView(new Image("images\\cards\\normal\\Sheep.jpg",100,100,false,false));
             this.setGraphic(imageDecline);
@@ -99,6 +105,10 @@ public class minionButton extends Button implements Cloneable{
         hp=minion.getCurrentHP();
 
         this.setText( "Name:"+" "+ minion.getName()+"\n" + "Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n"+""+ tauntt);
+        if(minion.isSleeping())
+            this.setEffect(new InnerShadow(300,Color.BLACK));
+        if(minion.isSleeping() && minion.isDivine())
+            this.setEffect(new InnerShadow(300,Color.DARKGOLDENROD));
 
   
     }

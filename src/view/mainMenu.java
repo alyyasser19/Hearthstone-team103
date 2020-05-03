@@ -58,6 +58,7 @@ public class mainMenu extends Application implements GameListener {
     boolean minionTargeted=false;
     boolean handler;
     Clip Fx;
+    Clip Voice;
     private ImageView selectedCharacter;
     boolean selected;
     boolean gameStart;
@@ -208,7 +209,7 @@ public class mainMenu extends Application implements GameListener {
         mage.setOnMouseClicked(e2->{
             try {
                 selectedHero= new Mage();
-                playOnce("sounds/jaina.wav");
+                playOnceVoice("sounds/jaina.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -228,7 +229,7 @@ public class mainMenu extends Application implements GameListener {
         warlock.setOnMouseClicked(e3->{
             try {
                 selectedHero= new Warlock();
-                playOnce("sounds/guldan.wav");
+                playOnceVoice("sounds/guldan.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -248,7 +249,7 @@ public class mainMenu extends Application implements GameListener {
         paladin.setOnMouseClicked(e4->{
             try {
                 selectedHero= new Paladin();
-                playOnce("sounds/uther.wav");
+                playOnceVoice("sounds/uther.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -268,7 +269,7 @@ public class mainMenu extends Application implements GameListener {
         priest.setOnMouseClicked(e5->{
             try {
                 selectedHero= new Priest();
-                playOnce("sounds/aunduin.wav");
+                playOnceVoice("sounds/aunduin.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -288,7 +289,7 @@ public class mainMenu extends Application implements GameListener {
         hunter.setOnMouseClicked(e6->{
             try {
                 selectedHero= new Hunter();
-                playOnce("sounds/rexxar.wav");
+                playOnceVoice("sounds/rexxar.wav");
             } catch (IOException | CloneNotSupportedException ioException) {
                 ioException.printStackTrace();
             }
@@ -362,13 +363,14 @@ public class mainMenu extends Application implements GameListener {
             clip= AudioSystem.getClip();
             clip.open(a);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-20.0f);
+            gainControl.setValue(-1.0f);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
 
@@ -4081,6 +4083,11 @@ public class mainMenu extends Application implements GameListener {
         gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         minionTargeted=false;
         end.setOnMouseClicked(e-> {
+            verifyHeroP1();
+            verifyHeroP2();
+            verifyMana();
+            p2VerifyMinions();
+            p1VerifyMinions();
             Boolean draw=true;
             cardFlip();
             end.setEffect(new InnerShadow(100,Color.BLACK));
@@ -4180,7 +4187,6 @@ public class mainMenu extends Application implements GameListener {
             else if(p1 instanceof Warlock){
                 icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
                 winnerName="Gul'dan";}
-
             else if(p1 instanceof Priest){
                 icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
                 winnerName="Anduin Wrynn";}
@@ -4272,21 +4278,41 @@ public String getHeroBack(Hero p){
     return "images\\whitepage.png";
 
 }
-public void playOnce(String filePath){
+public void playOnceVoice(String filePath){
+        if(Voice!=null)
+            if(Voice.isRunning()||Voice.isActive()||Voice.isOpen())
+                Voice.stop();
 
     try {
 
         AudioInputStream ding = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
-        Fx= AudioSystem.getClip();
-        if(Fx.isRunning()){
-            System.out.println(Fx.isActive());
-            Fx.stop();
+        Voice= AudioSystem.getClip();
+        if(Voice.isRunning()){
+            System.out.println(Voice.isActive());
+            Voice.stop();
         }
-        Fx.open(ding);
-        Fx.start();
+        Voice.open(ding);
+        Voice.start();
     } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
         error.printStackTrace();
     }
 }
+    public void playOnce(String filePath){
+
+
+        try {
+
+            AudioInputStream ding = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            Fx= AudioSystem.getClip();
+            if(Fx.isRunning()){
+                System.out.println(Fx.isActive());
+                Fx.stop();
+            }
+            Fx.open(ding);
+            Fx.start();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
+            error.printStackTrace();
+        }
+    }
 
 }
