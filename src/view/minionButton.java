@@ -80,6 +80,9 @@ public class minionButton extends Button implements Cloneable{
        if(minion.isDivine()){
            this.setEffect(new InnerShadow(100, Color.GOLD));
        }
+       if(minion.isSleeping()){
+           this.setEffect(new InnerShadow(100, Color.BLACK));
+       }
        //this.setBackground();
        this.setBackground(new Background(new BackgroundImage(new Image("images/minio.png"),
                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,

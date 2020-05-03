@@ -360,8 +360,9 @@ public class mainMenu extends Application implements GameListener {
         try {
             AudioInputStream a = AudioSystem.getAudioInputStream(new File(filepath).getAbsoluteFile());
             clip= AudioSystem.getClip();
-
             clip.open(a);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-20.0f);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
@@ -2031,6 +2032,32 @@ public class mainMenu extends Application implements GameListener {
         okay.setOnMouseClicked(e1-> s1.close());
         v.getChildren().add(okay);
         s1.setScene(sc);
+        if(e instanceof FullFieldException){
+            playOnce("sounds/fullField.wav");
+        }
+        if(e instanceof FullHandException){
+            playOnce("sounds/fullHand.wav");
+        }
+        if(e instanceof CannotAttackException){
+            if(e.getLocalizedMessage()=="Give this minion a turn to get ready"){
+                playOnce("sounds/sleep.wav");}
+            else{
+                playOnce("sounds/attacked.wav");
+            }
+        }
+
+        if(e instanceof InvalidTargetException){
+            playOnce("sounds/invalid.wav");
+        }
+        if(e instanceof NotEnoughManaException){
+            playOnce("sounds/mana.wav");
+        }
+        if(e instanceof TauntBypassException){
+            playOnce("sounds/Taunt.wav");
+        }
+        if(e instanceof FullFieldException){
+            playOnce("sounds/fullField.wav");
+        }
     }
     public void target(Hero p,Hero pOther,ImageView opponent,boolean attack){
         Stage s1=new Stage();
@@ -4153,6 +4180,7 @@ public class mainMenu extends Application implements GameListener {
             else if(p1 instanceof Warlock){
                 icon.setImage(new Image("images\\Guldan.png",250,250,true,true));
                 winnerName="Gul'dan";}
+
             else if(p1 instanceof Priest){
                 icon.setImage(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
                 winnerName="Anduin Wrynn";}
