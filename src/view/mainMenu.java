@@ -63,6 +63,7 @@ public class mainMenu extends Application implements GameListener {
     boolean handler;
     boolean minionTargeted;
     boolean heroTargeted;
+    boolean play=false;
 
     Clip Fx;
     Clip Voice;
@@ -370,7 +371,7 @@ public class mainMenu extends Application implements GameListener {
             clip= AudioSystem.getClip();
             clip.open(a);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(-1.0f);
+            gainControl.setValue(-6.5f);
             clip.start();
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
@@ -412,37 +413,46 @@ public class mainMenu extends Application implements GameListener {
                         return;
                     }
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     verifyMana();
                     finalA5.setOnMouseEntered(enter->{
-                        if(Targeting){
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                             finalA5.setEffect(new InnerShadow(100,Color.RED));
                             playOnce("sounds/twitch.wav");
                         }
                     });
+
                     finalA5.setOnMouseExited(exit->{
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero())
+                        finalA5.verifyMinion();
 
                     });
                     finalA5.setOnMouseClicked(ee->{
-                        if(Targeting){
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                             Targeting=false;
                             try {
                                 game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
 
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
+
 
                                 return;
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
+
 
                                 return;
                             } catch (InvalidTargetException invalidTargetException) {
@@ -454,15 +464,19 @@ public class mainMenu extends Application implements GameListener {
                             } catch (NotSummonedException notSummonedException) {
                                 notSummonedException.printStackTrace();
                                 exceptionWindow(notSummonedException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
 
                                 return;
                             }
                             playOnce("sounds/attack.wav");
-
+                            p1VerifyMinions();
+                            p2VerifyMinions();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
                         }
                         else{
                             finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                            playOnce("sounds/sattack.wav");
                             Targeting=true;
                             attacker=finalA5.getMinion();
                             gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
@@ -493,6 +507,7 @@ public class mainMenu extends Application implements GameListener {
                             notEnoughManaException.printStackTrace();
                             return;
                         }
+                        playOnce("sounds/card.wav");
                         phand.getChildren().remove(a);
                         verifyMana();
                         verifyHeroP2();
@@ -524,6 +539,7 @@ public class mainMenu extends Application implements GameListener {
                             notEnoughManaException.printStackTrace();
                             return;
                         }
+                        playOnce("sounds/card.wav");
                         System.out.println("works?");
                         verifyMana();
                         p1VerifyMinions();
@@ -555,6 +571,7 @@ public class mainMenu extends Application implements GameListener {
                             notEnoughManaException.printStackTrace();
                             return;
                         }
+                        playOnce("sounds/card.wav");
                         verifyMana();
                         verifyHeroP2();
                         verifyHeroP1();
@@ -618,6 +635,7 @@ public class mainMenu extends Application implements GameListener {
                                         exceptionWindow(notEnoughManaException);
                                         return;
                                     }
+                                    playOnce("sounds/card.wav");
                                     phand.getChildren().remove(a);
                                     verifyMana();
                                     verifyHeroP2();
@@ -803,6 +821,7 @@ public class mainMenu extends Application implements GameListener {
                                         exceptionWindow(notEnoughManaException);
                                         return;
                                     }
+                                    playOnce("sounds/card.wav");
                                     phand.getChildren().remove(a);
                                     verifyMana();
                                     verifyHeroP2();
@@ -843,6 +862,7 @@ public class mainMenu extends Application implements GameListener {
                                         pOtherField.getChildren().remove(curr);
                                     verifyHeroP1();
                                     verifyHeroP2();
+                                    playOnce("sounds/card.wav");
                                     phand.getChildren().remove(a);
                                     verifyMana();
                                     verifyMana();
@@ -1000,37 +1020,46 @@ public class mainMenu extends Application implements GameListener {
                     return;
                 }
                 phand.getChildren().remove(a);
+                playOnce("sounds/card.wav");
                 verifyMana();
                 finalA5.setOnMouseEntered(enter->{
-                    if(Targeting){
+                    if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                         finalA5.setEffect(new InnerShadow(100,Color.RED));
                         playOnce("sounds/twitch.wav");
                     }
                 });
+
                 finalA5.setOnMouseExited(exit->{
+                    if(Targeting && finalA5.getListener()!=game.getCurrentHero())
+                        finalA5.verifyMinion();
 
                 });
                 finalA5.setOnMouseClicked(ee->{
-                    if(Targeting){
+                    if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                         Targeting=false;
                         try {
                             game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
-                            Targeting=false;
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            finalA5.verifyMinion();
 
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
-                            Targeting=false;
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            finalA5.verifyMinion();
+
 
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            Targeting=false;
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            finalA5.verifyMinion();
+
 
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
@@ -1042,15 +1071,19 @@ public class mainMenu extends Application implements GameListener {
                         } catch (NotSummonedException notSummonedException) {
                             notSummonedException.printStackTrace();
                             exceptionWindow(notSummonedException);
-                            Targeting=false;
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            finalA5.verifyMinion();
 
                             return;
                         }
                         playOnce("sounds/attack.wav");
-
+                        p1VerifyMinions();
+                        p2VerifyMinions();
+                        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
                     }
                     else{
                         finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                        playOnce("sounds/sattack.wav");
                         Targeting=true;
                         attacker=finalA5.getMinion();
                         gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
@@ -1081,6 +1114,7 @@ public class mainMenu extends Application implements GameListener {
                         return;
                     }
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     System.out.println("works?");
                     verifyMana();
                     verifyHeroP2();
@@ -1094,6 +1128,7 @@ public class mainMenu extends Application implements GameListener {
                     p2VerifyMinions();
                     p1VerifyMinions();
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     verifyMana();});
             }
             if (cur instanceof FieldSpell) {
@@ -1114,6 +1149,7 @@ public class mainMenu extends Application implements GameListener {
                     System.out.println("works?");
 
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     verifyMana();
                     p1VerifyMinions();
                     p2VerifyMinions();
@@ -1144,6 +1180,7 @@ public class mainMenu extends Application implements GameListener {
                     verifyHeroP1();
                     verifyHeroP2();
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     verifyMana();
                     System.out.println("works?");
                 });
@@ -1199,6 +1236,7 @@ public class mainMenu extends Application implements GameListener {
                                 verifyHeroP1();
                                 verifyMana();
                                 phand.getChildren().remove(a);
+                                playOnce("sounds/card.wav");
                             }});
                         oppField.getChildren().add(opponent);}
                     for(Node curr:pOtherField.getChildren()){
@@ -1236,6 +1274,7 @@ public class mainMenu extends Application implements GameListener {
 
                             ;
                             phand.getChildren().remove(a);
+                            playOnce("sounds/card.wav");
                             verifyMana();
                             verifyMana();
                             verifyHeroP2();
@@ -1277,6 +1316,7 @@ public class mainMenu extends Application implements GameListener {
                                     return;
                                 }
                                 phand.getChildren().remove(a);
+                                playOnce("sounds/card.wav");
                                 verifyMana();
                                 verifyHeroP2();
                                 verifyHeroP1();
@@ -1312,6 +1352,7 @@ public class mainMenu extends Application implements GameListener {
                                 if(((minionButton) curr).getHp()==0)
                                     pOtherField.getChildren().remove(curr);
                                 phand.getChildren().remove(a);
+                                playOnce("sounds/card.wav");
                                 verifyMana();
                                 verifyMana();
                                 verifyHeroP2();
@@ -1410,6 +1451,7 @@ public class mainMenu extends Application implements GameListener {
                                 p2VerifyMinions();
                                 p1VerifyMinions();
                                 phand.getChildren().remove(a);
+                                playOnce("sounds/card.wav");
                                 verifyMana();
                             }
 
@@ -1472,37 +1514,46 @@ public class mainMenu extends Application implements GameListener {
                         return;
                     }
                     phand.getChildren().remove(a);
+                    playOnce("sounds/card.wav");
                     verifyMana();
                     finalA5.setOnMouseEntered(enter->{
-                        if(Targeting){
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                             finalA5.setEffect(new InnerShadow(100,Color.RED));
                             playOnce("sounds/twitch.wav");
                         }
                     });
+
                     finalA5.setOnMouseExited(exit->{
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero())
+                        finalA5.verifyMinion();
 
                     });
                     finalA5.setOnMouseClicked(ee->{
-                        if(Targeting){
+                        if(Targeting && finalA5.getListener()!=game.getCurrentHero()){
                             Targeting=false;
                             try {
                                 game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
 
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
+
 
                                 return;
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
+
 
                                 return;
                             } catch (InvalidTargetException invalidTargetException) {
@@ -1514,15 +1565,19 @@ public class mainMenu extends Application implements GameListener {
                             } catch (NotSummonedException notSummonedException) {
                                 notSummonedException.printStackTrace();
                                 exceptionWindow(notSummonedException);
-                                Targeting=false;
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                finalA5.verifyMinion();
 
                                 return;
                             }
                             playOnce("sounds/attack.wav");
-
+                            p1VerifyMinions();
+                            p2VerifyMinions();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
                         }
                         else{
                             finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                            playOnce("sounds/sattack.wav");
                             Targeting=true;
                             attacker=finalA5.getMinion();
                             gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
@@ -1553,6 +1608,7 @@ public class mainMenu extends Application implements GameListener {
                             return;
                         }
                         phand.getChildren().remove(a);
+                        playOnce("sounds/card.wav");
                         System.out.println("works?");
                         verifyMana();
                         verifyHeroP2();
@@ -1566,6 +1622,7 @@ public class mainMenu extends Application implements GameListener {
                         p2VerifyMinions();
                         p1VerifyMinions();
                         phand.getChildren().remove(a);
+                        playOnce("sounds/card.wav");
                         verifyMana();});
                 }
                 if (cur instanceof FieldSpell) {
@@ -1586,6 +1643,7 @@ public class mainMenu extends Application implements GameListener {
                         System.out.println("works?");
 
                         phand.getChildren().remove(a);
+                        playOnce("sounds/card.wav");
                         verifyMana();
                         p1VerifyMinions();
                         p2VerifyMinions();
@@ -1616,6 +1674,7 @@ public class mainMenu extends Application implements GameListener {
                         verifyHeroP1();
                         verifyHeroP2();
                         phand.getChildren().remove(a);
+                        playOnce("sounds/card.wav");
                         verifyMana();
                         System.out.println("works?");
                     });
@@ -1670,6 +1729,7 @@ public class mainMenu extends Application implements GameListener {
                                     verifyHeroP1();
                                     verifyMana();
                                     phand.getChildren().remove(a);
+                                    playOnce("sounds/card.wav");
                                 }});
                             oppField.getChildren().add(opponent);}
                         for(Node curr:pOtherField.getChildren()){
@@ -1707,6 +1767,7 @@ public class mainMenu extends Application implements GameListener {
 
                                 ;
                                 phand.getChildren().remove(a);
+                                playOnce("sounds/card.wav");
                                 verifyMana();
                                 verifyMana();
                                 verifyHeroP2();
@@ -1748,6 +1809,7 @@ public class mainMenu extends Application implements GameListener {
                                         return;
                                     }
                                     phand.getChildren().remove(a);
+                                    playOnce("sounds/card.wav");
                                     verifyMana();
                                     verifyHeroP2();
                                     verifyHeroP1();
@@ -1783,6 +1845,7 @@ public class mainMenu extends Application implements GameListener {
                                     if(((minionButton) curr).getHp()==0)
                                         pOtherField.getChildren().remove(curr);
                                     phand.getChildren().remove(a);
+                                    playOnce("sounds/card.wav");
                                     verifyMana();
                                     verifyMana();
                                     verifyHeroP2();
@@ -1881,6 +1944,7 @@ public class mainMenu extends Application implements GameListener {
                                     p2VerifyMinions();
                                     p1VerifyMinions();
                                     phand.getChildren().remove(a);
+                                    playOnce("sounds/card.wav");
                                     verifyMana();
                                 }
 
@@ -1908,6 +1972,11 @@ public class mainMenu extends Application implements GameListener {
         }
     }
     public void exceptionWindow(Exception e){
+        if(play){
+        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
+        p1VerifyMinions();
+        p2VerifyMinions();
+        verifyMana();}
         Stage s1=new Stage();
         s1.initModality(Modality.APPLICATION_MODAL);
         s1.show();
@@ -3038,6 +3107,7 @@ public class mainMenu extends Application implements GameListener {
 //            }
     }
     public void game() throws FullHandException, CloneNotSupportedException {
+        play=true;
         playOnce("sounds/Start.wav");
         stage=new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -3073,29 +3143,27 @@ public class mainMenu extends Application implements GameListener {
             } catch (NotYourTurnException notYourTurnException) {
                 exceptionWindow(notYourTurnException);
                 notYourTurnException.printStackTrace();
-                Targeting=false;
+
 
                 return;
             } catch (TauntBypassException tauntBypassException) {
                 exceptionWindow(tauntBypassException);
                 tauntBypassException.printStackTrace();
-                Targeting=false;
+
 
                 return;
             } catch (NotSummonedException notSummonedException) {
                 exceptionWindow(notSummonedException);
                 notSummonedException.printStackTrace();
-                Targeting=false;
 
                 return;
             } catch (InvalidTargetException invalidTargetException) {
                 exceptionWindow(invalidTargetException);
                 invalidTargetException.printStackTrace();
-                Targeting=false;
-
                 return;
             }
                 playOnce("sounds/attack.wav");
+                Verify();
 
             }
         });
@@ -3148,7 +3216,7 @@ public class mainMenu extends Application implements GameListener {
                     return;
                 }
                 playOnce("sounds/attack.wav");
-
+                Verify();
             }
         });
         verifyHeroP1();
@@ -3175,6 +3243,7 @@ public class mainMenu extends Application implements GameListener {
 
 
         p1Power.setOnMouseClicked(e->{
+            playOnce("sounds/power.wav");
             if(p1 instanceof Warlock) {
                 try {
                     p1.useHeroPower();
@@ -3277,55 +3346,65 @@ public class mainMenu extends Application implements GameListener {
                 Minion SilverHand=p1.getField().get(p1.getField().size()-1);
                 minionButton Silver= new minionButton(SilverHand);
                 Silver.setOnMouseEntered(enter->{
-                    if(Targeting){
+                    if(Targeting && Silver.getListener()!=game.getCurrentHero()){
                         Silver.setEffect(new InnerShadow(100,Color.RED));
                         playOnce("sounds/twitch.wav");
                     }
                 });
                 Silver.setOnMouseExited(exit->{
+                    if(Targeting&& Silver.getListener()!=game.getCurrentHero())
+                    Silver.verifyMinion();
 
                 });
                 Silver.setOnMouseClicked(ee->{
-                    if(Targeting){
+                    if(Targeting && Silver.getListener()!=game.getCurrentHero()){
                         Targeting=false;
                         try {
                             game.getCurrentHero().attackWithMinion(attacker,Silver.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
                             invalidTargetException.printStackTrace();
                             exceptionWindow(invalidTargetException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (NotSummonedException notSummonedException) {
                             notSummonedException.printStackTrace();
                             exceptionWindow(notSummonedException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         }
                         playOnce("sounds/attack.wav");
+                        p1VerifyMinions();
+                        p2VerifyMinions();
 
                     }
                     else{
                         Silver.setEffect(new InnerShadow(100, Color.GREEN));
+                        playOnce("sounds/sattack.wav");
                         Targeting=true;
                         attacker=Silver.getMinion();
                         gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
@@ -3536,7 +3615,9 @@ public class mainMenu extends Application implements GameListener {
 
         });
 
-        p2Power.setOnMouseClicked(e->{if(p2 instanceof Warlock) {
+        p2Power.setOnMouseClicked(e->{
+            playOnce("sounds/power.wav");
+            if(p2 instanceof Warlock) {
             try {
                 p2.useHeroPower();
             } catch (NotEnoughManaException notEnoughManaException) {
@@ -3607,7 +3688,7 @@ public class mainMenu extends Application implements GameListener {
             }
             if(p2 instanceof Paladin){
                 try {
-                    p1.useHeroPower();
+                    p2.useHeroPower();
                 } catch (NotEnoughManaException notEnoughManaException) {
                     exceptionWindow(notEnoughManaException);
                     notEnoughManaException.printStackTrace();
@@ -3635,64 +3716,72 @@ public class mainMenu extends Application implements GameListener {
                     exceptionWindow(indexOutOfBoundsException);
                     return;
                 }
-                Minion SilverHand=p1.getField().get(p1.getField().size()-1);
+                Minion SilverHand=p2.getField().get(p2.getField().size()-1);
                 minionButton Silver= new minionButton(SilverHand);
                 Silver.setOnMouseEntered(enter->{
-                    if(Targeting){
+                    if(Targeting && Silver.getListener()!=game.getCurrentHero()){
                         Silver.setEffect(new InnerShadow(100,Color.RED));
                         playOnce("sounds/twitch.wav");
                     }
                 });
                 Silver.setOnMouseExited(exit->{
+                    if(Targeting&& Silver.getListener()!=game.getCurrentHero())
+                    Silver.verifyMinion();
 
                 });
                 Silver.setOnMouseClicked(ee->{
-                    if(Targeting){
+                    if(Targeting&& Silver.getListener()!=game.getCurrentHero()){
                         Targeting=false;
                         try {
                             game.getCurrentHero().attackWithMinion(attacker,Silver.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
-                            Targeting=false;
-
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            Silver.verifyMinion();
                             return;
+
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
-                            Targeting=false;
-
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
                             invalidTargetException.printStackTrace();
                             exceptionWindow(invalidTargetException);
-                            Targeting=false;
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
 
                             return;
                         } catch (NotSummonedException notSummonedException) {
                             notSummonedException.printStackTrace();
                             exceptionWindow(notSummonedException);
-                            Targeting=false;
-
+                            Silver.verifyMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
                             return;
                         }
                         playOnce("sounds/attack.wav");
+                        p1VerifyMinions();
+                        p2VerifyMinions();
 
                     }
                     else{
                         Silver.setEffect(new InnerShadow(100, Color.GREEN));
                         Targeting=true;
+                        playOnce("sounds/sattack.wav");
                         attacker=Silver.getMinion();
                         gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
                     }
                 });
-                p1Field.getChildren().add(Silver);
+                p2Field.getChildren().add(Silver);
                 verifyMana();
                 verifyHeroP1();
                 verifyHeroP2();
@@ -3912,8 +4001,8 @@ public class mainMenu extends Application implements GameListener {
         inv.setVisible(true);
 
         playerDraw(p2hand,p2Field,p2,p1,p1Field);
-        minionButton test= new minionButton(new Icehowl());
-        test.setMinSize(0.1,430);
+        Button test= new Button();
+        test.setPrefSize(0.1,430);
         test.setVisible(false);
 
        p2Field.getChildren().add(p2Icon);
@@ -3963,8 +4052,8 @@ public class mainMenu extends Application implements GameListener {
         fieldArea.setTop(p2Field);
         fieldArea.setBottom(p1Field);
         VBox V=new VBox();
-        p2Mana.setMinSize(200,100);
-        p1Mana.setMinSize(200,100);
+        p2Mana.setMinSize(200,75);  // change the p1mana and p2mana size from (200,100) to (200,75)
+        p1Mana.setMinSize(200,75);
         p2Mana.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(200,100, false, false, false, false))));
@@ -3989,6 +4078,8 @@ public class mainMenu extends Application implements GameListener {
         V.getChildren().add(p1Mana);
         VBox exitA= new VBox();
         exitA.setMaxSize(100,50);
+        end.setFitHeight(50);    //add these 2 lines right after part where end button is created
+        end.setFitWidth(200);
 
         exit.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -4093,7 +4184,7 @@ public class mainMenu extends Application implements GameListener {
     test2.setPrefSize(50,50);
         Button ad=new Button();
         ad.setVisible(false);
-        ad.setPrefSize(70,450);
+        ad.setPrefSize(0.1,450);
         top.setMaxSize(50,50);
         top.getChildren().add(test2);
         //p1Area.setTop(top);
@@ -4170,6 +4261,13 @@ public class mainMenu extends Application implements GameListener {
             v.getChildren().add(l2);
             v.getChildren().add(icon);
             v.getChildren().add(close);
+            Button play= new Button("play again");
+            play.setOnMouseClicked(e->{
+                s1.close();
+                clip.stop();
+                start(new Stage());
+            });
+        v.getChildren().add(play);
             s1.setScene(sc);
 
     
@@ -4250,12 +4348,12 @@ public void playOnceVoice(String filePath){
         }
     }
     public void Verify(){
-        verifyMana();
         verifyHeroP2();
         verifyHeroP1();
-        //p1VerifyMinions();
-        //p2VerifyMinions();
-        //gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
+        p1VerifyMinions();
+        p2VerifyMinions();
+        if(!Targeting)
+        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
     }
 
 }
