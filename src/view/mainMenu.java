@@ -616,9 +616,14 @@ public class mainMenu extends Application implements GameListener {
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
                         scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
-                        oppField.setPrefSize(1820,500);
+                        oppField.setPrefSize(1500,700);
+                        BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                                new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                        oppField.setBackground(new Background(b));
                         s1.setScene(scene);
                         Label opp=new Label("opponent");
+                        opp.setTextFill(Color.web("#FFD700"));
                         oppField.getChildren().add(opp);
                         if(cur instanceof HeroTargetSpell){
                             ImageView opponent = null;
@@ -703,6 +708,7 @@ public class mainMenu extends Application implements GameListener {
                                 ;});
                         }
                         Label ally= new Label("Friendly");
+                        ally.setTextFill(Color.web("#FFD700"));
                         oppField.getChildren().add(ally);
                         if(cur instanceof HeroTargetSpell){
                             ImageView hero= null;
@@ -793,11 +799,15 @@ public class mainMenu extends Application implements GameListener {
                     a.setOnMouseClicked(e -> {
                         Stage s1=new Stage();
                         s1.initModality(Modality.APPLICATION_MODAL);
-
                         s1.show();
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
                         scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
+                        oppField.setPrefSize(1500,700);
+                        BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                                new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                        oppField.setBackground(new Background(b));
                         s1.setScene(scene);
                         if(cur instanceof HeroTargetSpell){
                             ImageView opponent = null;
@@ -1231,11 +1241,15 @@ public class mainMenu extends Application implements GameListener {
                 a.setOnMouseClicked(e -> {
                     Stage s1=new Stage();
                     s1.initModality(Modality.APPLICATION_MODAL);
-
                     s1.show();
                     FlowPane oppField= new FlowPane();
-                    oppField.setPrefSize(1900,300);
+                    oppField.setPrefSize(1500,700);
+                    BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                    oppField.setBackground(new Background(b));
                     Label opp=new Label("opponent");
+                    opp.setTextFill(Color.web("#FFD700"));
                     oppField.getChildren().add(opp);
                     Scene scene= new Scene(oppField);
                     scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
@@ -1318,6 +1332,7 @@ public class mainMenu extends Application implements GameListener {
                             p1VerifyMinions();;});
                     }
                     Label ally= new Label("Friendly");
+                    ally.setTextFill(Color.web("#FFD700"));
                     oppField.getChildren().add(ally);
                     if(cur instanceof HeroTargetSpell){
                         ImageView hero= null;
@@ -1402,9 +1417,13 @@ public class mainMenu extends Application implements GameListener {
                 a.setOnMouseClicked(e -> {
                     Stage s1=new Stage();
                     s1.initModality(Modality.APPLICATION_MODAL);
-
                     s1.show();
                     FlowPane oppField= new FlowPane();
+                    oppField.setPrefSize(1500,700);
+                    BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                    oppField.setBackground(new Background(b));
                     Scene scene= new Scene(oppField);
                     s1.setScene(scene);
                     if(cur instanceof HeroTargetSpell){
@@ -1548,6 +1567,8 @@ public class mainMenu extends Application implements GameListener {
                         s1.initModality(Modality.APPLICATION_MODAL);
                         s1.show();
                         FlowPane oppField= new FlowPane();
+                        Scene scene= new Scene(oppField);
+                        s1.setScene(scene);
                         ImageView opponent = null;
                         if(pOther instanceof Mage)
                             opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
@@ -1644,8 +1665,7 @@ public class mainMenu extends Application implements GameListener {
                             });
                             oppField.getChildren().add(target);
                         }
-                        Scene scene= new Scene(oppField);
-                        s1.setScene(scene);
+
 
                     });
                     pfield.getChildren().add(finalA5);
@@ -1745,10 +1765,15 @@ public class mainMenu extends Application implements GameListener {
                     a.setOnMouseClicked(e -> {
                         Stage s1=new Stage();
                         s1.initModality(Modality.APPLICATION_MODAL);
-
                         s1.show();
                         FlowPane oppField= new FlowPane();
+                        oppField.setPrefSize(1500,700);
+                        BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                                new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                        oppField.setBackground(new Background(b));
                         Label opp=new Label("opponent");
+                        opp.setTextFill(Color.web("#FFD700"));
                         oppField.getChildren().add(opp);
                         Scene scene= new Scene(oppField);
                         s1.setScene(scene);
@@ -1830,6 +1855,7 @@ public class mainMenu extends Application implements GameListener {
                                 p1VerifyMinions();;});
                         }
                         Label ally= new Label("Friendly");
+                        ally.setTextFill(Color.web("#FFD700"));
                         oppField.getChildren().add(ally);
                         if(cur instanceof HeroTargetSpell){
                             ImageView hero= null;
@@ -1914,9 +1940,13 @@ public class mainMenu extends Application implements GameListener {
                     a.setOnMouseClicked(e -> {
                         Stage s1=new Stage();
                         s1.initModality(Modality.APPLICATION_MODAL);
-
                         s1.show();
                         FlowPane oppField= new FlowPane();
+                        oppField.setPrefSize(1500,700);
+                        BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                                new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                        oppField.setBackground(new Background(b));
                         Scene scene= new Scene(oppField);
                         s1.setScene(scene);
                         if(cur instanceof HeroTargetSpell){
@@ -3290,6 +3320,11 @@ public class mainMenu extends Application implements GameListener {
                     s1.initModality(Modality.APPLICATION_MODAL);
                     s1.show();
                     FlowPane oppField= new FlowPane();
+                    oppField.setPrefSize(1500,700);
+                    BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                    oppField.setBackground(new Background(b));
                     ImageView opponent = null;
                     if(p2 instanceof Mage)
                         opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
@@ -3392,8 +3427,12 @@ public class mainMenu extends Application implements GameListener {
             if(p1 instanceof Priest) {
                 Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
-                screen.setPrefSize(500,500);
                 Scene scene= new Scene(screen);
+                screen.setPrefSize(1500,700);
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
+                screen.setBackground(new Background(b));
                 s1.setScene(scene);
                 s1.show();
                 Image p = new Image("images\\Anduin_Wrynn.png", 250, 250, true, true);
@@ -3481,7 +3520,11 @@ public class mainMenu extends Application implements GameListener {
             }
             if(p1 instanceof Mage){            Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
-                screen.setPrefSize(500,500);
+                screen.setPrefSize(1500,700);
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
+                screen.setBackground(new Background(b));
                 Scene scene= new Scene(screen);
                 s1.setScene(scene);
                 s1.show();
@@ -3686,6 +3729,11 @@ public class mainMenu extends Application implements GameListener {
                     s1.initModality(Modality.APPLICATION_MODAL);
                     s1.show();
                     FlowPane oppField= new FlowPane();
+                    oppField.setPrefSize(1500,700);
+                    BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
+                    oppField.setBackground(new Background(b));
                     ImageView opponent = null;
                     if(p1 instanceof Mage)
                         opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
@@ -3784,7 +3832,11 @@ public class mainMenu extends Application implements GameListener {
             if(p2 instanceof Priest) {
                 Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
-                screen.setPrefSize(500,500);
+                screen.setPrefSize(1500,700);
+                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
+                screen.setBackground(new Background(b));
                 Scene scene= new Scene(screen);
                 s1.setScene(scene);
                 s1.show();
@@ -3873,7 +3925,11 @@ public class mainMenu extends Application implements GameListener {
             }
             if(p2 instanceof Mage){            Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
-                screen.setPrefSize(500,500);
+                screen.setPrefSize(1500,700);
+                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                        new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
+                screen.setBackground(new Background(b));
                 Scene scene= new Scene(screen);
                 s1.setScene(scene);
                 s1.show();
