@@ -50,21 +50,26 @@ public class mainMenu extends Application implements GameListener {
     Hero p1;
     Hero p2;
     Game game;
-    ImageView end;
+    Minion attacker;
     Minion minionTarget;
     Hero heroTarget;
-    Boolean Targeteing= false;
-    boolean heroTargeted=false;
-    boolean minionTargeted=false;
-    boolean handler;
-    Clip Fx;
-    Clip Voice;
-    private ImageView selectedCharacter;
+
+    int frustration;
+
     boolean selected;
     boolean gameStart;
     boolean mute=false;
+    boolean Targeting= false;
+    boolean handler;
+    boolean minionTargeted;
+    boolean heroTargeted;
 
+    Clip Fx;
+    Clip Voice;
     Clip clip;
+
+    private ImageView selectedCharacter;
+    ImageView end;
     ImageView p1Icon=null;
     ImageView p2Icon=null;
     ImageView p1Power;
@@ -77,7 +82,9 @@ public class mainMenu extends Application implements GameListener {
     HBox oppHand=new HBox();
     FlowPane p1Field=new FlowPane();
     FlowPane p2Field= new FlowPane();
+
     Stage stage;
+    Scene gamescene;
 
     public void start(Stage primaryStage) {
         titleScreen= new Stage();
@@ -406,103 +413,60 @@ public class mainMenu extends Application implements GameListener {
                     }
                     phand.getChildren().remove(a);
                     verifyMana();
+                    finalA5.setOnMouseEntered(enter->{
+                        if(Targeting){
+                            finalA5.setEffect(new InnerShadow(100,Color.RED));
+                            playOnce("sounds/twitch.wav");
+                        }
+                    });
+                    finalA5.setOnMouseExited(exit->{
+
+                    });
                     finalA5.setOnMouseClicked(ee->{
-                        Stage s1=new Stage();
-                        s1.initModality(Modality.APPLICATION_MODAL);
-                        s1.show();
-                        FlowPane oppField= new FlowPane();
-                        ImageView opponent = null;
-                        if(pOther instanceof Mage)
-                            opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
-                        if(pOther instanceof Warlock)
-                            opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
-                        if(pOther instanceof Priest)
-                            opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
-                        if(pOther instanceof Paladin)
-                            opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
-                        if(pOther instanceof Hunter)
-                            opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
-                        opponent.setOnMouseClicked(eee->{
-                            heroTargeted=true;
-                            heroTarget=pOther;
-                            s1.close();
+                        if(Targeting){
+                            Targeting=false;
                             try {
-                                p.attackWithMinion((Minion) cur,pOther);
-                                verifyHeroP1();
-                                verifyHeroP2();
-                                System.out.println(pOther.getCurrentHP());
+                                game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
+                                Targeting=false;
+
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
+                                Targeting=false;
+
                                 return;
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                return;
-                            } catch (NotSummonedException notSummonedException) {
-                                notSummonedException.printStackTrace();
-                                exceptionWindow(notSummonedException);
+                                Targeting=false;
+
                                 return;
                             } catch (InvalidTargetException invalidTargetException) {
                                 invalidTargetException.printStackTrace();
                                 exceptionWindow(invalidTargetException);
+                                Targeting=false;
+
+                                return;
+                            } catch (NotSummonedException notSummonedException) {
+                                notSummonedException.printStackTrace();
+                                exceptionWindow(notSummonedException);
+                                Targeting=false;
+
                                 return;
                             }
-                            System.out.println(pOther.getCurrentHP());
-                            System.out.println(p1.getCurrentHP());
-                            System.out.println(p2.getCurrentHP());
-                        });
-                        oppField.getChildren().add(opponent);
-                        for(Node curr: pOtherField.getChildren()){
-                            if(!curr.isVisible() || (curr instanceof ImageView))
-                                continue;
-                            minionButton target= new minionButton(((minionButton)curr).getMinion());
-                            target.setOnMouseClicked(eee->{
-                                try {
-                                    p.attackWithMinion((Minion) cur,target.getMinion());
-                                } catch (CannotAttackException cannotAttackException) {
-                                    cannotAttackException.printStackTrace();
-                                    exceptionWindow(cannotAttackException);
-                                    return;
-                                } catch (NotYourTurnException notYourTurnException) {
-                                    notYourTurnException.printStackTrace();
-                                    exceptionWindow(notYourTurnException);
-                                    return;
-                                } catch (TauntBypassException tauntBypassException) {
-                                    tauntBypassException.printStackTrace();
-                                    exceptionWindow(tauntBypassException);
-                                    return;
-                                } catch (InvalidTargetException invalidTargetException) {
-                                    invalidTargetException.printStackTrace();
-                                    exceptionWindow(invalidTargetException);
-                                    return;
-                                } catch (NotSummonedException notSummonedException) {
-                                    exceptionWindow(notSummonedException);
-                                    notSummonedException.printStackTrace();
-                                    return;
-                                }
-                                ((minionButton)curr).verifyMinion();
-                                finalA5.verifyMinion();
-                                if(finalA5.getHp()==0)
-                                    pfield.getChildren().remove(finalA5);
-                                if(((minionButton)curr).getHp()==0)
-                                    pOtherField.getChildren().remove(((minionButton)curr));
-                                s1.close();
+                            playOnce("sounds/attack.wav");
 
-
-                            });
-                            oppField.getChildren().add(target);
                         }
-
-                        Scene scene= new Scene(oppField);
-                        scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
-                        s1.setScene(scene);
-
-
+                        else{
+                            finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                            Targeting=true;
+                            attacker=finalA5.getMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                        }
                     });
                     pfield.getChildren().add(finalA5);
 
@@ -1019,8 +983,7 @@ public class mainMenu extends Application implements GameListener {
             a.setOnMouseClicked(e -> {
                 try {
                     p.playMinion((Minion) cur);
-                }
-                catch (NotYourTurnException notYourTurnException) {
+                } catch (NotYourTurnException notYourTurnException) {
                     notYourTurnException= new NotYourTurnException("Not Your Turn!!");
                     exceptionWindow(notYourTurnException);
                     notYourTurnException.printStackTrace();
@@ -1038,111 +1001,60 @@ public class mainMenu extends Application implements GameListener {
                 }
                 phand.getChildren().remove(a);
                 verifyMana();
+                finalA5.setOnMouseEntered(enter->{
+                    if(Targeting){
+                        finalA5.setEffect(new InnerShadow(100,Color.RED));
+                        playOnce("sounds/twitch.wav");
+                    }
+                });
+                finalA5.setOnMouseExited(exit->{
+
+                });
                 finalA5.setOnMouseClicked(ee->{
-                    Stage s1=new Stage();
-                    s1.initModality(Modality.APPLICATION_MODAL);
-                    s1.show();
-                    FlowPane oppField= new FlowPane();
-                    ImageView opponent = null;
-                    if(pOther instanceof Mage)
-                        opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
-                    if(pOther instanceof Warlock)
-                        opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
-                    if(pOther instanceof Priest)
-                        opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
-                    if(pOther instanceof Paladin)
-                        opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
-                    if(pOther instanceof Hunter)
-                        opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
-                    opponent.setOnMouseClicked(eee->{
-                        heroTargeted=true;
-                        heroTarget=pOther;
-                        s1.close();
+                    if(Targeting){
+                        Targeting=false;
                         try {
-                            p.attackWithMinion((Minion) cur,pOther);
-                            verifyHeroP1();
-                            verifyHeroP2();
-                            System.out.println(pOther.getCurrentHP());
+                            game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
+                            Targeting=false;
+
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
+                            Targeting=false;
+
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            return;
-                        } catch (NotSummonedException notSummonedException) {
-                            notSummonedException.printStackTrace();
-                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
                             invalidTargetException.printStackTrace();
                             exceptionWindow(invalidTargetException);
+                            Targeting=false;
+
+                            return;
+                        } catch (NotSummonedException notSummonedException) {
+                            notSummonedException.printStackTrace();
+                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         }
-                        System.out.println(pOther.getCurrentHP());
-                        System.out.println(p1.getCurrentHP());
-                        System.out.println(p2.getCurrentHP());
-                        verifyMana();
-                        verifyHeroP2();
-                        verifyHeroP1();
-                        p2VerifyMinions();
-                        p1VerifyMinions();
-                    });
-                    oppField.getChildren().add(opponent);
-                    for(Node curr: pOtherField.getChildren()){
-                        if(!curr.isVisible() || curr instanceof ImageView)
-                            continue;
-                        minionButton target= new minionButton(((minionButton)curr).getMinion());
-                        target.setOnMouseClicked(eee->{
-                            try {
-                                p.attackWithMinion((Minion) cur,target.getMinion());
-                            } catch (CannotAttackException cannotAttackException) {
-                                cannotAttackException.printStackTrace();
-                                exceptionWindow(cannotAttackException);
-                                return;
-                            } catch (NotYourTurnException notYourTurnException) {
-                                notYourTurnException.printStackTrace();
-                                exceptionWindow(notYourTurnException);
-                                return;
-                            } catch (TauntBypassException tauntBypassException) {
-                                tauntBypassException.printStackTrace();
-                                exceptionWindow(tauntBypassException);
-                                return;
-                            } catch (InvalidTargetException invalidTargetException) {
-                                invalidTargetException.printStackTrace();
-                                exceptionWindow(invalidTargetException);
-                                return;
-                            } catch (NotSummonedException notSummonedException) {
-                                exceptionWindow(notSummonedException);
-                                notSummonedException.printStackTrace();
-                                return;
-                            }
-                            verifyMana();
-                            verifyHeroP2();
-                            verifyHeroP1();
-                            p2VerifyMinions();
-                            p1VerifyMinions();
-                            ((minionButton)curr).verifyMinion();
-                            finalA5.verifyMinion();
-                            if(finalA5.getHp()==0)
-                                pfield.getChildren().remove(finalA5);
-                            if(((minionButton)curr).getHp()==0)
-                                pOtherField.getChildren().remove(((minionButton)curr));
-                            s1.close();
+                        playOnce("sounds/attack.wav");
 
-
-                        });
-                        oppField.getChildren().add(target);
                     }
-                    Scene scene= new Scene(oppField);
-                    scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
-                    s1.setScene(scene);
-
+                    else{
+                        finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                        Targeting=true;
+                        attacker=finalA5.getMinion();
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                    }
                 });
                 pfield.getChildren().add(finalA5);
 
@@ -1543,8 +1455,7 @@ public class mainMenu extends Application implements GameListener {
                 a.setOnMouseClicked(e -> {
                     try {
                         p.playMinion((Minion) cur);
-                    }
-                    catch (NotYourTurnException notYourTurnException) {
+                    } catch (NotYourTurnException notYourTurnException) {
                         notYourTurnException= new NotYourTurnException("Not Your Turn!!");
                         exceptionWindow(notYourTurnException);
                         notYourTurnException.printStackTrace();
@@ -1562,111 +1473,60 @@ public class mainMenu extends Application implements GameListener {
                     }
                     phand.getChildren().remove(a);
                     verifyMana();
+                    finalA5.setOnMouseEntered(enter->{
+                        if(Targeting){
+                            finalA5.setEffect(new InnerShadow(100,Color.RED));
+                            playOnce("sounds/twitch.wav");
+                        }
+                    });
+                    finalA5.setOnMouseExited(exit->{
+
+                    });
                     finalA5.setOnMouseClicked(ee->{
-                        Stage s1=new Stage();
-                        s1.initModality(Modality.APPLICATION_MODAL);
-                        s1.show();
-                        FlowPane oppField= new FlowPane();
-                        Scene scene= new Scene(oppField);
-                        s1.setScene(scene);
-                        ImageView opponent = null;
-                        if(pOther instanceof Mage)
-                            opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
-                        if(pOther instanceof Warlock)
-                            opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
-                        if(pOther instanceof Priest)
-                            opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
-                        if(pOther instanceof Paladin)
-                            opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
-                        if(pOther instanceof Hunter)
-                            opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
-                        opponent.setOnMouseClicked(eee->{
-                            heroTargeted=true;
-                            heroTarget=pOther;
-                            s1.close();
+                        if(Targeting){
+                            Targeting=false;
                             try {
-                                p.attackWithMinion((Minion) cur,pOther);
-                                verifyHeroP1();
-                                verifyHeroP2();
-                                System.out.println(pOther.getCurrentHP());
+                                game.getCurrentHero().attackWithMinion(attacker,finalA5.getMinion());
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
+                                Targeting=false;
+
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
+                                Targeting=false;
+
                                 return;
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                return;
-                            } catch (NotSummonedException notSummonedException) {
-                                notSummonedException.printStackTrace();
-                                exceptionWindow(notSummonedException);
+                                Targeting=false;
+
                                 return;
                             } catch (InvalidTargetException invalidTargetException) {
                                 invalidTargetException.printStackTrace();
                                 exceptionWindow(invalidTargetException);
+                                Targeting=false;
+
+                                return;
+                            } catch (NotSummonedException notSummonedException) {
+                                notSummonedException.printStackTrace();
+                                exceptionWindow(notSummonedException);
+                                Targeting=false;
+
                                 return;
                             }
-                            System.out.println(pOther.getCurrentHP());
-                            System.out.println(p1.getCurrentHP());
-                            System.out.println(p2.getCurrentHP());
-                            verifyMana();
-                            verifyHeroP2();
-                            verifyHeroP1();
-                            p2VerifyMinions();
-                            p1VerifyMinions();
-                        });
-                        oppField.getChildren().add(opponent);
-                        for(Node curr: pOtherField.getChildren()){
-                            if(!curr.isVisible() || curr instanceof ImageView)
-                                continue;
-                            minionButton target= new minionButton(((minionButton)curr).getMinion());
-                            target.setOnMouseClicked(eee->{
-                                try {
-                                    p.attackWithMinion((Minion) cur,target.getMinion());
-                                } catch (CannotAttackException cannotAttackException) {
-                                    cannotAttackException.printStackTrace();
-                                    exceptionWindow(cannotAttackException);
-                                    return;
-                                } catch (NotYourTurnException notYourTurnException) {
-                                    notYourTurnException.printStackTrace();
-                                    exceptionWindow(notYourTurnException);
-                                    return;
-                                } catch (TauntBypassException tauntBypassException) {
-                                    tauntBypassException.printStackTrace();
-                                    exceptionWindow(tauntBypassException);
-                                    return;
-                                } catch (InvalidTargetException invalidTargetException) {
-                                    invalidTargetException.printStackTrace();
-                                    exceptionWindow(invalidTargetException);
-                                    return;
-                                } catch (NotSummonedException notSummonedException) {
-                                    exceptionWindow(notSummonedException);
-                                    notSummonedException.printStackTrace();
-                                    return;
-                                }
-                                verifyMana();
-                                verifyHeroP2();
-                                verifyHeroP1();
-                                p2VerifyMinions();
-                                p1VerifyMinions();
-                                ((minionButton)curr).verifyMinion();
-                                finalA5.verifyMinion();
-                                if(finalA5.getHp()==0)
-                                    pfield.getChildren().remove(finalA5);
-                                if(((minionButton)curr).getHp()==0)
-                                    pOtherField.getChildren().remove(((minionButton)curr));
-                                s1.close();
+                            playOnce("sounds/attack.wav");
 
-
-                            });
-                            oppField.getChildren().add(target);
                         }
-
-
+                        else{
+                            finalA5.setEffect(new InnerShadow(100, Color.GREEN));
+                            Targeting=true;
+                            attacker=finalA5.getMinion();
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                        }
                     });
                     pfield.getChildren().add(finalA5);
 
@@ -3190,7 +3050,107 @@ public class mainMenu extends Application implements GameListener {
 //        stage.setMaxWidth(1920);
         //HeroIcon
         p1Icon= new ImageView(new Image("images\\jaina\\Jaina_Proudmoore_30.png",250,300,true,true));
+        p1Icon.setOnMouseEntered(e->{
+            if(Targeting){
+                p1Icon.setEffect(new InnerShadow(100,Color.RED));
+                playOnce("sounds/twitch.wav");
+            }
+        });
+        p1Icon.setOnMouseExited(e->{
+            if(Targeting){
+                p1Icon.setEffect(new InnerShadow(0,Color.RED));
+            }
+        });
+        p1Icon.setOnMouseClicked(e->{
+            if(Targeting){
+                Targeting=false;
+            try {
+                game.getCurrentHero().attackWithMinion(attacker,p1);
+            } catch (CannotAttackException cannotAttackException) {
+                exceptionWindow(cannotAttackException);
+                cannotAttackException.printStackTrace();
+                return;
+            } catch (NotYourTurnException notYourTurnException) {
+                exceptionWindow(notYourTurnException);
+                notYourTurnException.printStackTrace();
+                Targeting=false;
+
+                return;
+            } catch (TauntBypassException tauntBypassException) {
+                exceptionWindow(tauntBypassException);
+                tauntBypassException.printStackTrace();
+                Targeting=false;
+
+                return;
+            } catch (NotSummonedException notSummonedException) {
+                exceptionWindow(notSummonedException);
+                notSummonedException.printStackTrace();
+                Targeting=false;
+
+                return;
+            } catch (InvalidTargetException invalidTargetException) {
+                exceptionWindow(invalidTargetException);
+                invalidTargetException.printStackTrace();
+                Targeting=false;
+
+                return;
+            }
+                playOnce("sounds/attack.wav");
+
+            }
+        });
+
         p2Icon=new ImageView(new Image("images\\Urther\\Uther_Lightbringer_30.png",250,300,true,true));
+        p2Icon.setOnMouseEntered(e->{
+            if(Targeting){
+                p2Icon.setEffect(new InnerShadow(100,Color.RED));
+                playOnce("sounds/twitch.wav");
+            }
+        });
+        p2Icon.setOnMouseExited(e->{
+            if(Targeting){
+                p2Icon.setEffect(new InnerShadow(0,Color.RED));
+            }
+        });
+        p2Icon.setOnMouseClicked(e->{
+            if(Targeting){
+                Targeting=false;
+                try {
+                    game.getCurrentHero().attackWithMinion(attacker,p2);
+                } catch (CannotAttackException cannotAttackException) {
+                    exceptionWindow(cannotAttackException);
+                    cannotAttackException.printStackTrace();
+                    Targeting=false;
+
+                    return;
+                } catch (NotYourTurnException notYourTurnException) {
+                    exceptionWindow(notYourTurnException);
+                    notYourTurnException.printStackTrace();
+                    return;
+                } catch (TauntBypassException tauntBypassException) {
+                    exceptionWindow(tauntBypassException);
+                    tauntBypassException.printStackTrace();
+                    Targeting=false;
+
+                    return;
+                } catch (NotSummonedException notSummonedException) {
+                    exceptionWindow(notSummonedException);
+                    notSummonedException.printStackTrace();
+                    Targeting=false;
+
+
+                    return;
+                } catch (InvalidTargetException invalidTargetException) {
+                    exceptionWindow(invalidTargetException);
+                    invalidTargetException.printStackTrace();
+                    Targeting=false;
+
+                    return;
+                }
+                playOnce("sounds/attack.wav");
+
+            }
+        });
         verifyHeroP1();
         verifyHeroP2();
         //__________________________________________________________________________________________________________
@@ -3316,108 +3276,60 @@ public class mainMenu extends Application implements GameListener {
                 }
                 Minion SilverHand=p1.getField().get(p1.getField().size()-1);
                 minionButton Silver= new minionButton(SilverHand);
-                Silver.setOnMouseClicked(ee->{Stage s1=new Stage();
-                    s1.initModality(Modality.APPLICATION_MODAL);
-                    s1.show();
-                    FlowPane oppField= new FlowPane();
-                    oppField.setPrefSize(1500,700);
-                    BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
-                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
-                    oppField.setBackground(new Background(b));
-                    ImageView opponent = null;
-                    if(p2 instanceof Mage)
-                        opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
-                    if(p2 instanceof Warlock)
-                        opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
-                    if(p2 instanceof Priest)
-                        opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
-                    if(p2 instanceof Paladin)
-                        opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
-                    if(p2 instanceof Hunter)
-                        opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
-                    opponent.setOnMouseClicked(eee->{
-                        heroTargeted=true;
-                        heroTarget=p2;
-                        s1.close();
+                Silver.setOnMouseEntered(enter->{
+                    if(Targeting){
+                        Silver.setEffect(new InnerShadow(100,Color.RED));
+                        playOnce("sounds/twitch.wav");
+                    }
+                });
+                Silver.setOnMouseExited(exit->{
+
+                });
+                Silver.setOnMouseClicked(ee->{
+                    if(Targeting){
+                        Targeting=false;
                         try {
-                            p1.attackWithMinion((Minion) SilverHand,p2);
-                            verifyHeroP1();
-                            verifyHeroP2();
-                            System.out.println(p2.getCurrentHP());
+                            game.getCurrentHero().attackWithMinion(attacker,Silver.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
+                            Targeting=false;
+
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
+                            Targeting=false;
+
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            return;
-                        } catch (NotSummonedException notSummonedException) {
-                            notSummonedException.printStackTrace();
-                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
                             invalidTargetException.printStackTrace();
                             exceptionWindow(invalidTargetException);
+                            Targeting=false;
+
+                            return;
+                        } catch (NotSummonedException notSummonedException) {
+                            notSummonedException.printStackTrace();
+                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         }
-                        System.out.println(p2.getCurrentHP());
-                        System.out.println(p1.getCurrentHP());
-                        System.out.println(p2.getCurrentHP());
-                    });
-                    oppField.getChildren().add(opponent);
-                    for(Node curr: p2Field.getChildren()){
-                        if(!curr.isVisible() || (curr instanceof ImageView))
-                            continue;
-                        minionButton target= new minionButton(((minionButton)curr).getMinion());
-                        target.setOnMouseClicked(eee->{
-                            try {
-                                p1.attackWithMinion((Minion) SilverHand,target.getMinion());
-                            } catch (CannotAttackException cannotAttackException) {
-                                cannotAttackException.printStackTrace();
-                                exceptionWindow(cannotAttackException);
-                                return;
-                            } catch (NotYourTurnException notYourTurnException) {
-                                notYourTurnException.printStackTrace();
-                                exceptionWindow(notYourTurnException);
-                                return;
-                            } catch (TauntBypassException tauntBypassException) {
-                                tauntBypassException.printStackTrace();
-                                exceptionWindow(tauntBypassException);
-                                return;
-                            } catch (InvalidTargetException invalidTargetException) {
-                                invalidTargetException.printStackTrace();
-                                exceptionWindow(invalidTargetException);
-                                return;
-                            } catch (NotSummonedException notSummonedException) {
-                                exceptionWindow(notSummonedException);
-                                notSummonedException.printStackTrace();
-                                return;
-                            }
+                        playOnce("sounds/attack.wav");
 
-                            p1VerifyMinions();
-                            p2VerifyMinions();
-                            verifyMana();
-                            verifyHeroP1();
-                            verifyHeroP2();
-                            if(Silver.getHp()==0)
-                                p1Field.getChildren().remove(Silver);
-                            if(((minionButton)curr).getHp()==0)
-                                p2Field.getChildren().remove(((minionButton)curr));
-                            s1.close();
-
-
-                        });
-                        oppField.getChildren().add(target);
                     }
-                    Scene scene= new Scene(oppField);
-                    s1.setScene(scene);
-
+                    else{
+                        Silver.setEffect(new InnerShadow(100, Color.GREEN));
+                        Targeting=true;
+                        attacker=Silver.getMinion();
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                    }
                 });
                 p1Field.getChildren().add(Silver);
                 verifyMana();
@@ -3695,7 +3607,7 @@ public class mainMenu extends Application implements GameListener {
             }
             if(p2 instanceof Paladin){
                 try {
-                    p2.useHeroPower();
+                    p1.useHeroPower();
                 } catch (NotEnoughManaException notEnoughManaException) {
                     exceptionWindow(notEnoughManaException);
                     notEnoughManaException.printStackTrace();
@@ -3723,108 +3635,64 @@ public class mainMenu extends Application implements GameListener {
                     exceptionWindow(indexOutOfBoundsException);
                     return;
                 }
-                Minion SilverHand=p2.getField().get(p2.getField().size()-1);
+                Minion SilverHand=p1.getField().get(p1.getField().size()-1);
                 minionButton Silver= new minionButton(SilverHand);
-                Silver.setOnMouseClicked(ee->{Stage s1=new Stage();
-                    s1.initModality(Modality.APPLICATION_MODAL);
-                    s1.show();
-                    FlowPane oppField= new FlowPane();
-                    oppField.setPrefSize(1500,700);
-                    BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
-                            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                            new BackgroundSize(oppField.getWidth(),oppField.getHeight(), false, false, true, false));
-                    oppField.setBackground(new Background(b));
-                    ImageView opponent = null;
-                    if(p1 instanceof Mage)
-                        opponent=new ImageView(new Image("images\\Jaina_Proudmoore.png",250,250,true,true));
-                    if(p1 instanceof Warlock)
-                        opponent=new ImageView(new Image("images\\Guldan.png",250,250,true,true));
-                    if(p1 instanceof Priest)
-                        opponent=new ImageView(new Image("images\\Anduin_Wrynn.png",250,250,true,true));
-                    if(p1 instanceof Paladin)
-                        opponent=new ImageView(new Image("images\\Uther_Lightbringer.png",250,250,true,true));
-                    if(p1 instanceof Hunter)
-                        opponent=new ImageView(new Image("images\\Rexxar.png",250,250,true,true));
-                    opponent.setOnMouseClicked(eee->{
-                        heroTargeted=true;
-                        heroTarget=p1;
-                        s1.close();
+                Silver.setOnMouseEntered(enter->{
+                    if(Targeting){
+                        Silver.setEffect(new InnerShadow(100,Color.RED));
+                        playOnce("sounds/twitch.wav");
+                    }
+                });
+                Silver.setOnMouseExited(exit->{
+
+                });
+                Silver.setOnMouseClicked(ee->{
+                    if(Targeting){
+                        Targeting=false;
                         try {
-                            p2.attackWithMinion((Minion) SilverHand,p1);
-                            verifyHeroP1();
-                            verifyHeroP2();
-                            System.out.println(p1.getCurrentHP());
+                            game.getCurrentHero().attackWithMinion(attacker,Silver.getMinion());
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
+                            Targeting=false;
+
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
+                            Targeting=false;
+
                             return;
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            return;
-                        } catch (NotSummonedException notSummonedException) {
-                            notSummonedException.printStackTrace();
-                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         } catch (InvalidTargetException invalidTargetException) {
                             invalidTargetException.printStackTrace();
                             exceptionWindow(invalidTargetException);
+                            Targeting=false;
+
+                            return;
+                        } catch (NotSummonedException notSummonedException) {
+                            notSummonedException.printStackTrace();
+                            exceptionWindow(notSummonedException);
+                            Targeting=false;
+
                             return;
                         }
-                        System.out.println(p2.getCurrentHP());
-                        System.out.println(p1.getCurrentHP());
-                        System.out.println(p2.getCurrentHP());
-                    });
-                    oppField.getChildren().add(opponent);
-                    for(Node curr: p1Field.getChildren()){
-                        if(!curr.isVisible() || (curr instanceof ImageView))
-                            continue;
-                        minionButton target= new minionButton(((minionButton)curr).getMinion());
-                        target.setOnMouseClicked(eee->{
-                            try {
-                                p2.attackWithMinion((Minion) SilverHand,target.getMinion());
-                            } catch (CannotAttackException cannotAttackException) {
-                                cannotAttackException.printStackTrace();
-                                exceptionWindow(cannotAttackException);
-                                return;
-                            } catch (NotYourTurnException notYourTurnException) {
-                                notYourTurnException.printStackTrace();
-                                exceptionWindow(notYourTurnException);
-                                return;
-                            } catch (TauntBypassException tauntBypassException) {
-                                tauntBypassException.printStackTrace();
-                                exceptionWindow(tauntBypassException);
-                                return;
-                            } catch (InvalidTargetException invalidTargetException) {
-                                invalidTargetException.printStackTrace();
-                                exceptionWindow(invalidTargetException);
-                                return;
-                            } catch (NotSummonedException notSummonedException) {
-                                exceptionWindow(notSummonedException);
-                                notSummonedException.printStackTrace();
-                                return;
-                            }
-                            ((minionButton)curr).verifyMinion();
-                            Silver.verifyMinion();
-                            if(Silver.getHp()==0)
-                                p2Field.getChildren().remove(Silver);
-                            if(((minionButton)curr).getHp()==0)
-                                p1Field.getChildren().remove(((minionButton)curr));
-                            s1.close();
-                            p2VerifyMinions(); p1VerifyMinions();
+                        playOnce("sounds/attack.wav");
 
-                        });
-                        oppField.getChildren().add(target);
                     }
-                    Scene scene= new Scene(oppField);
-                    s1.setScene(scene);
-
+                    else{
+                        Silver.setEffect(new InnerShadow(100, Color.GREEN));
+                        Targeting=true;
+                        attacker=Silver.getMinion();
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                    }
                 });
-                p2Field.getChildren().add(Silver);
+                p1Field.getChildren().add(Silver);
                 verifyMana();
                 verifyHeroP1();
                 verifyHeroP2();
@@ -4071,7 +3939,7 @@ public class mainMenu extends Application implements GameListener {
 
         test2.setMinSize(200,192);
         test2.setVisible(false);
-        p1Field.getChildren().add(test2);
+
         p1Field.getChildren().add(p1Power);
         oppHand.setMaxSize(580,192);
         p1hand.setMaxSize(580,192);
@@ -4082,8 +3950,8 @@ public class mainMenu extends Application implements GameListener {
         verifyMana();
        // p1Mana.setShape(new Circle(20));
 
-        top.getChildren().add(p1Icon);
-        p1Area.setTop(top);
+
+
         p1Area.setRight(null);
         gamescreen.setBottom(p1Area);
 
@@ -4134,11 +4002,11 @@ public class mainMenu extends Application implements GameListener {
 
         end.setOnMouseReleased(e->{end.setEffect(new InnerShadow(100,Color.WHITESMOKE));});
 
-        Scene gamescene= new Scene(gamescreen,1360,768);
+        gamescene= new Scene(gamescreen,1360,768);
         stage.setScene(gamescene);
         gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
-        minionTargeted=false;
         end.setOnMouseClicked(e-> {
+            playOnce("sounds/end.wav");
             verifyHeroP1();
             verifyHeroP2();
             verifyMana();
@@ -4215,16 +4083,25 @@ public class mainMenu extends Application implements GameListener {
 
         p1Field.setHgap(5);
         p2Field.setHgap(5);
-            stage.setOnCloseRequest(e ->{
-            e.consume();
-            stage.close();
-        });
             stage.setOnHiding(e->e.consume());
             stage.setIconified(false);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setFullScreenExitHint("");
     stage.setMaximized(true);
     stage.show();
+    test2.setPrefSize(300,300);
+        Button ad=new Button();
+        ad.setVisible(false);
+        ad.setPrefSize(100,100);
+        top.getChildren().add(test2);
+        p1Area.setTop(top);
+        //p1Field.getChildren().add(p1Icon);
+
+
+
+        p1Field.getChildren().add(ad);
+
+
     }
 
 
@@ -4369,6 +4246,14 @@ public void playOnceVoice(String filePath){
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException error) {
             error.printStackTrace();
         }
+    }
+    public void Verify(){
+        verifyMana();
+        verifyHeroP2();
+        verifyHeroP1();
+        //p1VerifyMinions();
+        //p2VerifyMinions();
+        //gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
     }
 
 }
