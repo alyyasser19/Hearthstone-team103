@@ -616,7 +616,7 @@ public class mainMenu extends Application implements GameListener {
                         FlowPane oppField= new FlowPane();
                         Scene scene= new Scene(oppField);
                         scene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
-                        oppField.setPrefSize(1900,300);
+                        oppField.setPrefSize(1820,500);
                         s1.setScene(scene);
                         Label opp=new Label("opponent");
                         oppField.getChildren().add(opp);

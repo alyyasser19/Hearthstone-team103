@@ -88,6 +88,7 @@ public class minionButton extends Button implements Cloneable{
         this.setEffect(new InnerShadow(300,Color.BLACK));
     if(minion.isSleeping() && minion.isDivine())
         this.setEffect(new InnerShadow(300,Color.DARKGOLDENROD));
+
     }
     public void verifyMinion() {
         if(!minion.isSleeping())
