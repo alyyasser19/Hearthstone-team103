@@ -3906,13 +3906,13 @@ public class mainMenu extends Application implements GameListener {
 
         //Validate to be added and the get target method to be implemented
         Button inv= new Button();
-        inv.setPrefSize(200,200);
-        inv.setMinSize(200,200);
+        inv.setPrefSize(50,200);
+        inv.setMinSize(50,200);
         inv.setVisible(true);
 
         playerDraw(p2hand,p2Field,p2,p1,p1Field);
         minionButton test= new minionButton(new Icehowl());
-        test.setMinSize(210,200);
+        test.setMinSize(0.1,430);
         test.setVisible(false);
 
        p2Field.getChildren().add(p2Icon);
@@ -4092,7 +4092,7 @@ public class mainMenu extends Application implements GameListener {
     test2.setPrefSize(50,50);
         Button ad=new Button();
         ad.setVisible(false);
-        ad.setPrefSize(200,150);
+        ad.setPrefSize(70,450);
         top.setMaxSize(50,50);
         top.getChildren().add(test2);
         //p1Area.setTop(top);
