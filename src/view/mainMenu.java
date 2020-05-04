@@ -3915,14 +3915,15 @@ public class mainMenu extends Application implements GameListener {
         minionButton test= new minionButton(new Icehowl());
         test.setMinSize(210,200);
         test.setVisible(false);
-       p2Field.getChildren().add(test);
+
+       p2Field.getChildren().add(p2Icon);
         p2Field.getChildren().add(p2Power);
+        p2Field.getChildren().add(test);
         p2hand.setMaxSize(580,200);
         p2Area.setLeft(p2hand);
         HBox bottom=new HBox();
         p2Mana=new Button("Current Mana:"+p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
         p2Mana.setMinWidth(100);
-        bottom.getChildren().add(p2Icon);
 
         p2Area.setBottom(bottom);
         p2Area.setRight(null);
@@ -3940,7 +3941,7 @@ public class mainMenu extends Application implements GameListener {
         test2.setMinSize(200,192);
         test2.setVisible(false);
 
-        p1Field.getChildren().add(p1Power);
+
         oppHand.setMaxSize(580,192);
         p1hand.setMaxSize(580,192);
         p1Area.setLeft(p1hand);
@@ -4089,14 +4090,15 @@ public class mainMenu extends Application implements GameListener {
         stage.setFullScreenExitHint("");
     stage.setMaximized(true);
     stage.show();
-    test2.setPrefSize(300,300);
+    test2.setPrefSize(50,50);
         Button ad=new Button();
         ad.setVisible(false);
-        ad.setPrefSize(100,100);
+        ad.setPrefSize(200,150);
+        top.setMaxSize(50,50);
         top.getChildren().add(test2);
-        p1Area.setTop(top);
-        //p1Field.getChildren().add(p1Icon);
-
+        //p1Area.setTop(top);
+        p1Field.getChildren().add(p1Icon);
+        p1Field.getChildren().add(p1Power);
 
 
         p1Field.getChildren().add(ad);
