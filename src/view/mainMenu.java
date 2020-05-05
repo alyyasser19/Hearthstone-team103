@@ -3790,7 +3790,7 @@ public class mainMenu extends Application implements GameListener {
                 Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
                 screen.setPrefSize(1500,700);
-                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
                 screen.setBackground(new Background(b));
@@ -3883,7 +3883,7 @@ public class mainMenu extends Application implements GameListener {
             if(p2 instanceof Mage){            Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
                 screen.setPrefSize(1500,700);
-                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
                 screen.setBackground(new Background(b));
