@@ -2458,6 +2458,7 @@ public class mainMenu extends Application implements GameListener {
 
 
         }
+        p1Icon.setFitHeight(200);
     }
 
     public void verifyHeroP2(){
@@ -2946,6 +2947,7 @@ public class mainMenu extends Application implements GameListener {
 
 
         }
+        p2Icon.setFitHeight(200);
 
     }
     public void verifyMana(){
@@ -3700,7 +3702,7 @@ public class mainMenu extends Application implements GameListener {
                 Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
                 screen.setPrefSize(1500,700);
-                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
                 screen.setBackground(new Background(b));
@@ -3793,7 +3795,7 @@ public class mainMenu extends Application implements GameListener {
             if(p2 instanceof Mage){            Stage s1 = new Stage();
                 FlowPane screen = new FlowPane();
                 screen.setPrefSize(1500,700);
-                BackgroundImage b= new BackgroundImage(new Image("images/BG.jpg"),
+                BackgroundImage b= new BackgroundImage(new Image("images/spellsBG.jpg"),
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                         new BackgroundSize(screen.getWidth(),screen.getHeight(), false, false, true, false));
                 screen.setBackground(new Background(b));
@@ -3918,7 +3920,7 @@ public class mainMenu extends Application implements GameListener {
        p2Field.getChildren().add(p2Icon);
         p2Field.getChildren().add(p2Power);
         p2Field.getChildren().add(test);
-        p2hand.setMaxSize(580,200);
+        p2hand.setMaxSize(580,192);
         p2Area.setLeft(p2hand);
         HBox bottom=new HBox();
         p2Mana=new Button("Current Mana:"+p2.getCurrentManaCrystals()+"\nMax Mana:"+ p2.getTotalManaCrystals()+"\nCards Left:"+p2.getDeck().size());
@@ -3958,12 +3960,14 @@ public class mainMenu extends Application implements GameListener {
         //Field Layout
         BorderPane fieldArea= new BorderPane();
 
-
         fieldArea.setTop(p2Field);
         fieldArea.setBottom(p1Field);
+        p1Field.setPrefHeight(192);
+        p2Field.setPrefHeight(192);
         VBox V=new VBox();
-        p2Mana.setMinSize(200,100);
-        p1Mana.setMinSize(200,100);
+        V.setMaxHeight(192);
+        p2Mana.setMinSize(200,75);
+        p1Mana.setMinSize(200,75);
         p2Mana.setBackground(new Background(new BackgroundImage(new Image("images/resources/Border.png"),
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(200,100, false, false, false, false))));
@@ -3982,8 +3986,10 @@ public class mainMenu extends Application implements GameListener {
         Button exit= new Button("exit");
        end.setOnMouseEntered(e->{end.setEffect(new InnerShadow(100,Color.GRAY));});
        end.setOnMouseExited(e->{end.setEffect(new InnerShadow(0,Color.BLACK));});
+       end.setFitHeight(50);
+       end.setFitWidth(200);
         V.getChildren().add(exit);
-       V.getChildren().add(p2Mana);
+        V.getChildren().add(p2Mana);
         V.getChildren().add(end);
         V.getChildren().add(p1Mana);
         VBox exitA= new VBox();
@@ -4092,7 +4098,7 @@ public class mainMenu extends Application implements GameListener {
     test2.setPrefSize(50,50);
         Button ad=new Button();
         ad.setVisible(false);
-        ad.setPrefSize(70,450);
+        ad.setPrefSize(70,390);
         top.setMaxSize(50,50);
         top.getChildren().add(test2);
         //p1Area.setTop(top);
