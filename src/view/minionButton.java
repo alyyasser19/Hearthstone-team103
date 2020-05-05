@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import model.cards.minions.Minion;
+import model.cards.minions.MinionListener;
 
 public class minionButton extends Button implements Cloneable{
     int hp;
@@ -19,6 +20,7 @@ public class minionButton extends Button implements Cloneable{
     String name;
     String description;
     String tauntt="";
+    MinionListener listener;
 
     Minion minion;
 
@@ -45,9 +47,11 @@ public class minionButton extends Button implements Cloneable{
     public int getHp() {
         return hp;
     }
+    public MinionListener getListener(){return listener;}
 
    public minionButton(Minion minion){
 	   this.minion=minion;
+	   listener=minion.getListener();
         //ImageView imageFile = new ImageView(new Image(getImage()));
 	   Image imageFile = new Image(getImage(),100,100,false,false);
        ImageView imageDecline = new ImageView(imageFile);
