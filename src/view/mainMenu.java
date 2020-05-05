@@ -947,7 +947,7 @@ public class mainMenu extends Application implements GameListener {
             return "images\\cards\\WilfredFizzlebang.png";
 
         if(cur.getName().equals("Curse of Weakness"))
-            return "images\\cards\\CurseofWeakness.png";
+            return "images\\cards\\CurseOfWeakness.png";
 
         if(cur.getName().equals("Divine Spirit"))
             return "images\\cards\\DivineSpirit.png";
