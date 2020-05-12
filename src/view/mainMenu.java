@@ -1985,7 +1985,12 @@ public class mainMenu extends Application implements GameListener {
         s1.setMinWidth(300);
         s1.setMinHeight(300);
         VBox v= new VBox();
+        BackgroundImage b= new BackgroundImage(new Image("images\\ExceptionBG.jpg"),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(v.getWidth(),v.getHeight(), false, false, true, false));
+        v.setBackground(new Background(b));
         Label x=new Label(e.getLocalizedMessage());
+        x.setTextFill(Color.web("#FAEBD7"));
         x.setMinSize(200,200);
         v.getChildren().add(x);
         v.setAlignment(Pos.CENTER);
@@ -4119,13 +4124,8 @@ public class mainMenu extends Application implements GameListener {
                     p1.endTurn();
                 } catch (FullHandException fullHandException) {
                     Card x=fullHandException.getBurned();
-                    Stage s1 = new Stage();
-                    s1.initModality(Modality.APPLICATION_MODAL);
-                    s1.show();
-                    StackPane sp = new StackPane();
-                    sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
-                    Scene sc = new Scene(sp, 200, 200);
-                    s1.setScene(sc);
+                    fullHandException=new FullHandException("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity(),x);
+                    exceptionWindow(fullHandException);
                     draw=false;
 
                 } catch (CloneNotSupportedException cloneNotSupportedException) {
@@ -4142,13 +4142,8 @@ public class mainMenu extends Application implements GameListener {
                     p2.endTurn();
                 } catch (FullHandException fullHandException) {
                     Card x=fullHandException.getBurned();
-                    Stage s1 = new Stage();
-                    s1.initModality(Modality.APPLICATION_MODAL);
-                    s1.show();
-                    StackPane sp = new StackPane();
-                    sp.getChildren().add(new Label("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity()));
-                    Scene sc = new Scene(sp, 200, 200);
-                    s1.setScene(sc);
+                    fullHandException=new FullHandException("You Have a Full Hand!!\n"+x.getName()+"\n"+x.getManaCost()+"\n"+x.getRarity(),x);
+                    exceptionWindow(fullHandException);
                     draw=false;
 
                 } catch (CloneNotSupportedException cloneNotSupportedException) {
