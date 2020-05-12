@@ -984,10 +984,10 @@ public class mainMenu extends Application implements GameListener {
             return "images\\cards\\SiphonSoul.png";
 
         if(cur.getName().equals("Twisting Nether"))
-            return "images\\cards\\Twistingnether.png";
+            return "images\\cards\\TwistingNether.png";
 
-        if(cur.getName().equals("Goldshire Footman"))
-            return "images\\cards\\GoldshireFootman.png";
+        if(cur.getName().equals("Sheep"))
+            return "images\\cards\\Sheep.png";
 
         return "images\\whitepage.png";
     }
