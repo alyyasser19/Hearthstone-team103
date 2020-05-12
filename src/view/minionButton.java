@@ -1,5 +1,5 @@
 package view;
-
+//change
 import javafx.scene.control.Button;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -98,7 +98,7 @@ public class minionButton extends Button implements Cloneable{
 
     }
     public void verifyMinion() {
-        if(!minion.isSleeping())
+        if(!minion.isSleeping() || minion.isAttacked())
             this.setEffect(new InnerShadow(0,Color.BLACK));
         if(minion.getName().equals("Sheep")){
             ImageView imageDecline = new ImageView(new Image("images\\cards\\normal\\Sheep.jpg",100,100,false,false));
@@ -110,9 +110,9 @@ public class minionButton extends Button implements Cloneable{
         hp=minion.getCurrentHP();
 
         this.setText( "Name:"+" "+ minion.getName()+"\n" + "Attack: "+minion.getAttack()+"       Health: "+minion.getCurrentHP() +"\n"+""+ tauntt);
-        if(minion.isSleeping())
-            this.setEffect(new InnerShadow(300,Color.BLACK));
-        if(minion.isSleeping() && minion.isDivine())
+        if(minion.isSleeping() || minion.isAttacked())
+            this.setEffect(new InnerShadow(300,Color.BLACK) );
+        if((minion.isSleeping() || minion.isAttacked()) && minion.isDivine())
             this.setEffect(new InnerShadow(300,Color.DARKGOLDENROD));
 
   

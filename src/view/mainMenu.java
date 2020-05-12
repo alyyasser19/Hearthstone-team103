@@ -4100,6 +4100,7 @@ public class mainMenu extends Application implements GameListener {
         stage.setScene(gamescene);
         gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png",250,250,true,true)));
         end.setOnMouseClicked(e-> {
+            Targeting=false;
             playOnce("sounds/end.wav");
             verifyHeroP1();
             verifyHeroP2();
@@ -4271,6 +4272,16 @@ public class mainMenu extends Application implements GameListener {
             });
         v.getChildren().add(play);
             s1.setScene(sc);
+
+            p1Field= new FlowPane();
+            p1hand=new HBox();
+            p1Area=new BorderPane();
+            p1Mana=new Button();
+
+        p2Field= new FlowPane();
+        p2hand=new HBox();
+        p2Area=new BorderPane();
+        p2Mana=new Button();
 
     
 
