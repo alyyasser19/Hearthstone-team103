@@ -437,14 +437,14 @@ public class mainMenu extends Application implements GameListener {
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
 
@@ -452,7 +452,7 @@ public class mainMenu extends Application implements GameListener {
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
 
@@ -466,7 +466,7 @@ public class mainMenu extends Application implements GameListener {
                             } catch (NotSummonedException notSummonedException) {
                                 notSummonedException.printStackTrace();
                                 exceptionWindow(notSummonedException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
                                 return;
@@ -481,7 +481,7 @@ public class mainMenu extends Application implements GameListener {
                             playOnce("sounds/sattack.wav");
                             Targeting=true;
                             attacker=finalA5.getMinion();
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                         }
                     });
                     pfield.getChildren().add(finalA5);
@@ -1044,14 +1044,14 @@ public class mainMenu extends Application implements GameListener {
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                             finalA5.verifyMinion();
 
                             return;
                         } catch (NotYourTurnException notYourTurnException) {
                             notYourTurnException.printStackTrace();
                             exceptionWindow(notYourTurnException);
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                             finalA5.verifyMinion();
 
 
@@ -1059,7 +1059,7 @@ public class mainMenu extends Application implements GameListener {
                         } catch (TauntBypassException tauntBypassException) {
                             tauntBypassException.printStackTrace();
                             exceptionWindow(tauntBypassException);
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                             finalA5.verifyMinion();
 
 
@@ -1073,7 +1073,7 @@ public class mainMenu extends Application implements GameListener {
                         } catch (NotSummonedException notSummonedException) {
                             notSummonedException.printStackTrace();
                             exceptionWindow(notSummonedException);
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                             finalA5.verifyMinion();
 
                             return;
@@ -1088,7 +1088,7 @@ public class mainMenu extends Application implements GameListener {
                         playOnce("sounds/sattack.wav");
                         Targeting=true;
                         attacker=finalA5.getMinion();
-                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                     }
                 });
                 pfield.getChildren().add(finalA5);
@@ -1538,14 +1538,14 @@ public class mainMenu extends Application implements GameListener {
                             } catch (CannotAttackException cannotAttackException) {
                                 cannotAttackException.printStackTrace();
                                 exceptionWindow(cannotAttackException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
                                 return;
                             } catch (NotYourTurnException notYourTurnException) {
                                 notYourTurnException.printStackTrace();
                                 exceptionWindow(notYourTurnException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
 
@@ -1553,7 +1553,7 @@ public class mainMenu extends Application implements GameListener {
                             } catch (TauntBypassException tauntBypassException) {
                                 tauntBypassException.printStackTrace();
                                 exceptionWindow(tauntBypassException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
 
@@ -1567,7 +1567,7 @@ public class mainMenu extends Application implements GameListener {
                             } catch (NotSummonedException notSummonedException) {
                                 notSummonedException.printStackTrace();
                                 exceptionWindow(notSummonedException);
-                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                                gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                                 finalA5.verifyMinion();
 
                                 return;
@@ -1582,7 +1582,7 @@ public class mainMenu extends Application implements GameListener {
                             playOnce("sounds/sattack.wav");
                             Targeting=true;
                             attacker=finalA5.getMinion();
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                         }
                     });
                     pfield.getChildren().add(finalA5);
@@ -1979,6 +1979,7 @@ public class mainMenu extends Application implements GameListener {
         p1VerifyMinions();
         p2VerifyMinions();
         verifyMana();}
+        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
         Stage s1=new Stage();
         s1.initModality(Modality.APPLICATION_MODAL);
         s1.show();
@@ -2013,10 +2014,6 @@ public class mainMenu extends Application implements GameListener {
                 playOnce("sounds/attacked.wav");
             }
         }
-
-        if(e instanceof InvalidTargetException){
-            playOnce("sounds/invalid.wav");
-        }
         if(e instanceof NotEnoughManaException){
             playOnce("sounds/mana.wav");
         }
@@ -2026,6 +2023,10 @@ public class mainMenu extends Application implements GameListener {
         if(e instanceof FullFieldException){
             playOnce("sounds/fullField.wav");
         }
+        if(!(e instanceof FullFieldException || e instanceof TauntBypassException || e instanceof NotEnoughManaException || e instanceof CannotAttackException) || e instanceof FullFieldException ||e instanceof FullHandException){
+            playOnce("sounds/invalid.wav");
+        }
+        gamescene.setCursor(new ImageCursor(new Image("images\\mouse.png")));
     }
     public void target(Hero p,Hero pOther,ImageView opponent,boolean attack){
         Stage s1=new Stage();
@@ -3250,7 +3251,12 @@ public class mainMenu extends Application implements GameListener {
 
 
         p1Power.setOnMouseClicked(e->{
+            if(!(p1 instanceof Paladin))
             playOnce("sounds/power.wav");
+            else if(p1 instanceof Paladin)
+                playOnce("sounds/Urther_power.wav");
+
+
             if(p1 instanceof Warlock) {
                 try {
                     p1.useHeroPower();
@@ -3414,7 +3420,7 @@ public class mainMenu extends Application implements GameListener {
                         playOnce("sounds/sattack.wav");
                         Targeting=true;
                         attacker=Silver.getMinion();
-                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                     }
                 });
                 p1Field.getChildren().add(Silver);
@@ -3744,7 +3750,7 @@ public class mainMenu extends Application implements GameListener {
                         } catch (CannotAttackException cannotAttackException) {
                             cannotAttackException.printStackTrace();
                             exceptionWindow(cannotAttackException);
-                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                            gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                             Silver.verifyMinion();
                             return;
 
@@ -3785,7 +3791,7 @@ public class mainMenu extends Application implements GameListener {
                         Targeting=true;
                         playOnce("sounds/sattack.wav");
                         attacker=Silver.getMinion();
-                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png")));
+                        gamescene.setCursor(new ImageCursor(new Image("images\\attack.png",200,200,false,false)));
                     }
                 });
                 p2Field.getChildren().add(Silver);
